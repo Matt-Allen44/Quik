@@ -1,39 +1,60 @@
-<!doctype html>
 <html>
-  <head>
-    <title>Socket.IO chat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-  </head>
-  <body>
-      <input id="n" autocomplete="off" />
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+	<head>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> 
+		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.amber-yellow.min.css" /> 
+		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+		
+		<link rel="stylesheet" type="text/css" href="sidebar/sidebar.css">
+		<link src="sidebar/sidebar.js">
+		<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+	</head>
+	<body>
+	<div style="float:left; margin-top:-25px">
+		<!-- Overlay for fixed sidebar -->
+		<div class="sidebar-overlay"></div>
 
+		<!-- Material sidebar -->
+		<aside id="sidebar" class="sidebar sidebar-default open" role="navigation">
+		    <!-- Sidebar header -->
+		    <div class="sidebar-header header-cover" style="background-image: url(images/sidebar_bg.jpg);">
+		        <!-- Top bar -->
+		        <div class="top-bar"></div>
+		        <!-- Sidebar brand image -->
+		        <h2 style="padding-left:10px; color: #fff"> Quik </h2>
+		        <!-- Sidebar brand name -->
+		        <a id="sidebar_email" data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown" style="color:#fff">
+		            john.doe@gmail.com
+		            <b class="caret"></b>
+		        </a>
+		    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-	<script>
-		var usr_name = "Matt";
-  		var socket = io();
-  		$('form').submit(function(){
-    		socket.emit('chat message', $('#n').val() + ': ' + $('#m').val());
-    		$('#m').val('');
-    		return false;
- 		});
- 		socket.on('chat message', function(msg){
- 		    $('#messages').append($('<li>').text(msg));
- 		})
-	</script>
-  </body>
+		    <!-- Sidebar navigation -->
+		    <ul class="nav sidebar-nav">
+		        <li class="divider"></li>
+		        <li><a href="#">Java<span class="sidebar-badge">3</span></a></li>
+		        <li><a href="#">Javascript<span class="sidebar-badge">3</span></a></li>
+		        <li><a href="#">C/C++<span class="sidebar-badge">3</span></a></li>
+		        <li><a href="#">Python<span class="sidebar-badge">3</span></a></li>
+		        <!-- Place this tag where you want the button to render. -->
+				<div style="padding-left: 10px; position: absolute; 
+				                bottom: 10;"><!-- Place this tag where you want the button to render. -->
+				<a class="github-button" href="https://github.com/matt-allen44/quik/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/matt-allen44/quik/network" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork matt-allen44/quik on GitHub">Visit Us On Github</a></div>
+
+		    </ul>
+		    <!-- Sidebar divider -->
+		    <!-- <div class="sidebar-divider"></div> -->
+		    
+		    <!-- Sidebar text -->
+		    <!--  <div class="sidebar-text">Text</div> -->
+		</aside>
+		</div>
+
+		<div>
+			<div id="chat" class="chat-messages">
+				<p> dingos </p>
+			</div>
+
+		</div>
+	</body>
 </html>
