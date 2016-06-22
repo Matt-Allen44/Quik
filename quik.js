@@ -3,10 +3,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname + '/quik.html');
+	res.sendFile(__dirname + '/chat.html'); //CHANGE TO QUIK.HTML LATER
 });
 
-http.listen(80, function(){
+http.listen(8080, function(){
 	console.log('Launched Quik on :80')
 });
 
