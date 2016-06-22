@@ -10,7 +10,9 @@ Clone the git repository
 > node quik.js
 
 > access localhost using any web browser
+
 ### Configuration    
+
 To configure a development enviroment you must first install Socket.IO and Express, this can be done with the method as follows:
 > npm install --save socket.io
 
