@@ -10,17 +10,21 @@ http.listen(80, function(){
 	console.log('Launched Quik on :80')
 });
 
+usrs_connected = -1;
+
 
 /*
 	ON CONNECTION
 */
 io.on('connection', function(socket){
-	console.log('> Connection');
-	io.emit('chat message', msg)
+	usrs_connected = usrs_connected+1;
+	io.emit('connectEvent', usrs_connected)
+
 
 	socket.on('disconnect', function(){
-		console.log('> Disconnected')
-		io.emit('chat message', msg)
+		usrs_connected = usrs_connected-1;
+		console.log(usrs_connected + ' users connected')
+		io.emit('disconnectEvent', usrs_connected)
 	})
 
 	socket.on('chat message', function(msg){
