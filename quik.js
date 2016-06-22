@@ -16,9 +16,11 @@ http.listen(80, function(){
 */
 io.on('connection', function(socket){
 	console.log('> Connection');
+	io.emit('chat message', msg)
 
 	socket.on('disconnect', function(){
 		console.log('> Disconnected')
+		io.emit('chat message', msg)
 	})
 
 	socket.on('chat message', function(msg){
