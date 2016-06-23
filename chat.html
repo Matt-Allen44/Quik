@@ -1,16 +1,21 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+
+    <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box;}
       body { font: 13px Helvetica, Arial; width: 50%; margin:auto;}
-      form { background: #fff; padding: 3px; position: fixed; bottom: 0; width: 50%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; background-color: #ccc;}
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #ccc; text-align:right; }
+      #messages li {font-size: 16px;}
+      #messages li:nth-child(odd) {/*text-align:right;*/}
+
+      .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px}
+      .msg_text {margin-top: 0px; padding-top: 0px}
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
@@ -18,14 +23,28 @@
 
   </head>
   <body>
-    <ul id="messages"></ul>
+      <nav>
+        <div class="nav-wrapper teal lighten-2">
+          <a href="#" style="padding-left: 10px" class="brand-logo">Quik</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a id="usrs_connected">Users connected: 0</a></li>
+          </ul>
+        </div>
+      </nav>
 
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div style="overflow: hidden; display: block;">
+      <ul id="messages"></ul>
+    </div>
 
-    <script src="/socket.io/socket.io.js"></script>
+    <div>
+      <form action="" style="position: fixed; bottom: 0; width:50%">
+        <input style="width:69%; " id="m" autocomplete="off" />
+        <button style="width: 29%; float:right vertical-align: middle" class="btn waves-effect waves-light" type="submit" name="action">Send Message</button>
+      </form>
+    </div>
+
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
 
       var socket = io();
@@ -38,15 +57,16 @@
       });
 
       socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+        $('#messages').append($('<li class="msg_name">').text(msg.split(":")[0]));
+        $('#messages').append($('<li class="msg_text">').text(msg.split(":")[1]));
       });
 
       socket.on('disconnectEvent', function(msg){
-        $('#messages').append($('<li>').text(msg + " disconnected"));
+        document.getElementByID("usrs_connected").text = "Users connected: " + msg;
       });
 
       socket.on('connectEvent', function(msg){
-        $('#messages').append($('<li>').text(msg + " connected"));
+        document.getElementById("usrs_connected").text = "Users connected: " + msg;
       });
 
       //Prompt user for name
@@ -56,7 +76,7 @@
         type: "input",
         showCancelButton: false,
         closeOnConfirm: false,
-        confirmButtonColor: "#55DD6B",
+        confirmButtonColor: "#4db6ac",
         confirmButtonText: "Enter Quik!",
         inputPlaceholder: "username"
       }, function (inputValue) {
