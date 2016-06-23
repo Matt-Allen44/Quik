@@ -1,0 +1,17 @@
+body {
+	overflow-x:hidden;
+}
+
+.quik-sidebar-outer {
+	height: 100%;
+}
+
+.quik-main-outer {
+
+}
+
+.navbar {
+	margin-bottom: 0;
+    border-radius: 0;
+}
+    
