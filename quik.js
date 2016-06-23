@@ -6,8 +6,8 @@ app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html'); //CHANGE TO QUIK.HTML LATER
 });
 
-http.listen(80, function(){
-	console.log('Launched Quik on :80')
+http.listen(8080, function(){
+	console.log('Launched Quik on :8080')
 });
 
 usrs_connected = -1;
