@@ -11,9 +11,11 @@ Clone the git repository
 
 > access localhost using any web browser
 
-### Configuration    
+### Dependencies    
+Quik is reliant on the following packages:
+> socket.io, express@4.10.2, sanitize-html
 
-To configure a development enviroment you must first install Socket.IO and Express, this can be done with the method as follows:
+These can be installed with the following commands:
 > npm install --save socket.io
 
 > npm install --save express@4.10.2
