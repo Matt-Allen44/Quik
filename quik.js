@@ -1,16 +1,17 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var sanitizeHtml = require('sanitize-html');
 
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html'); //CHANGE TO QUIK.HTML LATER
 });
 
-http.listen(8080, function(){
-	console.log('Launched Quik on :8080')
+http.listen(25565, function(){
+	console.log('Launched Quik on :25565')
 });
 
-usrs_connected = -1;
+usrs_connected = 0;
 
 
 /*
@@ -28,7 +29,12 @@ io.on('connection', function(socket){
 	})
 
 	socket.on('chat message', function(msg){
-		console.log('> ' + msg)
-		io.emit('chat message', msg)
+		msg = sanitizeHtml(msg)
+		if(msg == ""){
+			console.log("> empty message removed")
+		} else {
+			console.log('> ' + msg)
+			io.emit('chat message', msg)
+		}
 	})
 });
