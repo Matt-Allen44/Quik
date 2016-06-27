@@ -1,149 +1,130 @@
 <!doctype html>
 <html>
-  <head>
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+   <head>
+      <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+      <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
+      <style>
+         * { margin: 0; padding: 0; box-sizing: border-box;}
+         body { font: 13px Helvetica, Arial; width: 100%; margin:auto;}
+         #messages { overflow-y: scroll; height: calc(100% - 400px);}
+         #messages li {font-size: 16px;}
+         #messages li:nth-child(odd) {/*text-align:right;*/}
+         .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px; display: inline;}
+         .msg_text {margin-top: 0px; padding-top: 0px; display:inline;}
+         img.emoji {
+         margin: 0px !important;
+         display: inline !important;
+         }
+      </style>
+      <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
+      <script>
+         window.onload = function() {
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+           // Set the size of the rendered Emojis
+           // This can be set to 16x16, 36x36, or 72x72
+           twemoji.size = '16x16';
 
-    <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
-    <style>
+           // Parse the document body and
+           // insert <img> tags in place of Unicode Emojis
+           twemoji.parse(document.body);
 
-      * { margin: 0; padding: 0; box-sizing: border-box;}
-      body { font: 13px Helvetica, Arial; width: 100%; margin:auto;}
-
-      #messages { overflow-y: scroll; height: calc(100% - 400px);}
-      #messages li {font-size: 16px;}
-      #messages li:nth-child(odd) {/*text-align:right;*/}
-
-      .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px; display: inline;}
-      .msg_text {margin-top: 0px; padding-top: 0px; display:inline;}
-
-      img.emoji {
-          margin: 0px !important;
-          display: inline !important;
-      }
-    </style>
-
-    <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
-    <script>
-      window.onload = function() {
-
-        // Set the size of the rendered Emojis
-        // This can be set to 16x16, 36x36, or 72x72
-        twemoji.size = '16x16';
-
-        // Parse the document body and
-        // insert <img> tags in place of Unicode Emojis
-        twemoji.parse(document.body);
-
-      }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-
-
-  </head>
-  <body class=".desktop-only">
+         }
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+   </head>
+   <body class=".desktop-only">
       <nav>
-        <div class="nav-wrapper orange lighten-1">
-          <a href="#" style="padding-left: 50px" class="brand-logo">Quik</a></li>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-
-        <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
-        <!-- Place this tag where you want the button to render. -->
-        <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
-        <!-- Place this tag where you want the button to render. -->
-        <li><a aria-label="Fork matt-allen44/quik on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-href="/matt-allen44/quik/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/matt-allen44/quik/fork" >Fork</a></li>
-        <!-- Place this tag where you want the button to render. -->
-        <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
-        <!-- Place this tag where you want the button to render. -->
-        <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
-
-            <li><a id="usrs_connected">Users connected: 0</a></li></li>
-
-
-          </ul>
-        </div>
+         <div class="nav-wrapper orange lighten-1">
+            <a href="#" style="padding-left: 50px" class="brand-logo">Quik</a></li>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+               <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
+               <!-- Place this tag where you want the button to render. -->
+               <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
+               <!-- Place this tag where you want the button to render. -->
+               <li><a aria-label="Fork matt-allen44/quik on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-href="/matt-allen44/quik/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/matt-allen44/quik/fork" >Fork</a></li>
+               <!-- Place this tag where you want the button to render. -->
+               <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
+               <!-- Place this tag where you want the button to render. -->
+               <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
+               <li><a id="usrs_connected">Users connected: 0</a></li>
+               </li>
+            </ul>
+         </div>
       </nav>
+      <div style="display: block; padding-left:50px; padding-top:50px">
+         <ul style="" id="messages"></ul>
+      </div>
+      <div>
+         <form action="" style="position: fixed; bottom: 0; width:100%">
+            <div style="padding-left:50px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid #ffa726;
+               -webkit-box-shadow: 0 1px 0 0 #ffa726;
+               -moz-box-shadow: 0 1px 0 0 #ffa726;
+               box-shadow: 0 1px 0 0 #ffa726;"  placeholder="message here" id="m" autocomplete="off" /></div>
+            <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
+         </form>
+      </div>
+      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+         var socket = io();
+         usr_name = "";
 
+         $('form').submit(function(){
+             if($('#m').val() === ""){
+               swal({
+                 title: 'Error sending message!',
+                 text: 'Please ensure you have entered text',
+                 timer: 2000
+               })
+             } else {
+               socket.emit('chat message', usr_name + "--DELIM-- " + $('#m').val());
+               $('#m').val('');
+             }
+             return false;
+         });
 
-    <div style="display: block; padding-left:50px; padding-top:50px">
-      <ul style="" id="messages"></ul>
-    </div>
+         socket.on('chat message', function(msg){
+           msg = twemoji.parse(msg);
+           $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
+           //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
+           $('#messages').append((msg.split("--DELIM--")[1]));
+           $('#messages').append($('<p/>'));
+         });
 
-    <div>
-      <form action="" style="position: fixed; bottom: 0; width:100%">
-        <div style="padding-left:50px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid #ffa726;
-  -webkit-box-shadow: 0 1px 0 0 #ffa726;
-  -moz-box-shadow: 0 1px 0 0 #ffa726;
-  box-shadow: 0 1px 0 0 #ffa726;"  placeholder="message here" id="m" autocomplete="off" /></div>
-        <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
-      </form>
-    </div>
+         socket.on('disconnectEvent', function(msg){
+           document.getElementByID("usrs_connected").text = "Users connected: " + msg;
+         });
 
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
+         socket.on('connectEvent', function(msg){
+           document.getElementById("usrs_connected").text = "Users connected: " + msg;
+         });
 
-      var socket = io();
-      usr_name = "";
+         //Prompt user for name
+         swal({
+           title: "Welcome to Quik",
+           text: "Enter  your desired username:",
+           type: "input",
+           showCancelButton: false,
+           closeOnConfirm: false,
+           confirmButtonColor: "#ffa726 ",
+           confirmButtonText: "Enter Quik!",
+           inputPlaceholder: "username"
+         }, function (inputValue) {
+           if (inputValue === false) window.close();
+           if (inputValue === "") {
+             swal.showInputError("You need to write something!");
+           }
+           swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
 
-      $('form').submit(function(){
-          if($('#m').val() === ""){
-            swal({
-              title: 'Error sending message!',
-              text: 'Please ensure you have entered text',
-              timer: 2000
-            })
-          } else {
-            socket.emit('chat message', usr_name + "--DELIM-- " + $('#m').val());
-            $('#m').val('');
-          }
-          return false;
-      });
-
-      socket.on('chat message', function(msg){
-        msg = twemoji.parse(msg);
-        $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
-        //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
-        $('#messages').append((msg.split("--DELIM--")[1]));
-        $('#messages').append($('<p/>'));
-      });
-
-      socket.on('disconnectEvent', function(msg){
-        document.getElementByID("usrs_connected").text = "Users connected: " + msg;
-      });
-
-      socket.on('connectEvent', function(msg){
-        document.getElementById("usrs_connected").text = "Users connected: " + msg;
-      });
-
-      //Prompt user for name
-      swal({
-        title: "Welcome to Quik",
-        text: "Enter  your desired username:",
-        type: "input",
-        showCancelButton: false,
-        closeOnConfirm: false,
-        confirmButtonColor: "#ffa726 ",
-        confirmButtonText: "Enter Quik!",
-        inputPlaceholder: "username"
-      }, function (inputValue) {
-        if (inputValue === false) window.close();
-        if (inputValue === "") {
-          swal.showInputError("You need to write something!");
-        }
-        swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
-
-        usr_name = inputValue;
-        socket.emit('chat message', usr_name + "--DELIM-- has connected");
-      });
-  </script>
-  </body>
+           usr_name = inputValue;
+           socket.emit('chat message', usr_name + "--DELIM-- has connected");
+         });
+      </script>
+   </body>
 </html>
