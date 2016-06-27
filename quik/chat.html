@@ -18,6 +18,7 @@
       <!-- Place this tag in your head or just before your close body tag. -->
       <script async defer src="https://buttons.github.io/buttons.js"></script>
    </head>
+   
    <body class=".desktop-only">
       <nav>
          <div class="nav-wrapper orange lighten-1">
@@ -49,6 +50,7 @@
             <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
          </form>
       </div>
+
       <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script>
@@ -94,16 +96,21 @@
            closeOnConfirm: false,
            confirmButtonColor: "#ffa726 ",
            confirmButtonText: "Enter Quik!",
+           allowEscapeKey: false,
            inputPlaceholder: "username"
          }, function (inputValue) {
            if (inputValue === false) window.close();
+
+
            if (inputValue === "") {
              swal.showInputError("You need to write something!");
-           }
-           swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
-
-           usr_name = inputValue;
-           socket.emit('chat message', usr_name + "--DELIM-- has connected");
+           } if(inputValue.length > 10){
+              swal.showInputError("Name can't be longer than 10 characters!");
+            } else {
+             swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
+             usr_name = inputValue;
+             socket.emit('chat message', usr_name + "--DELIM-- has connected");
+            }
          });
       </script>
    </body>
