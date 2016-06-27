@@ -9,13 +9,16 @@
 
     <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
     <style>
+      
       * { margin: 0; padding: 0; box-sizing: border-box;}
-      body { font: 13px Helvetica, Arial; width: 50%; margin:auto;}
+      body { font: 13px Helvetica, Arial; width: 100%; margin:auto;}
+
       #messages li {font-size: 16px;}
       #messages li:nth-child(odd) {/*text-align:right;*/}
 
       .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px; display: inline;}
       .msg_text {margin-top: 0px; padding-top: 0px; display:inline;}
+
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
@@ -24,37 +27,41 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
   </head>
-  <body>
+  <body class=".desktop-only">
       <nav>
-        <div class="nav-wrapper teal lighten-2">
-          <a href="#" style="padding-left: 10px" class="brand-logo">Quik</a>
+        <div class="nav-wrapper orange lighten-1">
+          <a href="#" style="padding-left: 10px" class="brand-logo">Quik</a></li>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a id="usrs_connected">Users connected: 0</a></li>
+        
+        <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
+        <!-- Place this tag where you want the button to render. -->
+        <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
+        <!-- Place this tag where you want the button to render. -->
+        <li><a aria-label="Fork matt-allen44/quik on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-href="/matt-allen44/quik/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/matt-allen44/quik/fork" >Fork</a></li>
+        <!-- Place this tag where you want the button to render. -->
+        <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
+        <!-- Place this tag where you want the button to render. -->
+        <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
+  
+            <li><a id="usrs_connected">Users connected: 0</a></li></li>
+
+  
           </ul>
         </div>
       </nav>
 
-      <div style="padding-top: 10px">
 
-<a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" class="github-button">Watch</a>
-<!-- Place this tag where you want the button to render. -->
-<a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" class="github-button">Star</a>
-<!-- Place this tag where you want the button to render. -->
-<a aria-label="Fork matt-allen44/quik on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-href="/matt-allen44/quik/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/matt-allen44/quik/fork" class="github-button">Fork</a>
-<!-- Place this tag where you want the button to render. -->
-<a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" class="github-button">Issue</a>
-<!-- Place this tag where you want the button to render. -->
-<a aria-label="Download matt-allen44/quik on GitHub" data-style="mega" data-icon="octicon-cloud-download" href="https://github.com/matt-allen44/quik/archive/master.zip" class="github-button">Download</a>
-      </div>
-
-    <div style="overflow: hidden; display: block;">
-      <ul id="messages"></ul>
+    <div style="overflow: hidden; display: block; padding-left:50px; padding-top:50px">
+      <ul style="overflow: hidden;" id="messages"></ul>
     </div>
 
     <div>
-      <form action="" style="position: fixed; bottom: 0; width:50%">
-        <input style="width:69%; " id="m" autocomplete="off" />
-        <button style="width: 29%; float:right vertical-align: middle" class="btn waves-effect waves-light" type="submit" name="action">Send Message</button>
+      <form action="" style="position: fixed; bottom: 0; width:100%">
+        <div style="padding-left:50px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid #ffa726;
+  -webkit-box-shadow: 0 1px 0 0 #ffa726;
+  -moz-box-shadow: 0 1px 0 0 #ffa726;
+  box-shadow: 0 1px 0 0 #ffa726;"  placeholder="message here" id="m" autocomplete="off" /></div>
+        <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
       </form>
     </div>
 
@@ -91,8 +98,8 @@
         text: "Enter  your desired username:",
         type: "input",
         showCancelButton: false,
-        closeOnConfirm: false,
-        confirmButtonColor: "#4db6ac",
+        closeOnConfirm: true,
+        confirmButtonColor: "#ffa726 ",
         confirmButtonText: "Enter Quik!",
         inputPlaceholder: "username"
       }, function (inputValue) {
