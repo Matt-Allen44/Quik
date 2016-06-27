@@ -14,8 +14,8 @@
       #messages li {font-size: 16px;}
       #messages li:nth-child(odd) {/*text-align:right;*/}
 
-      .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px}
-      .msg_text {margin-top: 0px; padding-top: 0px}
+      .msg_name {font-size: 12px; font-weight:bold; margin-bottom: 0px; padding-bottom: 0px; display: inline;}
+      .msg_text {margin-top: 0px; padding-top: 0px; display:inline;}
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
@@ -66,14 +66,15 @@
       usr_name = "";
 
       $('form').submit(function(){
-        socket.emit('chat message', usr_name + ": " + $('#m').val());
-        $('#m').val('');
-        return false;
+          socket.emit('chat message', usr_name + ": " + $('#m').val());
+          $('#m').val('');
+          return false;
       });
 
       socket.on('chat message', function(msg){
         $('#messages').append($('<li class="msg_name">').text(msg.split(":")[0]));
         $('#messages').append($('<li class="msg_text">').text(msg.split(":")[1]));
+        $('#messages').append($('<p/>'));
       });
 
       socket.on('disconnectEvent', function(msg){
