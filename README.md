@@ -20,4 +20,6 @@ These can be installed with the following commands:
 
 > npm install --save express@4.10.2
 
-> npm install -- save sanitize-html
+> npm install --save sanitize-html
+
+> npm install --save geoip-lite
