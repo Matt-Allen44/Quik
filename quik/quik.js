@@ -12,6 +12,13 @@ app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html');
 });
 
+var clients = [];
+app.get('/clients', function(req, res){
+	res.end("Open Sockets: " + clients.length)
+});
+
+
+
 http.listen(80, function(){
 	console.log('Launched Quik on :80')
 });
@@ -23,6 +30,7 @@ usrs_connected = 0;
 	ON CONNECTION
 */
 	io.on('connection', function(socket){
+		clients.push(socket)
 		usrs_connected = usrs_connected+1;
 		io.emit('connectEvent', usrs_connected)
 
