@@ -1,7 +1,7 @@
 # Quik
 
 ![Travis-CI Build](https://api.travis-ci.org/Matt-Allen44/Quik.svg)
-![Github Issues](https://img.shields.io/github/issues/badges/shields.svg)
+![Github Issues](https://img.shields.io/github/issues/matt-allen44/quik.svg)
 ![Github Release](https://img.shields.io/github/release/matt-allen44/quik.svg)
 ![Github Version](https://img.shields.io/github/tag/matt-allen44/quik.svg)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badge/)  
