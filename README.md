@@ -8,18 +8,20 @@
 ![Github Version](https://img.shields.io/github/tag/matt-allen44/quik.svg)
 ![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
+### Quick start
+Clone the git repository
+> git clone https://github.com/Matt-Allen44/Quik.git
+
+> npm install
+
+> node start
+
+> access localhost using any web browser
+
 ##Screenshots
 ![Conversation Screen](http://i.imgur.com/sEtoEDY.png)
 ![Joining Screen](http://i.imgur.com/xSgs1bD.png)
 
-
-### Installation & Launching
-Clone the git repository
-> git clone https://github.com/Matt-Allen44/Quik.git
-> npm install
-> node start
-
-> access localhost using any web browser
 
 ### Dependencies    
 Quik is reliant on the following packages:
