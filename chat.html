@@ -22,6 +22,45 @@
 
       <!-- Place this tag in your head or just before your close body tag. -->
       <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyByC4lJaLHZ1R4RtC-HSuuZBCG9Q4bWxLo",
+          authDomain: "quik-app.firebaseapp.com",
+          databaseURL: "https://quik-app.firebaseio.com",
+          storageBucket: "quik-app.appspot.com",
+        };
+        firebase.initializeApp(config);
+      </script>
+
+
+      <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+      <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+      <script type="text/javascript">
+        // FirebaseUI config.
+
+        var uiConfig = {
+          'signInSuccessUrl': '/',
+          'signInOptions': [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+          ],
+          // Terms of service url.
+          'tosUrl': '',
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+          console.log(user.displayName)
+          //TODO: Implemented firebase auth here
+        });
+      </script>
    </head>
 
    <body>
@@ -39,7 +78,7 @@
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
                <li><a id="usrs_connected">Users connected: 0</a></li>
-               </li>
+               <li>    <div id="firebaseui-auth-container"></div> </li>
             </ul>
          </div>
       </nav>
@@ -52,8 +91,8 @@
            <a style="float:left; padding-left: 10px" id="usrs_connected">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
-      </nav>
 
+      </nav>
 
       <div style="width:100%;   position: fixed; display: block; left:25px; padding-top:50px">
          <ul style="" id="messages"></ul>

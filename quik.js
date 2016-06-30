@@ -12,6 +12,10 @@ app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html');
 });
 
+app.get('/firebase', function(req, res){
+	res.sendFile(__dirname + '/firebase.html');
+});
+
 var clients = [];
 app.get('/dashboard', function(req, res){
 	res.end("Open Sockets: " + clients.length)
