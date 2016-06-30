@@ -10,12 +10,8 @@ body {
 }
 #messages {
     overflow-y: scroll;
-    height: calc(100% - 400px);
+    height: 400px;
 		width: auto;
-
-		::-webkit-scrollbar {
-    	display: none;
-		}
 }
 #messages li {
     font-size: 16px;
