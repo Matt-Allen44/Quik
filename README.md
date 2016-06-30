@@ -6,7 +6,7 @@
 ![Github Issues](https://img.shields.io/github/issues/matt-allen44/quik.svg)
 ![Github Release](https://img.shields.io/github/release/matt-allen44/quik.svg)
 ![Github Version](https://img.shields.io/github/tag/matt-allen44/quik.svg)
-![Open Source Love](https://github.com/matt-allen44)
+![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](
 
 A Free, Lightweight & Open Web Chat Application
 
