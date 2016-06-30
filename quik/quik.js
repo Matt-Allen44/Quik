@@ -63,7 +63,7 @@ usrs_connected = 0;
 				socket.emit('chat message', "Server --DELIM-- Empty message removed")
 				console.log("> empty message removed")
 			} else {
-				console.log(socket.conn.remoteAddress + " [" + geoip.lookup(socket.conn.remoteAddress)["city"] + "] " + msg.replace("--DELIM--", ":"))
+				console.log(socket.conn.remoteAddress + " [" + /*geoip.lookup(socket.conn.remoteAddress)["city"] +*/ "] " + msg.replace("--DELIM--", ":"))
 				io.emit('chat message', msg)
 			}
 		})

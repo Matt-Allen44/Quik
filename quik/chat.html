@@ -61,6 +61,12 @@
       <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script>
+
+      /* WORK AROUND - SHOULD BE CHANGED */
+      window.setInterval(function() {
+        var elem = document.getElementById('messages');
+        elem.scrollTop = elem.scrollHeight;
+      }, 500);
          var socket = io();
          usr_name = "";
 
