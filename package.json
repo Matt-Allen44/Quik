@@ -1,6 +1,6 @@
 {
-  "name": "Quik",
-  "version": "0.0.1",
+  "name": "QuikChat",
+  "version": "0.1.0",
   "description": "Quik is a free and open source chat application",
   "dependencies": {
     "express": "4.10.2",
