@@ -1,4 +1,5 @@
 # Quik
+![Travis-CI Build](https://api.travis-ci.org/Matt-Allen44/Quik.svg)
 A Free, Lightweight & Open Web Chat Application
 
     - Free, Lightweight, Open Source Chat Application
