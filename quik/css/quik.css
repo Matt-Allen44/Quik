@@ -10,12 +10,8 @@ body {
 }
 #messages {
     overflow-y: scroll;
-    height: calc(100% - 400px);
+    height: 400px;
 		width: auto;
-
-		::-webkit-scrollbar {
-    	display: none;
-		}
 }
 #messages li {
     font-size: 16px;
@@ -38,4 +34,18 @@ body {
 img.emoji {
     margin: 0px !important;
     display: inline !important;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

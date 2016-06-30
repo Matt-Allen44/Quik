@@ -2,14 +2,22 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
+var geoip = require('geoip-lite');
 
 app.get('/css/quik.css', function(req, res){
-	res.sendFile(__dirname + '/css/quik.css'); //CHANGE TO QUIK.HTML LATER
+	res.sendFile(__dirname + '/css/quik.css');
 });
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname + '/chat.html'); //CHANGE TO QUIK.HTML LATER
+	res.sendFile(__dirname + '/chat.html');
 });
+
+var clients = [];
+app.get('/clients', function(req, res){
+	res.end("Open Sockets: " + clients.length)
+});
+
+
 
 http.listen(80, function(){
 	console.log('Launched Quik on :80')
@@ -22,6 +30,7 @@ usrs_connected = 0;
 	ON CONNECTION
 */
 	io.on('connection', function(socket){
+		clients.push(socket)
 		usrs_connected = usrs_connected+1;
 		io.emit('connectEvent', usrs_connected)
 
@@ -54,7 +63,7 @@ usrs_connected = 0;
 				socket.emit('chat message', "Server --DELIM-- Empty message removed")
 				console.log("> empty message removed")
 			} else {
-				console.log('> ' + msg.replace("--DELIM--", ":"))
+				console.log(socket.conn.remoteAddress + " [" + /*geoip.lookup(socket.conn.remoteAddress)["city"] +*/ "] " + msg.replace("--DELIM--", ":"))
 				io.emit('chat message', msg)
 			}
 		})
