@@ -3,6 +3,11 @@ A Free, Lightweight & Open Web Chat Application
 
     - Free, Lightweight, Open Source Chat Application
     - Built upon HTML, CSS, Javascript & NodeJS
+##Screenshots
+![Conversation Screen]("https://raw.githubusercontent.com/Matt-Allen44/Quik/master/docs/chatwindow.PNG")
+![Joining Screen]("https://raw.githubusercontent.com/Matt-Allen44/Quik/master/docs/entername.PNG")
+
+
 ### Installation & Launching
 Clone the git repository
 > git clone https://github.com/Matt-Allen44/Quik.git
