@@ -1,4 +1,4 @@
-# Quik
+# Quik | A Free, Lightweight & Open Web Chat Application
 
 ![Travis-CI Build](https://api.travis-ci.org/Matt-Allen44/Quik.svg)
 ![Dependencies](https://david-dm.org/matt-allen44/quik.svg)
@@ -8,10 +8,6 @@
 ![Github Version](https://img.shields.io/github/tag/matt-allen44/quik.svg)
 ![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
-A Free, Lightweight & Open Web Chat Application
-
-    > Free, Lightweight, Open Source Chat Application
-    > Built upon HTML, CSS, Javascript & NodeJS
 ##Screenshots
 ![Conversation Screen](http://i.imgur.com/sEtoEDY.png)
 ![Joining Screen](http://i.imgur.com/xSgs1bD.png)
@@ -20,8 +16,8 @@ A Free, Lightweight & Open Web Chat Application
 ### Installation & Launching
 Clone the git repository
 > git clone https://github.com/Matt-Allen44/Quik.git
-
-> node quik.js
+> npm install
+> node start
 
 > access localhost using any web browser
 

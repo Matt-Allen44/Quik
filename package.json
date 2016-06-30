@@ -9,8 +9,7 @@
     "geoip-lite": "1.1.8"
 
   },
-  "main": "quik.js",
   "scripts": {
-    "start": "electron quik.js"
-  }
+      "start": "node quik.js"
+    }
 }
