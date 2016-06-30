@@ -4,8 +4,8 @@ A Free, Lightweight & Open Web Chat Application
     - Free, Lightweight, Open Source Chat Application
     - Built upon HTML, CSS, Javascript & NodeJS
 ##Screenshots
-![Conversation Screen]("https://raw.githubusercontent.com/Matt-Allen44/Quik/master/docs/chatwindow.PNG")
-![Joining Screen]("https://raw.githubusercontent.com/Matt-Allen44/Quik/master/docs/entername.PNG")
+![Conversation Screen]("http://i.imgur.com/sEtoEDY.png")
+![Joining Screen]("http://i.imgur.com/xSgs1bD.png")
 
 
 ### Installation & Launching
