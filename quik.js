@@ -21,6 +21,11 @@ app.get('/dashboard', function(req, res){
 	res.end("Open Sockets: " + clients.length)
 });
 
+//The 404 Route (ALWAYS Keep this as the last route)
+app.get('*', function(req, res){
+	res.status(404);
+  res.sendFile(__dirname + '/404.html');
+});
 
 
 http.listen(80, function(){
