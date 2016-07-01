@@ -25,13 +25,4 @@ Clone the git repository
 
 ### Dependencies    
 Quik is reliant on the following packages:
-> socket.io, express@4.10.2, sanitize-html
-
-These can be installed with the following commands:
-> npm install --save socket.io
-
-> npm install --save express@4.10.2
-
-> npm install --save sanitize-html
-
-> npm install --save geoip-lite
+> socket.io, express@4.10.2, sanitize-html, config-js
