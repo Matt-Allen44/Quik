@@ -88,7 +88,7 @@
            <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;">Quik</a>
          </div>
          <div class="nav-wrapper orange lighten-1" style="height:24px; line-height: 0px;">
-           <a style="float:left; padding-left: 10px" id="usrs_connected">Users connected: 0</a>
+           <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
 
@@ -142,11 +142,13 @@
          });
 
          socket.on('disconnectEvent', function(msg){
-           document.getElementByID("usrs_connected").text = "Users connected: " + msg;
+           document.getElementById("usrs_connected").text = "Users connected: " + msg;
+           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
          });
 
          socket.on('connectEvent', function(msg){
            document.getElementById("usrs_connected").text = "Users connected: " + msg;
+           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
          });
 
          //Prompt user for name
