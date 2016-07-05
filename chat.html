@@ -75,8 +75,8 @@
 
    <body>
       <nav class="bigscreen">
-         <div class="nav-wrapper orange lighten-1">
-            <a href="#" style="left: 25px" class="brand-logo">Quik</a></li>
+         <div class="nav-wrapper orange darken-4">
+            <a href="#" style="left: 25px" class="brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
             <!--
               <li>
@@ -100,22 +100,22 @@
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
                <li><a id="usrs_connected">Users connected: 0</a></li>
-               <li>    <div id="firebaseui-auth-container"></div> </li>
+               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
             </ul>
          </div>
       </nav>
 
       <nav class="smallscreen">
-         <div class="nav-wrapper orange lighten-1">
-           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;">Quik</a>
+         <div class="nav-wrapper orange darken-4">
+           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="64" style="padding:8px" src="/branding/logo.png"></a>
          </div>
-         <div class="nav-wrapper orange lighten-1" style="height:24px; line-height: 0px;">
+         <div class="nav-wrapper orange darken-4" style="height:24px; line-height: 0px;">
            <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
 
          <!---
-         <div class="nav-wrapper orange lighten-1" style="height:24px; line-height: 0px; width:100%">
+         <div class="nav-wrapper orange darken-4" style="height:24px; line-height: 0px; width:100%">
            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
            <ins class="adsbygoogle"
                 style="display:inline-block;width:728px;height:90px"
@@ -138,7 +138,7 @@
                -webkit-box-shadow: 0 1px 0 0 #ffa726;
                -moz-box-shadow: 0 1px 0 0 #ffa726;
                box-shadow: 0 1px 0 0 #ffa726;"  placeholder="message here" id="m" autocomplete="off" /></div>
-            <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
+            <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange darken-4" type="submit" name="action">Send Message</button></div>
          </form>
       </div>
 
@@ -174,7 +174,7 @@
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
            $('#messages').append((msg.split("--DELIM--")[1]));
            $('#messages').append($('<p/>'));
-         });
+         });  
 
          socket.on('disconnectEvent', function(msg){
            document.getElementById("usrs_connected").text = "Users connected: " + msg;
@@ -193,7 +193,7 @@
            type: "input",
            showCancelButton: false,
            closeOnConfirm: false,
-           confirmButtonColor: "#ffa726 ",
+           confirmButtonColor: "#e65100 ",
            confirmButtonText: "Enter Quik!",
            allowEscapeKey: false,
            inputPlaceholder: "username"

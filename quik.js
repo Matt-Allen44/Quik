@@ -8,6 +8,10 @@ app.get('/css/quik.css', function(req, res){
 	res.sendFile(__dirname + '/css/quik.css');
 });
 
+app.get('/branding/logo.png', function(req, res){
+	res.sendFile(__dirname + '/branding/logo.png');
+});
+
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html');
 });
