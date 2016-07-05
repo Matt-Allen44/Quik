@@ -8,9 +8,17 @@ app.get('/css/quik.css', function(req, res){
 	res.sendFile(__dirname + '/css/quik.css');
 });
 
+/* Branding related requests */
+
 app.get('/branding/logo.png', function(req, res){
 	res.sendFile(__dirname + '/branding/logo.png');
 });
+
+app.get('/branding/theme', function(req, res){
+	res.sendFile(__dirname + '/branding/theme');
+});
+
+/* End of branding related requests */
 
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html');
@@ -27,8 +35,9 @@ app.get('/dashboard', function(req, res){
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
+	console.log("404")
 	res.status(404);
-  res.sendFile(__dirname + '/404.html');
+  	res.sendFile(__dirname + '/404.html');
 });
 
 
