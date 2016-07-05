@@ -139,7 +139,7 @@
          <div class="nav-wrapper branding_theme_class ">
            <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="32" style="padding:8px" src="/branding/logo.png"></a>
          </div>
-         <div class="nav-wrapper branding_theme_class">
+         <div class="nav-wrapper branding_theme_class ">
            <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
@@ -183,12 +183,17 @@
       text = xmlhttp.responseText;
 
       var brandingColorClass = text.split(",")[0].split(":")[1];
-      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class ', brandingColorClass);
+      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class', brandingColorClass);
       console.log('Branding color class: ' + brandingColorClass)
 
       var brandingColorHex = text.split(",")[1].split(":")[1];
       document.body.innerHTML = document.body.innerHTML.replace('branding_theme_hex', brandingColorHex);
       console.log('Branding color hex: ' + brandingColorHex)
+
+
+
+      var brandingTitle = text.split(",")[2].split(":")[1];
+      document.title = brandingTitle
 
       /* End of brand themeing */
 
