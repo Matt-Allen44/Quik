@@ -77,7 +77,7 @@
 
    <body>
       <nav class="bigscreen">
-         <div class="nav-wrapper branding_theme_class">
+         <div class="nav-wrapper branding_theme_class ">
             <a href="#" style="left: 25px" class="brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
             <!--
@@ -136,16 +136,16 @@
       </nav>
 
       <nav class="smallscreen">
-         <div class="nav-wrapper branding_theme_class">
+         <div class="nav-wrapper branding_theme_class ">
            <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="64" style="padding:8px" src="/branding/logo.png"></a>
          </div>
-         <div class="nav-wrapper branding_theme_class" style="height:24px; line-height: 0px;">
+         <div class="nav-wrapper branding_theme_class " style="height:24px; line-height: 0px;">
            <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
 
          <!---
-         <div class="nav-wrapper branding_theme_class" style="height:24px; line-height: 0px; width:100%">
+         <div class="nav-wrapper branding_theme_class " style="height:24px; line-height: 0px; width:100%">
            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
            <ins class="adsbygoogle"
                 style="display:inline-block;width:728px;height:90px"
@@ -168,7 +168,7 @@
                -webkit-box-shadow: 0 1px 0 0 branding_theme_hex;
                -moz-box-shadow: 0 1px 0 0 branding_theme_hex;
                box-shadow: 0 1px 0 0 branding_theme_hex;"  placeholder="message here" id="m" autocomplete="off" /></div>
-            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_theme_class " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
+            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_theme_class  " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
          </form>
       </div>
 
@@ -183,7 +183,7 @@
       text = xmlhttp.responseText;
 
       var brandingColorClass = text.split(",")[0].split(":")[1];
-      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class', brandingColorClass);
+      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class ', brandingColorClass);
       console.log('Branding color class: ' + brandingColorClass)
 
       var brandingColorHex = text.split(",")[1].split(":")[1];
@@ -247,9 +247,9 @@
            if (inputValue === false) window.close();
 
 
-           if (inputValue === "") {
+           if (inputValue.length < 1) {
              swal.showInputError("You need to write something!");
-           } if(inputValue.length > 10){
+           } else if(inputValue.length > 10){
               swal.showInputError("Name can't be longer than 10 characters!");
             } else {
              swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
