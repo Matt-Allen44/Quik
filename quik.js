@@ -52,6 +52,10 @@ usrs_connected = 0;
 	ON CONNECTION
 */
 	io.on('connection', function(socket){
+		socket.emit('chat message', 'Notice --DELIM-- Connection established')
+		socket.emit('chat message', "Notice --DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik")
+		socket.emit('chat message', 'Notice --DELIM-- This chat room is logged and users must comply with the TOS')
+
 		clients.push(socket)
 		usrs_connected = usrs_connected+1;
 		io.emit('connectEvent', usrs_connected)
