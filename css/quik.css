@@ -39,6 +39,9 @@ and (min-device-width : 501px){ .smallscreen { display: none; }}
     padding-top: 0px;
     display: inline;
 }
+nav .nav-wrapper {
+    height:25%;  !important 
+}
 img.emoji {
     margin: 0px !important;
     display: inline !important;
