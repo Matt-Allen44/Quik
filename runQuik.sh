@@ -1,2 +1,2 @@
 npm install
-npm start
+npm startNode
