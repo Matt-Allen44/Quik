@@ -15,6 +15,8 @@
       <link rel="stylesheet" type="text/css" href="/css/quik.css">
 
       <!-- Compiled and minified JavaScript -->
+            <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
       <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
       <script>twemoji.size = '16x16';</script>
@@ -89,8 +91,16 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
               </li>
-              -->
-               <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
+              -->               
+
+               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Github</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown1' class='dropdown-content'>
+              <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
                <!-- Place this tag where you want the button to render. -->
@@ -99,8 +109,28 @@
                <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
-               <li><a id="usrs_connected">Users connected: 0</a></li>
-               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
+              </ul>
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown2'>Chat Room</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown2' class='dropdown-content'>
+                <li><a href="/room/1">Room 1</a></li>
+                <li><a href="/room/2">Room 2</a></li>
+                <li><a href="/room/3">Room 3</a></li>
+              </ul>
+                    
+              <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown3'>User List</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown3' class='dropdown-content'>
+                <li><a href="/room/1" id="usrs_connected">Users Connected: 0</a></li>    
+                <li class="divider"></li>
+                <li><a href="/room/2">Room 2</a></li>
+                <li><a href="/room/3">Room 3</a></li>
+              </ul>
             </ul>
          </div>
       </nav>
@@ -142,8 +172,6 @@
          </form>
       </div>
 
-      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
       <script>
 
       /* Apply brand themeing */
@@ -229,6 +257,17 @@
              socket.emit('chat message', usr_name + "--DELIM-- has connected");
             }
          });
+
+      $('.dropdown-button').dropdown({
+           inDuration: 300,
+           outDuration: 225,
+           constrain_width: true, 
+           hover: false, 
+           gutter: 0, 
+           belowOrigin: false 
+           }
+      );
+        
       </script>
    </body>
 </html>
