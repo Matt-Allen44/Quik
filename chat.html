@@ -203,11 +203,6 @@
 
       /* End of brand themeing */
 
-      /* WORK AROUND - SHOULD BE CHANGED */
-      window.setInterval(function() {
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-      }, 500);
          var socket = io();
          usr_name = "";
 
@@ -226,6 +221,9 @@
          });
 
          socket.on('chat message', function(msg){
+           var elem = document.getElementById('messages');
+           elem.scrollTop = elem.scrollHeight;
+           
            msg = twemoji.parse(msg);
            $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));

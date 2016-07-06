@@ -11,8 +11,8 @@ body {
 
 @media only screen
 and (min-device-width : 0px)
-and (max-device-width : 500px) { 
-    .bigscreen { display: none; } 
+and (max-device-width : 500px) {
+    .bigscreen { display: none; }
     nav .nav-wrapper {height:25%;  !important }
 }
 
@@ -23,6 +23,7 @@ and (min-device-width : 501px){ .smallscreen { display: none; }}
     overflow-y: scroll;
     height: 400px;
 		width: auto;
+    margin:20px;
 }
 #messages li {
     font-size: 16px;
