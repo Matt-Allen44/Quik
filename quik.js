@@ -3,6 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
+var swearjar = require('swearjar');
 
 app.get('/css/quik.css', function(req, res){
 	res.sendFile(__dirname + '/css/quik.css');
@@ -71,30 +72,29 @@ usrs_connected = 0;
 		})
 
 			socket.on('chat message', function(msg){
+  			msg = sanitizeHtml(msg)
 
-			msg = sanitizeHtml(msg)
+  			//Check if users name is empty
+  			if(msg.split("--DELIM--")[0].length === 0){
+  				socket.emit('chat message', "Server --DELIM-- Connection Refused (invalid name)")
+  				socket.emit('chat message',  "Server --DELIM-- Your IP (" + socket.conn.remoteAddress + ") has been logged.")
+  				socket.disconnect();
+  			}
 
-			//Check if users name is empty
-			if(msg.split("--DELIM--")[0].length === 0){
-				socket.emit('chat message', "Server --DELIM-- Connection Refused (invalid name)")
-				socket.emit('chat message',  "Server --DELIM-- Your IP (" + socket.conn.remoteAddress + ") has been logged.")
-				socket.disconnect();
-			}
-
-			//Check if users name is too llong
-			if(msg.split("--DELIM--")[0].length > 10){
-				socket.emit('chat message', "Server --DELIM-- Connection Refused (name to long)")
-				socket.emit('chat message',  "Server --DELIM-- Your IP (" + socket.conn.remoteAddress + ") has been logged.")
-				socket.disconnect();
-			}
+  			//Check if users name is too llong
+  			if(msg.split("--DELIM--")[0].length > 10){
+  				socket.emit('chat message', "Server --DELIM-- Connection Refused (name to long)")
+  				socket.emit('chat message',  "Server --DELIM-- Your IP (" + socket.conn.remoteAddress + ") has been logged.")
+  				socket.disconnect();
+  			}
 
 
-			if(0 === msg.length){
-				socket.emit('chat message', "Server --DELIM-- Empty message removed")
-				console.log("> empty message removed")
-			} else {
-				console.log(socket.conn.remoteAddress + " [" + /*geoip.lookup(socket.conn.remoteAddress)["city"] +*/ "] " + msg.replace("--DELIM--", ":"))
-				io.emit('chat message', msg)
-			}
+  			if(0 === msg.length){
+  				socket.emit('chat message', "Server --DELIM-- Empty message removed")
+  				console.log("> empty message removed")
+  			} else {
+  				console.log(socket.conn.remoteAddress + " [" + /*geoip.lookup(socket.conn.remoteAddress)["city"] +*/ "] " + msg.replace("--DELIM--", ":"))
+  				io.emit('chat message', swearjar.censor(msg))
+  			}
 		})
 });
