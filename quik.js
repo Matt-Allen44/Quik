@@ -13,6 +13,10 @@ app.get('/branding/favicon.ico', function(req, res){
 	res.sendFile(__dirname + '/branding/favicon.ico');
 });
 
+app.get('/notify.mp3', function(req, res){
+	res.sendFile(__dirname + '/notify.mp3');
+});
+
 /* Branding related requests */
 
 app.get('/branding/logo.png', function(req, res){
