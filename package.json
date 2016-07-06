@@ -9,7 +9,6 @@
     "geoip-lite": "1.1.8",
     "config-js": "1.1.9",
     "winston": "2.2.0"
-
   },
   "scripts": {
       "startNode": "node quik.js",
