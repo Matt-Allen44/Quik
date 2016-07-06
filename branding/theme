@@ -1,3 +1,8 @@
-branding-color-class: light-green accent-4,
-branding-color-hex: #64dd17,
-branding-title: Generic Company Chat
+branding-color-class: grey lighten-1,
+branding-color-hex: #757575,
+branding-title: Generic Company Chat,
+branding-color-accent-class: orange darken-3,
+branding-color-accent-hex #ef6c00,
+
+NOTE: AT THIS CURRENT STAGE YOU WILL NOT BE NOTIFIED OF ERRORS WITH THIS FILE
+PLEASE ENSURE EACH LINE IS DELIMITED WITH A ',' 

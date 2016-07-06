@@ -98,7 +98,7 @@
                <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
 
                  <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Github</a>
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown1'>Github</a>
 
               <!-- Dropdown Structure -->
               <ul id='dropdown1' class='dropdown-content'>
@@ -114,20 +114,20 @@
               </ul>
 
                  <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn' href='#' data-activates='dropdown2'>Chat Room</a>
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown2'>Chat Room</a>
 
               <!-- Dropdown Structure -->
-              <ul id='dropdown2' class='dropdown-content'>
+              <ul id='dropdown2' class='dropdown-content branding_theme_class'>
                 <li><a href="/room/1">Room 1</a></li>
                 <li><a href="/room/2">Room 2</a></li>
                 <li><a href="/room/3">Room 3</a></li>
               </ul>
 
               <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn' href='#' data-activates='dropdown3'>User List</a>
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown3'>User List</a>
 
               <!-- Dropdown Structure -->
-              <ul id='dropdown3' class='dropdown-content'>
+              <ul id='dropdown3' class='dropdown-content branding_theme_class '>
                 <li><a href="/room/1" id="usrs_connected">Users Connected: 0</a></li>
                 <li class="divider"></li>
                 <li><a href="/room/2">Room 2</a></li>
@@ -170,7 +170,7 @@
                -webkit-box-shadow: 0 1px 0 0 branding_theme_hex;
                -moz-box-shadow: 0 1px 0 0 branding_theme_hex;
                box-shadow: 0 1px 0 0 branding_theme_hex;"  placeholder="message here" id="m" autocomplete="off" /></div>
-            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_theme_class  " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
+            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_accent_class  " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
          </form>
       </div>
 
@@ -192,7 +192,13 @@
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
       console.log('Branding color hex: ' + brandingColorHex)
 
+      var brandingAccentClass = text.split(",")[3].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
+      console.log('Branding accent class: ' + brandingAccentClass)
 
+      var brandingAccentHex = text.split(",")[4].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
+      console.log('Branding accent hex: ' + brandingAccentHex)
 
       var brandingTitle = text.split(",")[2].split(":")[1];
       document.title = brandingTitle
@@ -246,7 +252,7 @@
            type: "input",
            showCancelButton: false,
            closeOnConfirm: false,
-           confirmButtonColor: "branding_theme_hex",
+           confirmButtonColor: " #ff5050 ",
            confirmButtonText: "Continue",
            allowEscapeKey: false,
            inputPlaceholder: "username"
