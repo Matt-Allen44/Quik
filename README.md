@@ -19,8 +19,8 @@ Clone the git repository
 > access localhost using any web browser
 
 ##Screenshots
-![Conversation Screen](http://i.imgur.com/sEtoEDY.png)
-![Joining Screen](http://i.imgur.com/xSgs1bD.png)
+![Conversation Screen](http://i.imgur.com/O6pkX6U.png)
+![Joining Screen](http://i.imgur.com/oKBWSZ5.png)
 
 
 ### Dependencies    
