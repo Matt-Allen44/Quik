@@ -8,6 +8,10 @@ app.get('/css/quik.css', function(req, res){
 	res.sendFile(__dirname + '/css/quik.css');
 });
 
+app.get('/branding/favicon.ico', function(req, res){
+	res.sendFile(__dirname + '/branding/favicon.ico');
+});
+
 /* Branding related requests */
 
 app.get('/branding/logo.png', function(req, res){
