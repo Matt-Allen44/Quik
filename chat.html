@@ -190,7 +190,14 @@
              setInterval(function() {
                favicon.badge(messagesSinceFocus);
 
+               if(messagesSinceFocus > 0){
+                 document.title = "Quik (Unread)"
+               } else {
+                 document.title = "Quik"
+               }
+
              }, 1000);
+
       /* Apply brand themeing */
 
       var xmlhttp, text;

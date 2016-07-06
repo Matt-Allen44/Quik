@@ -11,13 +11,13 @@ body {
 
 @media only screen
 and (min-device-width : 0px)
-and (max-device-width : 500px) {
+and (max-device-width : 656px) {
     .bigscreen { display: none; }
     nav .nav-wrapper {height:25%;  !important }
 }
 
 @media only screen
-and (min-device-width : 501px){ .smallscreen { display: none; }}
+and (min-device-width : 656px){ .smallscreen { display: none; }}
 
 #messages {
     overflow-y: scroll;
