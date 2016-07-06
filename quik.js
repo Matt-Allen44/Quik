@@ -8,6 +8,18 @@ app.get('/css/quik.css', function(req, res){
 	res.sendFile(__dirname + '/css/quik.css');
 });
 
+/* Branding related requests */
+
+app.get('/branding/logo.png', function(req, res){
+	res.sendFile(__dirname + '/branding/logo.png');
+});
+
+app.get('/branding/theme', function(req, res){
+	res.sendFile(__dirname + '/branding/theme');
+});
+
+/* End of branding related requests */
+
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/chat.html');
 });
@@ -23,8 +35,9 @@ app.get('/dashboard', function(req, res){
 
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res){
+	console.log("404")
 	res.status(404);
-  res.sendFile(__dirname + '/404.html');
+  	res.sendFile(__dirname + '/404.html');
 });
 
 
@@ -39,6 +52,10 @@ usrs_connected = 0;
 	ON CONNECTION
 */
 	io.on('connection', function(socket){
+		socket.emit('chat message', 'Notice --DELIM-- Connection established')
+		socket.emit('chat message', "Notice --DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik")
+		socket.emit('chat message', 'Notice --DELIM-- This chat room is logged and users must comply with the TOS')
+
 		clients.push(socket)
 		usrs_connected = usrs_connected+1;
 		io.emit('connectEvent', usrs_connected)

@@ -2,6 +2,8 @@
 <html>
    <head>
 
+
+
       <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
       <meta charset="UTF-8">
       <meta name="description" content="A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik">
@@ -12,9 +14,10 @@
       <!-- Compiled and minified CSS -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-      <link rel="stylesheet" type="text/css" href="/css/quik.css">
 
       <!-- Compiled and minified JavaScript -->
+            <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
       <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
       <script>twemoji.size = '16x16';</script>
@@ -71,16 +74,17 @@
           //TODO: Implemented firebase auth here
         });
       </script>
+      <link rel="stylesheet" type="text/css" href="/css/quik.css">
    </head>
 
    <body>
       <nav class="bigscreen">
-         <div class="nav-wrapper orange lighten-1">
-            <a href="#" style="left: 25px" class="brand-logo">Quik</a></li>
+         <div class="nav-wrapper branding_theme_class ">
+            <a href="#" style="left: 25px" class="brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <!--
               <li>
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                <!-- QuikLeaderboard -->
                 <ins class="adsbygoogle"
                      style="display:inline-block;width:728px;height:90px"
                      data-ad-client="ca-pub-4543823594337896"
@@ -89,7 +93,16 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
               </li>
-               <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
+              -->               
+
+               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Github</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown1' class='dropdown-content'>
+              <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
                <!-- Place this tag where you want the button to render. -->
@@ -98,24 +111,44 @@
                <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
-               <li><a id="usrs_connected">Users connected: 0</a></li>
-               <li>    <div id="firebaseui-auth-container"></div> </li>
+              </ul>
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown2'>Chat Room</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown2' class='dropdown-content'>
+                <li><a href="/room/1">Room 1</a></li>
+                <li><a href="/room/2">Room 2</a></li>
+                <li><a href="/room/3">Room 3</a></li>
+              </ul>
+                    
+              <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn' href='#' data-activates='dropdown3'>User List</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown3' class='dropdown-content'>
+                <li><a href="/room/1" id="usrs_connected">Users Connected: 0</a></li>    
+                <li class="divider"></li>
+                <li><a href="/room/2">Room 2</a></li>
+                <li><a href="/room/3">Room 3</a></li>
+              </ul>
             </ul>
          </div>
       </nav>
 
       <nav class="smallscreen">
-         <div class="nav-wrapper orange lighten-1">
-           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;">Quik</a>
+         <div class="nav-wrapper branding_theme_class ">
+           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="32" style="padding:8px" src="/branding/logo.png"></a>
          </div>
-         <div class="nav-wrapper orange lighten-1" style="height:24px; line-height: 0px;">
+         <div class="nav-wrapper branding_theme_class ">
            <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
 
-         <div class="nav-wrapper orange lighten-1" style="height:24px; line-height: 0px; width:100%">
+         <!---
+         <div class="nav-wrapper branding_theme_class " style="height:24px; line-height: 0px; width:100%">
            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-           <!-- QuikLeaderboard -->
            <ins class="adsbygoogle"
                 style="display:inline-block;width:728px;height:90px"
                 data-ad-client="ca-pub-4543823594337896"
@@ -123,6 +156,7 @@
            <script>
            (adsbygoogle = window.adsbygoogle || []).push({});
            </script>
+          -->
          </div>
 
       </nav>
@@ -132,17 +166,38 @@
       </div>
       <div>
          <form action="" style="position: fixed; bottom: 0; width:100%">
-            <div style="padding-left:25px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid #ffa726;
-               -webkit-box-shadow: 0 1px 0 0 #ffa726;
-               -moz-box-shadow: 0 1px 0 0 #ffa726;
-               box-shadow: 0 1px 0 0 #ffa726;"  placeholder="message here" id="m" autocomplete="off" /></div>
-            <div style="padding-left:12.5px; display:inline"><button style="width: 100px; float:right vertical-align: middle;" class="btn waves-effect waves-light orange lighten-2" type="submit" name="action">Send Message</button></div>
+            <div style="padding-left:25px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid branding_theme_hex;
+               -webkit-box-shadow: 0 1px 0 0 branding_theme_hex;
+               -moz-box-shadow: 0 1px 0 0 branding_theme_hex;
+               box-shadow: 0 1px 0 0 branding_theme_hex;"  placeholder="message here" id="m" autocomplete="off" /></div>
+            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_theme_class  " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
          </form>
       </div>
 
-      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
       <script>
+
+      /* Apply brand themeing */
+
+      var xmlhttp, text;
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', '/branding/theme', false);
+      xmlhttp.send();
+      text = xmlhttp.responseText;
+
+      var brandingColorClass = text.split(",")[0].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class', brandingColorClass);
+      console.log('Branding color class: ' + brandingColorClass)
+
+      var brandingColorHex = text.split(",")[1].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_hex', brandingColorHex);
+      console.log('Branding color hex: ' + brandingColorHex)
+
+
+
+      var brandingTitle = text.split(",")[2].split(":")[1];
+      document.title = brandingTitle
+
+      /* End of brand themeing */
 
       /* WORK AROUND - SHOULD BE CHANGED */
       window.setInterval(function() {
@@ -172,7 +227,7 @@
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
            $('#messages').append((msg.split("--DELIM--")[1]));
            $('#messages').append($('<p/>'));
-         });
+         });  
 
          socket.on('disconnectEvent', function(msg){
            document.getElementById("usrs_connected").text = "Users connected: " + msg;
@@ -191,17 +246,17 @@
            type: "input",
            showCancelButton: false,
            closeOnConfirm: false,
-           confirmButtonColor: "#ffa726 ",
-           confirmButtonText: "Enter Quik!",
+           confirmButtonColor: "branding_theme_hex",
+           confirmButtonText: "Continue",
            allowEscapeKey: false,
            inputPlaceholder: "username"
          }, function (inputValue) {
            if (inputValue === false) window.close();
 
 
-           if (inputValue === "") {
+           if (inputValue.length < 1) {
              swal.showInputError("You need to write something!");
-           } if(inputValue.length > 10){
+           } else if(inputValue.length > 10){
               swal.showInputError("Name can't be longer than 10 characters!");
             } else {
              swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
@@ -209,6 +264,17 @@
              socket.emit('chat message', usr_name + "--DELIM-- has connected");
             }
          });
+
+      $('.dropdown-button').dropdown({
+           inDuration: 300,
+           outDuration: 225,
+           constrain_width: true, 
+           hover: false, 
+           gutter: 0, 
+           belowOrigin: false 
+           }
+      );
+        
       </script>
    </body>
 </html>

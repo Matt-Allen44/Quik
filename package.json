@@ -12,6 +12,7 @@
 
   },
   "scripts": {
-      "start": "node quik.js"
+      "startNode": "node quik.js",
+      "startNodeJS": "nodejs quik.js"
     }
 }
