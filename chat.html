@@ -78,10 +78,10 @@
    </head>
 
    <body>
-      <nav class="bigscreen">
-         <div class="nav-wrapper branding_theme_class ">
-            <a href="#" style="left: 25px" class="brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <nav class="bigscreen branding_theme_class ">
+         <div class="nav-wrapper">
+            <a href="#" class="left brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
+            <ul id="nav-mobile" class="right">
             <!--
               <li>
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -93,7 +93,7 @@
                 (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
               </li>
-              -->               
+              -->
 
                <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
 
@@ -122,13 +122,13 @@
                 <li><a href="/room/2">Room 2</a></li>
                 <li><a href="/room/3">Room 3</a></li>
               </ul>
-                    
+
               <!-- Dropdown Trigger -->
               <a class='dropdown-button btn' href='#' data-activates='dropdown3'>User List</a>
 
               <!-- Dropdown Structure -->
               <ul id='dropdown3' class='dropdown-content'>
-                <li><a href="/room/1" id="usrs_connected">Users Connected: 0</a></li>    
+                <li><a href="/room/1" id="usrs_connected">Users Connected: 0</a></li>
                 <li class="divider"></li>
                 <li><a href="/room/2">Room 2</a></li>
                 <li><a href="/room/3">Room 3</a></li>
@@ -137,11 +137,11 @@
          </div>
       </nav>
 
-      <nav class="smallscreen">
-         <div class="nav-wrapper branding_theme_class ">
+      <nav class="smallscreen branding_theme_class ">
+         <div class="nav-wrapper">
            <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="32" style="padding:8px" src="/branding/logo.png"></a>
          </div>
-         <div class="nav-wrapper branding_theme_class ">
+         <div class="nav-wrapper">
            <a style="float:left; padding-left: 10px" id="usrs_connectedMobi">Users connected: 0</a>
            <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px">View us on Github</a>
          </div>
@@ -185,11 +185,11 @@
       text = xmlhttp.responseText;
 
       var brandingColorClass = text.split(",")[0].split(":")[1];
-      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_class', brandingColorClass);
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
       console.log('Branding color class: ' + brandingColorClass)
 
       var brandingColorHex = text.split(",")[1].split(":")[1];
-      document.body.innerHTML = document.body.innerHTML.replace('branding_theme_hex', brandingColorHex);
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
       console.log('Branding color hex: ' + brandingColorHex)
 
 
@@ -227,7 +227,7 @@
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
            $('#messages').append((msg.split("--DELIM--")[1]));
            $('#messages').append($('<p/>'));
-         });  
+         });
 
          socket.on('disconnectEvent', function(msg){
            document.getElementById("usrs_connected").text = "Users connected: " + msg;
@@ -268,13 +268,13 @@
       $('.dropdown-button').dropdown({
            inDuration: 300,
            outDuration: 225,
-           constrain_width: true, 
-           hover: false, 
-           gutter: 0, 
-           belowOrigin: false 
+           constrain_width: true,
+           hover: false,
+           gutter: 0,
+           belowOrigin: false
            }
       );
-        
+
       </script>
    </body>
 </html>
