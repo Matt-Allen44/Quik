@@ -20,11 +20,9 @@ app.get('/dash/sysdat', function (req, res) {
     res.send('200 OK');
   }
 });
-
 app.get('/dash/usrdat', function (req, res) {
   res.send(clients.toString());
 });
-
 /* Branding related requests */
 app.get('/branding/logo.png', function (req, res) {
   res.sendFile(__dirname + '/branding/logo.png');

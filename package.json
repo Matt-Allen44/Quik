@@ -1,6 +1,6 @@
 {
   "name": "Quik",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Quik is a free and open source chat application",
   "dependencies": {
     "config-js": "1.1.9",
@@ -15,9 +15,9 @@
   "scripts": {
     "startNode": "node quik.js",
     "startNodeJS": "nodejs quik.js",
-    "test": "jshint quik.js"
+    "test": "jshint quik.js;"
   },
   "devDependencies": {
-    "jshint": "^2.9.2"
+    "jshint": "2.9.2"
   }
 }
