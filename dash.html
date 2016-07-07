@@ -450,67 +450,6 @@
           document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td>" + usrdat[i].split(',')[0] + "</td><td>" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td></tr>"
       }
 
-
-
-      //define notification audio
-      var audio = new Audio('notify.mp3');
-      var isFocused = true; //Default to true so the noise isn't played if there is an error
-      var messagesSinceFocus = 0;
-
-         var socket = io();
-         usr_name = "";
-
-         $('form').submit(function(){
-             if($('#m').val() === ""){
-               swal({
-                 title: 'Error sending message!',
-                 text: 'Please ensure you have entered text',
-                 timer: 2000
-               })
-             } else {
-               socket.emit('chat message', usr_name + "--DELIM-- " + $('#m').val());
-               $('#m').val('');
-             }
-             return false;
-         });
-
-
-         socket.on('chat message', function(msg){
-           var elem = document.getElementById('messages');
-           elem.scrollTop = elem.scrollHeight;
-
-           $(window).focus(function(){
-             isFocused = true;
-             messagesSinceFocus=0;
-           }).blur(function(){
-             isFocused = false;
-           });
-
-           if(!isFocused){
-             messagesSinceFocus++;
-             //Alert user if they are not focused on the tab
-             audio.play();
-           }
-
-
-           msg = twemoji.parse(msg);
-           $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
-           //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
-           $('#messages').append((msg.split("--DELIM--")[1]));
-           $('#messages').append($('<p/>'));
-         });
-
-         socket.on('disconnectEvent', function(msg){
-           document.getElementById("usrs_connected").text = "User list (" + msg + ")";
-           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
-         });
-
-         socket.on('connectEvent', function(msg){
-           document.getElementById("usrs_connected").text = "User list (" + msg + ")";
-           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
-         });
-
-
       $('.dropdown-button').dropdown({
            inDuration: 300,
            outDuration: 225,
