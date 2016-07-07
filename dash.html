@@ -2,34 +2,120 @@
 <html>
    <head>
 
-      <title>Quik | Dashboard</title>
+
+
+      <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
       <meta charset="UTF-8">
       <meta name="description" content="A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik">
       <meta name="keywords" content="Chat, Instant, Message, HTML, CSS, Javascript, NodeJS, SocketIO, Socket.IO">
       <meta name="author" content="Matthew Allen">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="icon" href="/branding/favicon.ico" />
 
       <!-- Compiled and minified CSS -->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
       <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-      <link rel="stylesheet" type="text/css" href="/css/quik.css">
 
       <!-- Compiled and minified JavaScript -->
+            <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+      <script src="/socket.io/socket.io.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
       <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
       <script>twemoji.size = '16x16';</script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
+
+      <script src="http://lab.ejci.net/favico.js/favico.min.js"></script>
+      <script>
+      var favicon=new Favico({
+          animation:'slide',
+          bgColor : '#000',
+          textColor : '#fff',
+          position : 'up'
+      });
+      </script>
+
       <!-- Place this tag in your head or just before your close body tag. -->
       <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyByC4lJaLHZ1R4RtC-HSuuZBCG9Q4bWxLo",
+          authDomain: "quik-app.firebaseapp.com",
+          databaseURL: "https://quik-app.firebaseio.com",
+          storageBucket: "quik-app.appspot.com",
+        };
+        firebase.initializeApp(config);
+      </script>
+
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-80183645-1', 'auto');
+        ga('send', 'pageview');
+
+      </script>
+
+      <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+      <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+      <script type="text/javascript">
+        // FirebaseUI config.
+
+        var uiConfig = {
+          'signInSuccessUrl': '/',
+          'signInOptions': [
+            // Leave the lines as is for the providers you want to offer your users.
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID
+          ],
+          // Terms of service url.
+          'tosUrl': '',
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+          console.log(user.displayName)
+          //TODO: Implemented firebase auth here
+        });
+      </script>
+      <link rel="stylesheet" type="text/css" href="/css/quik.css">
    </head>
 
    <body>
-      <nav class="smallscreen">
-         <div class="nav-wrapper orange lighten-1">
-            <a href="#" style="left: 25px" class="brand-logo">Quik <span style="font-size: 24px; font-weight:bold">Dashboard</span></a></li>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-               <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
+      <nav class="bigscreen branding_theme_class ">
+         <div class="nav-wrapper">
+            <a href="#" class="left brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
+            <ul id="nav-mobile" class="right">
+            <!--
+              <li>
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:728px;height:90px"
+                     data-ad-client="ca-pub-4543823594337896"
+                     data-ad-slot="1901525255"></ins>
+                <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+              </li>
+              -->
+
+               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown1'>Github</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown1' class='dropdown-content'>
+              <li><a href="https://github.com/matt-allen44/quik" >View Repository</a></li>
+              <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
                <!-- Place this tag where you want the button to render. -->
@@ -38,36 +124,283 @@
                <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
                <!-- Place this tag where you want the button to render. -->
                <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
-               <li><a id="usrs_connected">Users connected: 0</a></li>
-               </li>
+              </ul>
+
+                 <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown2'>Chat Room</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown2' class='dropdown-content branding_theme_class'>
+                <li><a href="/room/1">Room 1</a></li>
+                <li><a href="/room/2">Room 2</a></li>
+                <li><a href="/room/3">Room 3</a></li>
+              </ul>
+
+              <!-- Dropdown Trigger -->
+              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown3'id="usrs_connected">User List</a>
+
+              <!-- Dropdown Structure -->
+              <ul id='dropdown3' class='dropdown-content branding_theme_class '>
+              </ul>
             </ul>
          </div>
       </nav>
 
+      <nav class="smallscreen branding_theme_class ">
+         <div class="nav-wrapper">
+           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="32" style="padding:8px" src="/branding/logo.png"></a>
+         </div>
+         <div class="nav-wrapper">
+           <a style="float:left; padding-left: 10px;  color: branding_accent_hex" id="usrs_connectedMobi">Users connected: 0</a>
+           <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px;  color: branding_accent_hex">View us on Github</a>
+         </div>
 
-      <div style="width:100%;   position: fixed; display: block; left:25px; padding-top:50px">
-        <div>
-          <h2> Connected Users </h2>
-          <ul>
-            <li> Matt </li>
-            <li> Matt </li>
-            <li> Matt </li>
-            <li> Matt </li>
-            <li> Matt </li>
+         <!---
+         <div class="nav-wrapper branding_theme_class " style="height:24px; line-height: 0px; width:100%">
+           <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+           <ins class="adsbygoogle"
+                style="display:inline-block;width:728px;height:90px"
+                data-ad-client="ca-pub-4543823594337896"
+                data-ad-slot="1901525255"></ins>
+           <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+           </script>
+          -->
+         </div>
 
-          <ul>
-        </div>
+      </nav>
+
+      <!-- BODY HERE -->
+
+      <div id="userlist" class="userlist dashelement branding_theme_class left" style="border: 1px solid branding_accent_hex ">
+        <h5> User list </h5>
+        <table>
+               <thead>
+                 <tr>
+                     <th data-field="id">SocketID</th>
+                     <th data-field="ip">IP</th>
+                     <th data-field="location">Location</th>
+                     <th data-field="room">Room</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+                 <tr>
+                   <td>123</td>
+                   <td>127.0.0.1</td>
+                   <td>Adelaide, Australia</td>
+                   <td>Lobby</td>
+                 </tr>
+               </tbody>
+             </table>
       </div>
 
-      <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
+      <div class="rightbar right branding_theme_class" style="margin:20px; padding:20px; border: 1px solid branding_accent_hex">
+        <div id="controller" class="controller" style=" ">
+          <h5> Resource Usage (sysdat) </h5>
+          <table>
+            <thead>
+              <tr>
+                  <th data-field="cpu">CPU</th>
+                  <th data-field="usage_per">CPU Utilization (%)</th>
+                  <th data-field="usage_spd">CPU Speed (Mhz)</th>
+                  <th data-field="usage_per">CPU Average Utilization (%)</th>
+                  <th data-field="usage_spd">CPU Average Speed (Mhz)</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>CPU1</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+              </tr>
+              <tr>
+                <td>CPU2</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+              </tr>
+              <tr>
+                <td>CPU3</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+              </tr>
+              <tr>
+                <td>CPU4</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+                <td>76%</td>
+                <td>3600Mhz</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="rightbar right branding_theme_class" style="margin:20px; padding:20px; border: 1px solid branding_accent_hex">
+        <div id="controller" class="controller" style=" ">
+          <h5> Element </h5>
+        </div>
+      </div>
+      <div class="rightbar right branding_theme_class" style="margin:20px; padding:20px; border: 1px solid branding_accent_hex">
+        <div id="controller" class="controller" style=" ">
+          <h5> Element </h5>
+        </div>
+      </div>
+      <div class="rightbar right branding_theme_class" style="margin:20px; padding:20px; border: 1px solid branding_accent_hex">
+        <div id="controller" class="controller" style=" ">
+          <h5> Element </h5>
+        </div>
+      </div>
+      <div class="rightbar right branding_theme_class" style="margin:20px; padding:20px; border: 1px solid branding_accent_hex">
+        <div id="controller" class="controller" style=" ">
+          <h5> Element </h5>
+        </div>
+      </div>
       <script>
 
-      /* WORK AROUND - SHOULD BE CHANGED */
-      window.setInterval(function() {
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-      }, 500);
+
+
+             setInterval(function() {
+               favicon.badge(messagesSinceFocus);
+
+               if(messagesSinceFocus > 0){
+                 document.title = "Quik (Unread)"
+               } else {
+                 document.title = "Quik"
+               }
+
+             }, 1000);
+
+      /* Apply brand themeing */
+
+      var xmlhttp, text;
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', '/branding/theme', false);
+      xmlhttp.send();
+      text = xmlhttp.responseText;
+
+      var brandingColorClass = text.split(",")[0].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
+      console.log('Branding color class: ' + brandingColorClass)
+
+      var brandingColorHex = text.split(",")[1].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
+      console.log('Branding color hex: ' + brandingColorHex)
+
+      var brandingAccentClass = text.split(",")[3].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
+      console.log('Branding accent class: ' + brandingAccentClass)
+
+      var brandingAccentHex = text.split(",")[4].split(":")[1];
+      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
+      console.log('Branding accent hex: ' + brandingAccentHex)
+
+      var brandingTitle = text.split(",")[2].split(":")[1];
+      document.title = brandingTitle
+
+      /* End of brand themeing */
+
+      //define notification audio
+      var audio = new Audio('notify.mp3');
+      var isFocused = true; //Default to true so the noise isn't played if there is an error
+      var messagesSinceFocus = 0;
+
          var socket = io();
          usr_name = "";
 
@@ -85,7 +418,25 @@
              return false;
          });
 
+
          socket.on('chat message', function(msg){
+           var elem = document.getElementById('messages');
+           elem.scrollTop = elem.scrollHeight;
+
+           $(window).focus(function(){
+             isFocused = true;
+             messagesSinceFocus=0;
+           }).blur(function(){
+             isFocused = false;
+           });
+
+           if(!isFocused){
+             messagesSinceFocus++;
+             //Alert user if they are not focused on the tab
+             audio.play();
+           }
+
+
            msg = twemoji.parse(msg);
            $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
@@ -94,38 +445,26 @@
          });
 
          socket.on('disconnectEvent', function(msg){
-           document.getElementByID("usrs_connected").text = "Users connected: " + msg;
+           document.getElementById("usrs_connected").text = "User list (" + msg + ")";
+           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
          });
 
          socket.on('connectEvent', function(msg){
-           document.getElementById("usrs_connected").text = "Users connected: " + msg;
+           document.getElementById("usrs_connected").text = "User list (" + msg + ")";
+           document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
          });
 
-         //Prompt user for name
-         swal({
-           title: "Welcome to Quik",
-           text: "Enter  your desired username:",
-           type: "input",
-           showCancelButton: false,
-           closeOnConfirm: false,
-           confirmButtonColor: "#ffa726 ",
-           confirmButtonText: "Enter Quik!",
-           allowEscapeKey: false,
-           inputPlaceholder: "username"
-         }, function (inputValue) {
-           if (inputValue === false) window.close();
 
+      $('.dropdown-button').dropdown({
+           inDuration: 300,
+           outDuration: 225,
+           constrain_width: true,
+           hover: false,
+           gutter: 0,
+           belowOrigin: false
+           }
+      );
 
-           if (inputValue === "") {
-             swal.showInputError("You need to write something!");
-           } if(inputValue.length > 10){
-              swal.showInputError("Name can't be longer than 10 characters!");
-            } else {
-             swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
-             usr_name = inputValue;
-             socket.emit('chat message', usr_name + "--DELIM-- has connected");
-            }
-         });
       </script>
    </body>
 </html>

@@ -13,10 +13,15 @@ app.get('/branding/favicon.ico', function(req, res){
 	res.sendFile(__dirname + '/branding/favicon.ico');
 });
 
-app.get('/notify.mp3', function(req, res){
-	res.sendFile(__dirname + '/notify.mp3');
+app.get('/dash/sysdat', function(req, res){
+	if(process.platform === 'win32'){
+		res.send("501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)")
+	} else {
+		res.send("200 OK");
+	}
 });
 
+process.platform === 'win32'
 /* Branding related requests */
 
 app.get('/branding/logo.png', function(req, res){
@@ -38,8 +43,8 @@ app.get('/firebase', function(req, res){
 });
 
 var clients = [];
-app.get('/dashboard', function(req, res){
-	res.end("Open Sockets: " + clients.length)
+app.get('/dash', function(req, res){
+	res.sendFile(__dirname + '/dash.html');
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
