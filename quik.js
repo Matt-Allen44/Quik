@@ -42,9 +42,12 @@ app.get('/firebase', function(req, res) {
 app.get('/dash', function(req, res) {
     res.sendFile(__dirname + '/dash.html');
 });
+app.get('/notify.mp3', function(req, res) {
+    res.sendFile(__dirname + '/notify.mp3');
+});
 //The 404 Route (ALWAYS Keep this as the last route)
 app.get('*', function(req, res) {
-    console.log('404');
+    console.log('404 @ ' + req.originalUrl);
     res.status(404);
     res.sendFile(__dirname + '/404.html');
 });
@@ -64,8 +67,11 @@ io.on('connection', function(socket) {
         'Notice --DELIM-- This chat room is logged and users must comply with the TOS'
     );
     clients.push([
-        socket.conn.remoteAddress,
-        ipLookup(socket.conn.remoteAddress).city
+        socket.id,
+          socket.conn.remoteAddress,
+            ipLookup(socket.conn.remoteAddress).region,
+                  ipLookup(socket.conn.remoteAddress).country,
+                    Math.floor(new Date() / 1000)
     ]);
     usrs_connected = usrs_connected + 1;
     io.emit('connectEvent', usrs_connected);
@@ -112,7 +118,7 @@ io.on('connection', function(socket) {
 function ipLookup(ip) {
     if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {
         var array = {
-            city: 'Local Client'
+            city: 'Local Client', region: 'Local Client', country: 'Local Client'
         };
         return array;
     } else {

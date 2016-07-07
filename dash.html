@@ -265,199 +265,20 @@
 
     <div class="userlist dashelement branding_theme_class left" id="userlist"
     style="border: 1px solid branding_accent_hex">
-        <h5>User list</h5>
-
-
+        <h5>Connections</h5>
         <table>
-            <thead>
-                <tr>
-                    <th data-field="id">SocketID</th>
-
-                    <th data-field="ip">IP</th>
-
-                    <th data-field="location">Location</th>
-
-                    <th data-field="room">Room</th>
-                </tr>
-            </thead>
-
-
-            <tbody>
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-
-
-                <tr>
-                    <td>123</td>
-
-                    <td>127.0.0.1</td>
-
-                    <td>Adelaide, Australia</td>
-
-                    <td>Lobby</td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+                <th data-field="id">SocketID</th>
+                <th data-field="ip">Address</th>
+                <th data-field="region">Region</th>
+                <th data-field="country">Country</th>
+                <th data-field="time">Connection Time</th>
+            </tr>
+          </thead>
+
+          <tbody id="usrdattable">
+          </tbody>
         </table>
     </div>
 
@@ -615,6 +436,21 @@
       document.title = brandingTitle
 
       /* End of brand themeing */
+
+
+      /* Get dash data */
+      var xmlhttp, text;
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', '/dash/usrdat', false);
+      xmlhttp.send();
+      text = xmlhttp.responseText;
+
+      usrdat = text.split('/#');
+      for(var i = 1; i < usrdat.length; i++){
+          document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td>" + usrdat[i].split(',')[0] + "</td><td>" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td></tr>"
+      }
+
+
 
       //define notification audio
       var audio = new Audio('notify.mp3');
