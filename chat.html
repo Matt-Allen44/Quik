@@ -1,45 +1,57 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-   <head>
+<head>
+    <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
+    <meta charset="UTF-8">
+    <meta content=
+    "A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik"
+    name="description">
+    <meta content=
+    "Chat, Instant, Message, HTML, CSS, Javascript, NodeJS, SocketIO, Socket.IO"
+    name="keywords">
+    <meta content="Matthew Allen" name="author">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="/branding/favicon.ico" rel="icon">
+    <!-- Compiled and minified CSS -->
+    <link href=
+    "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css"
+    rel="stylesheet">
+    <link href=
+    "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"
+    rel="stylesheet" type="text/css"><!-- Compiled and minified JavaScript -->
 
-
-
-      <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
-      <meta charset="UTF-8">
-      <meta name="description" content="A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik">
-      <meta name="keywords" content="Chat, Instant, Message, HTML, CSS, Javascript, NodeJS, SocketIO, Socket.IO">
-      <meta name="author" content="Matthew Allen">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="icon" href="/branding/favicon.ico" />
-
-      <!-- Compiled and minified CSS -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
-
-      <!-- Compiled and minified JavaScript -->
-            <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
-      <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
-      <script>twemoji.size = '16x16';</script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-
-
-      <script src="http://lab.ejci.net/favico.js/favico.min.js"></script>
-      <script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js">
+    </script>
+    <script src="/socket.io/socket.io.js">
+    </script>
+    <script src=
+    "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js">
+    </script>
+    <script src="//twemoji.maxcdn.com/twemoji.min.js">
+    </script>
+    <script>
+    twemoji.size = '16x16';
+    </script>
+    <script src=
+    "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js">
+    </script>
+    <script src="http://lab.ejci.net/favico.js/favico.min.js">
+    </script>
+    <script>
       var favicon=new Favico({
           animation:'slide',
           bgColor : '#000',
           textColor : '#fff',
           position : 'up'
       });
-      </script>
+    </script>
+    <!-- Place this tag in your head or just before your close body tag. -->
 
-      <!-- Place this tag in your head or just before your close body tag. -->
-      <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-      <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
-      <script>
+    <script async defer src="https://buttons.github.io/buttons.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js">
+    </script>
+    <script>
         // Initialize Firebase
         var config = {
           apiKey: "AIzaSyByC4lJaLHZ1R4RtC-HSuuZBCG9Q4bWxLo",
@@ -48,9 +60,8 @@
           storageBucket: "quik-app.appspot.com",
         };
         firebase.initializeApp(config);
-      </script>
-
-      <script>
+    </script>
+    <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -59,11 +70,14 @@
         ga('create', 'UA-80183645-1', 'auto');
         ga('send', 'pageview');
 
-      </script>
-
-      <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
-      <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
-      <script type="text/javascript">
+    </script>
+    <script src=
+    "https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js">
+    </script>
+    <link href=
+    "https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" rel=
+    "stylesheet" type="text/css">
+    <script type="text/javascript">
         // FirebaseUI config.
 
         var uiConfig = {
@@ -85,16 +99,18 @@
           console.log(user.displayName)
           //TODO: Implemented firebase auth here
         });
-      </script>
-      <link rel="stylesheet" type="text/css" href="/css/quik.css">
-   </head>
+    </script>
+    <link href="/css/quik.css" rel="stylesheet" type="text/css">
+</head>
 
-   <body>
-      <nav class="bigscreen branding_theme_class ">
-         <div class="nav-wrapper">
-            <a href="#" class="left brand-logo"><img height="64" style="padding:8px" src="/branding/logo.png"></a></li>
-            <ul id="nav-mobile" class="right">
-            <!--
+<body>
+    <nav class="bigscreen branding_theme_class">
+        <div class="nav-wrapper">
+            <a class="left brand-logo" href="#"><img height="64" src=
+            "/branding/logo.png" style="padding:8px"></a>
+
+            <ul class="right" id="nav-mobile">
+                <!--
               <li>
                 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                 <ins class="adsbygoogle"
@@ -106,56 +122,133 @@
                 </script>
               </li>
               -->
+                <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
+                <!-- Dropdown Trigger -->
 
-               <!--<li>    <div id="firebaseui-auth-container"></div> </li>-->
 
-                 <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown1'>Github</a>
+                <li style="list-style: none; display: inline">
+                    <a class='dropdown-button btn branding_accent_class'
+                    data-activates='dropdown1' href='#'>Github</a>
+                    <!-- Dropdown Structure -->
 
-              <!-- Dropdown Structure -->
-              <ul id='dropdown1' class='dropdown-content'>
-              <li><a href="https://github.com/matt-allen44/quik" >View Repository</a></li>
-              <li><a aria-label="Watch matt-allen44/quik on GitHub" data-count-aria-label="# watchers on GitHub" data-count-api="/repos/matt-allen44/quik#subscribers_count" data-count-href="/matt-allen44/quik/watchers" data-style="mega" data-icon="octicon-eye" href="https://github.com/matt-allen44/quik" >Watch</a></li>
-               <!-- Place this tag where you want the button to render. -->
-               <li><a aria-label="Star matt-allen44/quik on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/matt-allen44/quik#stargazers_count" data-count-href="/matt-allen44/quik/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/matt-allen44/quik" >Star</a></li>
-               <!-- Place this tag where you want the button to render. -->
-               <li><a aria-label="Fork matt-allen44/quik on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/matt-allen44/quik#forks_count" data-count-href="/matt-allen44/quik/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/matt-allen44/quik/fork" >Fork</a></li>
-               <!-- Place this tag where you want the button to render. -->
-               <li><a aria-label="Issue matt-allen44/quik on GitHub" data-count-aria-label="# issues on GitHub" data-count-api="/repos/matt-allen44/quik#open_issues_count" data-style="mega" data-icon="octicon-issue-opened" href="https://github.com/matt-allen44/quik/issues" >Issue</a></li>
-               <!-- Place this tag where you want the button to render. -->
-               <li><a aria-label="Download matt-allen44/quik on GitHub" href="https://github.com/matt-allen44/quik/archive/master.zip">Download</a></li>
-              </ul>
 
-                 <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown2'>Chat Room</a>
+                    <ul class='dropdown-content' id='dropdown1'>
+                        <li>
+                            <a href="https://github.com/matt-allen44/quik">View
+                            Repository</a>
+                        </li>
 
-              <!-- Dropdown Structure -->
-              <ul id='dropdown2' class='dropdown-content branding_theme_class'>
-                <li><a href="/room/1">Room 1</a></li>
-                <li><a href="/room/2">Room 2</a></li>
-                <li><a href="/room/3">Room 3</a></li>
-              </ul>
 
-              <!-- Dropdown Trigger -->
-              <a class='dropdown-button btn branding_accent_class ' href='#' data-activates='dropdown3'id="usrs_connected">User List</a>
+                        <li>
+                            <a aria-label="Watch matt-allen44/quik on GitHub"
+                            data-count-api=
+                            "/repos/matt-allen44/quik#subscribers_count"
+                            data-count-aria-label="# watchers on GitHub"
+                            data-count-href="/matt-allen44/quik/watchers"
+                            data-icon="octicon-eye" data-style="mega" href=
+                            "https://github.com/matt-allen44/quik">Watch</a>
+                        </li>
+                        <!-- Place this tag where you want the button to render. -->
 
-              <!-- Dropdown Structure -->
-              <ul id='dropdown3' class='dropdown-content branding_theme_class '>
-              </ul>
+
+                        <li>
+                            <a aria-label="Star matt-allen44/quik on GitHub"
+                            data-count-api=
+                            "/repos/matt-allen44/quik#stargazers_count"
+                            data-count-aria-label="# stargazers on GitHub"
+                            data-count-href="/matt-allen44/quik/stargazers"
+                            data-icon="octicon-star" data-style="mega" href=
+                            "https://github.com/matt-allen44/quik">Star</a>
+                        </li>
+                        <!-- Place this tag where you want the button to render. -->
+
+
+                        <li>
+                            <a aria-label="Fork matt-allen44/quik on GitHub"
+                            data-count-api=
+                            "/repos/matt-allen44/quik#forks_count"
+                            data-count-aria-label="# forks on GitHub"
+                            data-count-href="/matt-allen44/quik/network"
+                            data-icon="octicon-repo-forked" data-style="mega"
+                            href=
+                            "https://github.com/matt-allen44/quik/fork">Fork</a>
+                        </li>
+                        <!-- Place this tag where you want the button to render. -->
+
+
+                        <li>
+                            <a aria-label="Issue matt-allen44/quik on GitHub"
+                            data-count-api=
+                            "/repos/matt-allen44/quik#open_issues_count"
+                            data-count-aria-label="# issues on GitHub"
+                            data-icon="octicon-issue-opened" data-style="mega"
+                            href=
+                            "https://github.com/matt-allen44/quik/issues">Issue</a>
+                        </li>
+                        <!-- Place this tag where you want the button to render. -->
+
+
+                        <li>
+                            <a aria-label=
+                            "Download matt-allen44/quik on GitHub" href=
+                            "https://github.com/matt-allen44/quik/archive/master.zip">
+                            Download</a>
+                        </li>
+                    </ul>
+                    <!-- Dropdown Trigger -->
+                    <a class='dropdown-button btn branding_accent_class'
+                    data-activates='dropdown2' href='#'>Chat Room</a>
+                    <!-- Dropdown Structure -->
+
+
+                    <ul class='dropdown-content branding_theme_class' id=
+                    'dropdown2'>
+                        <li>
+                            <a href="/room/1">Room 1</a>
+                        </li>
+
+
+                        <li>
+                            <a href="/room/2">Room 2</a>
+                        </li>
+
+
+                        <li>
+                            <a href="/room/3">Room 3</a>
+                        </li>
+                    </ul>
+                    <!-- Dropdown Trigger -->
+                    <a class='dropdown-button btn branding_accent_class'
+                    data-activates='dropdown3' href='#' id=
+                    "usrs_connected">User List</a> <!-- Dropdown Structure -->
+
+
+                    <ul class='dropdown-content branding_theme_class' id=
+                    'dropdown3'>
+                    </ul>
+                </li>
             </ul>
-         </div>
-      </nav>
+        </div>
+    </nav>
 
-      <nav class="smallscreen branding_theme_class ">
-         <div class="nav-wrapper">
-           <a href="#" class="brand-logo center-align" style="width: 100%; text-align: center;"><img height="32" style="padding:8px" src="/branding/logo.png"></a>
-         </div>
-         <div class="nav-wrapper">
-           <a style="float:left; padding-left: 10px;  color: branding_accent_hex" id="usrs_connectedMobi">Users connected: 0</a>
-           <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px;  color: branding_accent_hex">View us on Github</a>
-         </div>
 
-         <!---
+    <nav class="smallscreen branding_theme_class">
+        <div class="nav-wrapper">
+            <a class="brand-logo center-align" href="#" style=
+            "width: 100%; text-align: center;"><img height="32" src=
+            "/branding/logo.png" style="padding:8px"></a>
+        </div>
+
+
+        <div class="nav-wrapper">
+            <a id="usrs_connectedMobi" style=
+            "float:left; padding-left: 10px; color: branding_accent_hex">Users
+            connected: 0</a> <a href="http://www.github.com/matt-allen44/quik"
+            style=
+            "float:right; padding-right: 10px; color: branding_accent_hex">View
+            us on Github</a>
+        </div>
+        <!---
          <div class="nav-wrapper branding_theme_class " style="height:24px; line-height: 0px; width:100%">
            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
            <ins class="adsbygoogle"
@@ -166,24 +259,34 @@
            (adsbygoogle = window.adsbygoogle || []).push({});
            </script>
           -->
-         </div>
+    </nav>
 
-      </nav>
 
-      <div style="width:100%;   position: fixed; display: block; left:25px; padding-top:50px">
-         <ul style="" id="messages"></ul>
-      </div>
-      <div>
-         <form action="" style="position: fixed; bottom: 0; width:100%">
-            <div style="padding-left:25px; display:inline"><input style="width: calc(100% - 220px);border-bottom: 1px solid branding_theme_hex;
-               -webkit-box-shadow: 0 1px 0 0 branding_theme_hex;
-               -moz-box-shadow: 0 1px 0 0 branding_theme_hex;
-               box-shadow: 0 1px 0 0 branding_theme_hex;"  placeholder="message here" id="m" autocomplete="off" /></div>
-            <div style="padding-left:12.5px; display:inline"><button class="btn waves-effect branding_accent_class  " type="submit" name="action" style="width: 100px; float:right vertical-align: middle;">Send Message</button></div>
-         </form>
-      </div>
+    <div style=
+    "width:100%; position: fixed; display: block; left:25px; padding-top:50px">
+        <ul id="messages" style="">
+        </ul>
+    </div>
 
-      <script>
+
+    <div>
+        <form action="" style="position: fixed; bottom: 0; width:100%">
+            <div style="padding-left:25px; display:inline">
+                <input autocomplete="off" id="m" placeholder="message here"
+                style=
+                "width: calc(100% - 220px);border-bottom: 1px solid branding_theme_hex; -webkit-box-shadow: 0 1px 0 0 branding_theme_hex; -moz-box-shadow: 0 1px 0 0 branding_theme_hex; box-shadow: 0 1px 0 0 branding_theme_hex;">
+            </div>
+
+
+            <div style="padding-left:12.5px; display:inline">
+                <button class="btn waves-effect branding_accent_class" name=
+                "action" style=
+                "width: 100px; float:right vertical-align: middle;" type=
+                "submit">Send Message</button>
+            </div>
+        </form>
+    </div>
+    <script>
 
 
 
@@ -321,6 +424,6 @@
            }
       );
 
-      </script>
-   </body>
+    </script>
+</body>
 </html>
