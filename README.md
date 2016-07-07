@@ -14,7 +14,7 @@ Clone the git repository
 
 > npm install
 
-> node start
+> npm startNodeJS or npm startNode  (depends on your enviromental variable for node)
 
 > access localhost using any web browser
 
