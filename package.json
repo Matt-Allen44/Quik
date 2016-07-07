@@ -14,7 +14,8 @@
   },
   "scripts": {
     "startNode": "node quik.js",
-    "startNodeJS": "nodejs quik.js"
+    "startNodeJS": "nodejs quik.js",
+    "test": "jshint quik.js"
   },
   "devDependencies": {
     "jshint": "^2.9.2"
