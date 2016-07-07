@@ -114,7 +114,6 @@ http.listen(80, function(){
 });
 
 
-/
 function ipLookup(ip){
 	if(ip == "127.0.0.1" || ip == "localhost" || ip == "::1"){
 		var array = {city: "Local Client"}
