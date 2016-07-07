@@ -21,8 +21,6 @@ app.get('/dash/sysdat', function (req, res) {
   }
 });
 
-THIS SHOULD BREAK THE TRAVIS BUILD --- TEST TEST TEST
-
 app.get('/dash/usrdat', function (req, res) {
   res.send(clients.toString());
 });
