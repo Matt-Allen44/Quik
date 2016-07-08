@@ -15,35 +15,12 @@ var whitelistip = '121.45.31.204';
 // Called on all quik requests
 
 quik.use(function (req, res, next) {
-  helmet.contentSecurityPolicy({
-  // Specify directives as normal.
-  directives: {
-    defaultSrc: ["'self'", 'default.com'],
-    scriptSrc: ["'self'", "'unsafe-inline'"],
-    styleSrc: ['style.com'],
-    imgSrc: ['img.com', 'data:'],
-    sandbox: ['allow-forms', 'allow-scripts'],
-    reportUri: '/report-violation',
-    objectSrc: [] // An empty array allows nothing through
-  },
-
-  // Set to true if you only want browsers to report errors, not block them
-  reportOnly: false,
-
-  // Set to true if you want to blindly set all headers: Content-Security-Policy,
-  // X-WebKit-CSP, and X-Content-Security-Policy.
-  setAllHeaders: false,
-
-  // Set to true if you want to disable CSP on Android where it can be buggy.
-  disableAndroid: false,
-
-  // Set to false if you want to completely disable any user-agent sniffing.
-  // This may make the headers less compatible but it will be much faster.
-  // This defaults to `true`.
-  browserSniff: true
-});
-helmet.xssFilter();
-helmet.frameguard({ action: 'deny' });
+  helmet.xssFilter();
+  helmet.noCache();
+  helmet.noSniff();
+  helmet.frameguard();
+  helmet.hidePoweredBy();
+  
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
   next();
 });
