@@ -67,6 +67,8 @@ quik.get('*', function(req, res) {
     res.sendFile(__dirname + '/404.html');
 });
 http.listen(80, function() {
+  qlog('Server Log', "Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik")
+  qlog('Server Log', "Started on :80")
 });
 /*
 	ON CONNECTION
