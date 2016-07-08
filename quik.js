@@ -134,7 +134,7 @@ io.on('connection', function (socket) {
     io.emit('disconnectEvent', usrs_connected);
   });
   socket.on('chat message', function (msg) {
-    msg = sanitizeHtml(msg,{allowedTags: false,allowedAttributes: false});
+    msg = sanitizeHtml(msg);
     //Check if users name is empty
     if (msg.split('--DELIM--')[0].length === 0) {
       socket.emit('chat message', 'Server --DELIM-- Connection Refused (invalid name)');
