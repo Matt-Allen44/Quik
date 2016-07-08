@@ -7,12 +7,15 @@ var swearjar = require('swearjar');
 var os = require('os');
 var winston = require('winston');
 var util = require('util');
+var helmet = require('helmet')
 var clients = [];
 var usrs_connected = 0;
 var log = '';
 var whitelistip = '121.45.31.204';
 // Called on all quik requests
+
 quik.use(function (req, res, next) {
+  helmet()
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
   next();
 });
@@ -103,7 +106,7 @@ io.on('connection', function (socket) {
     io.emit('disconnectEvent', usrs_connected);
   });
   socket.on('chat message', function (msg) {
-    msg = sanitizeHtml(msg);
+    msg = sanitizeHtml(msg,{allowedTags: false,allowedAttributes: false});
     //Check if users name is empty
     if (msg.split('--DELIM--')[0].length === 0) {
       socket.emit('chat message', 'Server --DELIM-- Connection Refused (invalid name)');
