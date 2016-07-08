@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
 var swearjar = require('swearjar');
+var os = require('os');
 var clients = [];
 var usrs_connected = 0;
 app.get('/css/quik.css', function(req, res) {

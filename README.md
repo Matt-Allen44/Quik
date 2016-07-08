@@ -18,7 +18,7 @@ Clone the git repository
 
 > access localhost using any web browser
 
-##Screenshots
+## Screenshots
 ![Conversation Screen](http://i.imgur.com/O6pkX6U.png)
 ![Joining Screen](http://i.imgur.com/oKBWSZ5.png)
 

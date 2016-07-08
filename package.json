@@ -9,8 +9,7 @@
     "sanitize-html": "1.12.0",
     "socket.io": "1.4.8",
     "swearjar": "0.1.3",
-    "winston": "2.2.0",
-    "systeminformation ": "2.0.5"
+    "winston": "2.2.0"
   },
   "scripts": {
     "startNode": "node quik.js",
