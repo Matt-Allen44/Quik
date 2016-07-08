@@ -5,8 +5,20 @@ var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
 var swearjar = require('swearjar');
 var os = require('os');
+var winston = require('winston');
+var util = require('util');
 var clients = [];
 var usrs_connected = 0;
+var log = "";
+
+
+// Called on all quik requests
+quik.use(function(req, res, next) {
+  qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
+  next();
+});
+
+
 quik.get('/css/quik.css', function(req, res) {
     res.sendFile(__dirname + '/css/quik.css');
 });
@@ -25,6 +37,9 @@ quik.get('/dash/sysdat', function(req, res) {
 });
 quik.get('/dash/usrdat', function(req, res) {
     res.send(clients.toString());
+});
+quik.get('/dash/logdat', function(req, res) {
+    res.send(log);
 });
 /* Branding related requests */
 quik.get('/branding/logo.png', function(req, res) {
@@ -48,12 +63,10 @@ quik.get('/notify.mp3', function(req, res) {
 });
 //The 404 Route (ALWAYS Keep this as the last route)
 quik.get('*', function(req, res) {
-    console.log('404 @ ' + req.originalUrl);
     res.status(404);
     res.sendFile(__dirname + '/404.html');
 });
 http.listen(80, function() {
-    console.log('Launched Quik on :80');
 });
 /*
 	ON CONNECTION
@@ -78,7 +91,7 @@ io.on('connection', function(socket) {
     io.emit('connectEvent', usrs_connected);
     socket.on('disconnect', function() {
         usrs_connected = usrs_connected - 1;
-        console.log(usrs_connected + ' users connected');
+        qLog('chatlog', usrs_connected + ' users connected');
         io.emit('disconnectEvent', usrs_connected);
     });
     socket.on('chat message', function(msg) {
@@ -106,9 +119,9 @@ io.on('connection', function(socket) {
         if (0 === msg.length) {
             socket.emit('chat message',
                 'Server --DELIM-- Empty message removed');
-            console.log('> empty message removed');
+            qLog('chatlog', 'empty message removed');
         } else {
-            console.log(socket.conn.remoteAddress + ' [' +
+            qLog(socket.conn.remoteAddress + ' [' +
                 ipLookup(socket.conn.remoteAddress).city +
                 '] ' + msg.replace('--DELIM--', ':'));
             io.emit('chat message', swearjar.censor(msg));
@@ -123,7 +136,15 @@ function ipLookup(ip) {
         };
         return array;
     } else {
-        console.log(ip);
+        qLog(ip);
         return geoip.lookup(ip);
     }
+}
+
+winston.add(winston.transports.File, { filename: 'quik.log' });
+function qLog(type, msg){
+  msg = new Date() + msg;
+  console.log("[" + type + "] " + msg);
+  log += "[" + type + "]" + msg + "<br>";
+  winston.log(type, msg);
 }
