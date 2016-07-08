@@ -73,6 +73,11 @@ img.emoji {
   height: 100%;
 }
 
+.syslog {
+  margin-top:20px;
+  height: 150px;
+}
+
 .rightbar {
   width: calc(100% - 680px);
   height: 100%;

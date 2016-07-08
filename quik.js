@@ -121,7 +121,7 @@ io.on('connection', function(socket) {
                 'Server --DELIM-- Empty message removed');
             qLog('chatlog', 'empty message removed');
         } else {
-            qLog(socket.conn.remoteAddress + ' [' +
+            qLog('chatlog', socket.conn.remoteAddress + ' [' +
                 ipLookup(socket.conn.remoteAddress).city +
                 '] ' + msg.replace('--DELIM--', ':'));
             io.emit('chat message', swearjar.censor(msg));
@@ -145,6 +145,6 @@ winston.add(winston.transports.File, { filename: 'quik.log' });
 function qLog(type, msg){
   msg = new Date() + msg;
   console.log("[" + type + "] " + msg);
-  log += "[" + type + "]" + msg + "<br>";
+  log += "[" + type + "] " + msg + "\n";
   winston.log(type, msg);
 }

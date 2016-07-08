@@ -366,47 +366,21 @@
     <div class="rightbar right branding_theme_class" style=
     "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
         <div class="controller" id="controller" style="">
-            <h5>Element</h5>
+            <h5>System Log</h5>
+            <textarea id="syslog" class="syslog" rows="10" cols="80"> </textarea>
         </div>
     </div>
 
-
+<!-- Element template
     <div class="rightbar right branding_theme_class" style=
     "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
         <div class="controller" id="controller" style="">
             <h5>Element</h5>
         </div>
     </div>
+  -->
 
-
-    <div class="rightbar right branding_theme_class" style=
-    "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
-        <div class="controller" id="controller" style="">
-            <h5>Element</h5>
-        </div>
-    </div>
-
-
-    <div class="rightbar right branding_theme_class" style=
-    "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
-        <div class="controller" id="controller" style="">
-            <h5>Element</h5>
-        </div>
-    </div>
     <script>
-
-
-
-             setInterval(function() {
-               favicon.badge(messagesSinceFocus);
-
-               if(messagesSinceFocus > 0){
-                 document.title = "Quik (Unread)"
-               } else {
-                 document.title = "Quik"
-               }
-
-             }, 1000);
 
       /* Apply brand themeing */
 
@@ -449,6 +423,16 @@
       for(var i = 1; i < usrdat.length; i++){
           document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td>" + usrdat[i].split(',')[0] + "</td><td>" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td></tr>"
       }
+
+      /* Get log data */
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', '/dash/logdat', false);
+      xmlhttp.send();
+      text = xmlhttp.responseText;
+
+      var syslog = document.getElementById('syslog');
+      syslog.value = text;
+      syslog.scrollTop = syslog.scrollHeight;
 
       $('.dropdown-button').dropdown({
            inDuration: 300,
