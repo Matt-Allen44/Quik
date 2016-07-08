@@ -14,14 +14,8 @@ var log = '';
 var whitelistip = '121.45.31.204';
 // Called on all quik requests
 
+quik.use(helmet());
 quik.use(function (req, res, next) {
-  helmet();
-  helmet.xssFilter();
-  helmet.noCache();
-  helmet.noSniff();
-  helmet.frameguard();
-  helmet.hidePoweredBy();
-
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
   next();
 });
