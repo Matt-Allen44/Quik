@@ -82,3 +82,7 @@ img.emoji {
   width: calc(100% - 680px);
   height: 100%;
 }
+
+.material-icons {
+  vertical-align:middle
+}
