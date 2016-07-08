@@ -25,4 +25,4 @@ Clone the git repository
 
 ### Dependencies    
 Quik is reliant on the following packages:
-> socket.io, express@4.10.2, sanitize-html, config-js, winston, systeminformation  & swearjar
+> socket.io, express@4.10.2, sanitize-html, config-js, winston, systeminformation, helmet & swearjar
