@@ -11,6 +11,7 @@ var clients = [];
 var usrs_connected = 0;
 var log = "";
 
+var whitelistip = "121.45.31.204"
 
 // Called on all quik requests
 quik.use(function(req, res, next) {
@@ -27,6 +28,7 @@ quik.get('/branding/favicon.ico', function(req, res) {
 });
 /* Dashboard info */
 quik.get('/dash/sysdat', function(req, res) {
+  if(req.connection.remoteAddress == whitelistip){
     if (process.platform === 'win32') {
         res.send(
             '501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)'
@@ -34,12 +36,23 @@ quik.get('/dash/sysdat', function(req, res) {
     } else {
         res.send('200 OK');
     }
+  } else {
+    res.end("403 Unauthorised")
+  }
 });
 quik.get('/dash/usrdat', function(req, res) {
-    res.send(clients.toString());
+    if(req.connection.remoteAddress == whitelistip){
+      res.send(clients.toString());
+    } else {
+      res.end("403 Unauthorised")
+    }
 });
 quik.get('/dash/logdat', function(req, res) {
-    res.send(log);
+    if(req.connection.remoteAddress == whitelistip){
+      res.send(log);
+    } else {
+      res.end("403 Unauthorised")
+    }
 });
 /* Branding related requests */
 quik.get('/branding/logo.png', function(req, res) {
@@ -56,7 +69,11 @@ quik.get('/firebase', function(req, res) {
     res.sendFile(__dirname + '/firebase.html');
 });
 quik.get('/dash', function(req, res) {
-    res.sendFile(__dirname + '/dash.html');
+    if(req.connection.remoteAddress == whitelistip){
+      res.sendFile(__dirname + '/dash.html');
+    } else {
+      res.end("403 Unauthorised")
+    }
 });
 quik.get('/notify.mp3', function(req, res) {
     res.sendFile(__dirname + '/notify.mp3');
