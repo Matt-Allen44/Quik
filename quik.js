@@ -1,5 +1,5 @@
-var app = require('express')();
-var http = require('http').Server(app);
+var quik = require('express')();
+var http = require('http').Server(quik);
 var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
@@ -7,14 +7,14 @@ var swearjar = require('swearjar');
 var os = require('os');
 var clients = [];
 var usrs_connected = 0;
-app.get('/css/quik.css', function(req, res) {
+quik.get('/css/quik.css', function(req, res) {
     res.sendFile(__dirname + '/css/quik.css');
 });
-app.get('/branding/favicon.ico', function(req, res) {
+quik.get('/branding/favicon.ico', function(req, res) {
     res.sendFile(__dirname + '/branding/favicon.ico');
 });
 /* Dashboard info */
-app.get('/dash/sysdat', function(req, res) {
+quik.get('/dash/sysdat', function(req, res) {
     if (process.platform === 'win32') {
         res.send(
             '501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)'
@@ -23,31 +23,31 @@ app.get('/dash/sysdat', function(req, res) {
         res.send('200 OK');
     }
 });
-app.get('/dash/usrdat', function(req, res) {
+quik.get('/dash/usrdat', function(req, res) {
     res.send(clients.toString());
 });
 /* Branding related requests */
-app.get('/branding/logo.png', function(req, res) {
+quik.get('/branding/logo.png', function(req, res) {
     res.sendFile(__dirname + '/branding/logo.png');
 });
-app.get('/branding/theme', function(req, res) {
+quik.get('/branding/theme', function(req, res) {
     res.sendFile(__dirname + '/branding/theme');
 });
 /* End of branding related requests */
-app.get('/', function(req, res) {
+quik.get('/', function(req, res) {
     res.sendFile(__dirname + '/chat.html');
 });
-app.get('/firebase', function(req, res) {
+quik.get('/firebase', function(req, res) {
     res.sendFile(__dirname + '/firebase.html');
 });
-app.get('/dash', function(req, res) {
+quik.get('/dash', function(req, res) {
     res.sendFile(__dirname + '/dash.html');
 });
-app.get('/notify.mp3', function(req, res) {
+quik.get('/notify.mp3', function(req, res) {
     res.sendFile(__dirname + '/notify.mp3');
 });
 //The 404 Route (ALWAYS Keep this as the last route)
-app.get('*', function(req, res) {
+quik.get('*', function(req, res) {
     console.log('404 @ ' + req.originalUrl);
     res.status(404);
     res.sendFile(__dirname + '/404.html');
@@ -62,7 +62,7 @@ io.on('connection', function(socket) {
     socket.emit('chat message',
         'Notice --DELIM-- Connection established');
     socket.emit('chat message',
-        'Notice --DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik'
+        'Notice --DELIM-- This quiklication is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik'
     );
     socket.emit('chat message',
         'Notice --DELIM-- This chat room is logged and users must comply with the TOS'
