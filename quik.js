@@ -26,7 +26,7 @@ quik.use(csp({
   directives: {
     defaultSrc: ["'self'", 'groms.xyz'],
     scriptSrc: ["'self'", "'unsafe-inline'", "ejci.net", 'cloudflare.com','github.io','gstatic.com','google-analytics.com'],
-    styleSrc: ['groms.xyz','cloudflare.com'],
+    styleSrc: ['*'],
     imgSrc: ['groms.xyz', 'data:'],
     sandbox: ['allow-forms', 'allow-scripts'],
     reportUri: '/report-violation',
