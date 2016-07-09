@@ -382,7 +382,7 @@
   -->
 
     <script>
-      var socket = io();
+      var socket = io.connect('https://groms.xyz', {secure: true});
       /* Apply brand themeing */
 
       var xmlhttp, text;
