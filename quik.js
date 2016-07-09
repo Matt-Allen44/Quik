@@ -86,13 +86,21 @@ http.listen(80, function () {
   qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
   qLog('Server Log', 'Started on :80');
 });
+
+var motd = "";
+var fs = require('fs');
+fs.readFile(__dirname + "/branding/motd", 'utf8', function(err, data) {
+  if (err) throw err;
+  motd = data;
+});
+
 /*
 	ON CONNECTION
 */
 io.on('connection', function (socket) {
   socket.emit('chat message', 'Notice', 'Connection established');
-  socket.emit('chat message', 'Notice', 'DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
-  socket.emit('chat message', 'Notice', 'This chat room is logged and users must comply with the TOS');
+  socket.emit('chat message', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
+  socket.emit('chat message', 'Notice', motd);
   usrs_connected = usrs_connected + 1;
 
   socket.on('disconnect', function () {
