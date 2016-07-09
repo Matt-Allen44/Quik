@@ -121,11 +121,12 @@ io.on('connection', function (socket) {
     usrs_connected = usrs_connected - 1;
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', getUsername(socket.id), usrs_connected);
-    clients.splice(userIDs[socket.id], 1);
-    userIDs.splice(socket.id, 1);
+    //clients.splice(userIDs[socket.id], 1);
+    //userIDs.splice(socket.id, 1);
   });
   socket.on('ban', function (ip) {
     banIP(ip);
+    socket.emit('chat message', 'Server', ip + " has been permanently banned.")
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);

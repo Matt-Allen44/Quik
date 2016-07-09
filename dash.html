@@ -264,7 +264,7 @@
     <!-- BODY HERE -->
 
 
-    <div class="userlist dashelement branding_theme_class left" id="userlist"
+    <div class="userlist dashelement branding_theme_class" id="userlist"
     style="border: 1px solid branding_accent_hex">
         <h5><i class="material-icons" >chat_bubble_outline</i> Connections</h5>
         <table>
@@ -284,7 +284,7 @@
     </div>
 
 
-    <div class="rightbar right branding_theme_class" style=
+    <div class="left halfsec branding_theme_class" style=
     "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
         <div class="controller" id="controller" style="">
             <h5><i class="material-icons" >perm_scan_wifi</i> Resource Usage </h5>
@@ -364,7 +364,7 @@
     </div>
 
 
-    <div class="rightbar right branding_theme_class" style=
+    <div class="halfsec right branding_theme_class" style=
     "margin:20px; padding:20px; border: 1px solid branding_accent_hex">
         <div class="controller" id="controller" style="">
             <h5><i class="material-icons" >list</i> System Log</h5>
@@ -427,7 +427,7 @@
       document.getElementById('usrs_connected').text = "User List (" + (usrdat.length-1) + ")"
       for(var i = 1; i < usrdat.length; i++){
           document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" +  usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>"
-          + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=socket.emit('ban','" + usrdat[i].split(',')[2] + "')> IP BAN</td></tr>"
+          + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=socket.emit('ban','" + usrdat[i].split(',')[2] + "'); alert('User banned!')> IP BAN</td><td><a onClick=socket.emit('give Admin','" + usrdat[i].split(',')[2] + "');> GIVE ADMIN</td></tr>"
           console.log(usrdat[i].split(',')[1]);
           userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
       }
