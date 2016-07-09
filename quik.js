@@ -126,10 +126,6 @@ quik.get('*', function (req, res) {
   res.status(404);
   res.sendFile(__dirname + '/404.html');
 });
-http.listen(80, function () {
-  qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
-  qLog('Server Log', 'Started on :80');
-});
 
 var motd = "";
 var fs = require('fs');
@@ -143,6 +139,18 @@ fs.readFile(__dirname + "/conf/godips", 'utf8', function(err, data) {
   godlist = data.trim();
   qLog('Server Log', "Loaded god ips: " + godlist);
 });
+
+var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
+var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
+
+http.listen(80, function () {
+  qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
+  qLog('Server Log', 'Started on :80');
+});
+https.createServer({
+    key: privateKey,
+    cert: certificate
+}, app).listen(443);
 
 /*
 	ON CONNECTION
