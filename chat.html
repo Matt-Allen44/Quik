@@ -358,6 +358,8 @@
              } else {
                socket.emit('chat message', $('#m').val());
                $('#m').val('');
+               var elem = document.getElementById('messages');
+               elem.scrollTop = elem.scrollHeight;
              }
              return false;
          });
