@@ -23,7 +23,8 @@ quik.use(function (req, res, next) {
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
   if(banlist.indexOf(req.connection.remoteAddress) > -1){
     qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + " access denied - IP Ban");
-    res.send("403 Forbidden (you have been IP banned)");
+    res.status(403);
+    res.sendFile(__dirname + '/ipban.html');
   } else {
     next();
   }
@@ -43,21 +44,24 @@ quik.get('/dash/sysdat', function (req, res) {
       res.send('200 OK');
     }
   } else {
-    res.end('403 Unauthorised');
+    res.status(403);
+    res.sendFile(__dirname + '/ipban.html');
   }
 });
 quik.get('/dash/usrdat', function (req, res) {
   if(godlist == req.connection.remoteAddress){
     res.send(clients.toString());
   } else {
-    res.end('403 Unauthorised');
+    res.status(403);
+    res.sendFile(__dirname + '/ipban.html');
   }
 });
 quik.get('/dash/logdat', function (req, res) {
   if(godlist == req.connection.remoteAddress){
     res.send(log);
   } else {
-    res.end('403 Unauthorised');
+    res.status(403);
+    res.sendFile(__dirname + '/ipban.html');
   }
 });
 /* Branding related requests */
@@ -79,7 +83,8 @@ quik.get('/dash', function (req, res) {
     res.sendFile(__dirname + '/dash.html');
   } else {
     qLog("403 Logs", ("Denied " + req.connection.remoteAddress));
-    res.end('403 Unauthorised');
+    res.status(403);
+    res.sendFile(__dirname + '/ipban.html');
   }
 });
 quik.get('/notify.mp3', function (req, res) {
@@ -126,7 +131,7 @@ io.on('connection', function (socket) {
   });
   socket.on('ban', function (ip) {
     banIP(ip);
-    socket.emit('chat message', 'Server', ip + " has been permanently banned.");
+    socket.emit('chat message', 'Server', "the ip " + ip + " has been permanently banned.");
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -173,7 +178,6 @@ function ipLookup(ip) {
     };
     return array;
   } else {
-    qLog(ip);
     return geoip.lookup(ip);
   }
 }
@@ -208,8 +212,9 @@ function getUsername(socketID){
     return users[socketID];
   }
 }
-function banIP(ip){
+function banIP(user, ip){
   qLog('adminlog', "IP banned " + ip);
+  io.emit("chat message", "Server", ip + " has been banned.");
   banlist.push(ip);
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });
