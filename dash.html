@@ -382,6 +382,7 @@
   -->
 
     <script>
+      var socket = io();
       /* Apply brand themeing */
 
       var xmlhttp, text;
@@ -421,10 +422,12 @@
 
       usrdat = text.split('/#');
       userlist = document.getElementById('dropdown3')
+      var socket = io();
 
       document.getElementById('usrs_connected').text = "User List (" + (usrdat.length-1) + ")"
       for(var i = 1; i < usrdat.length; i++){
-          document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" +  usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td></tr>"
+          document.getElementById('usrdattable').innerHTML =   document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" +  usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>"
+          + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=socket.emit('ban','" + usrdat[i].split(',')[2] + "')> IP BAN</td></tr>"
           console.log(usrdat[i].split(',')[1]);
           userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
       }

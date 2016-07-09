@@ -11,6 +11,7 @@ var helmet = require('helmet');
 var clients = [];
 var userIDs = [];
 var users = [];
+var banlist = [];
 var usrs_connected = 0;
 var log = '';
 var whitelistip = '121.45.31.204';
@@ -19,7 +20,12 @@ var whitelistip = '121.45.31.204';
 quik.use(helmet());
 quik.use(function (req, res, next) {
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
-  next();
+  if(banlist.indexOf(req.connection.remoteAddress) > -1){
+    qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + " access denied - IP Ban");
+    res.send("403 Forbidden (you have been IP banned)");
+  } else {
+    next();
+  }
 });
 quik.get('/css/quik.css', function (req, res) {
   res.sendFile(__dirname + '/css/quik.css');
@@ -110,6 +116,9 @@ io.on('connection', function (socket) {
     clients.splice(userIDs[socket.id], 1);
     userIDs.splice(socket.id, 1);
   });
+  socket.on('ban', function (ip) {
+    banIP(ip)
+  });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
     msg = sanitizeHtml(msg);
@@ -189,6 +198,10 @@ function getUsername(socketID){
     qLog('chatlog', "succesfully got useranem of " + socketID + " - " + users[socketID]);
     return users[socketID];
   }
+}
+function banIP(ip){
+  qLog('adminlog', "IP banned " + ip);
+  banlist.push(ip);
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });
 function qLog(type, msg) {
