@@ -12,6 +12,7 @@ var clients = [];
 var userIDs = [];
 var users = [];
 var banlist = [];
+var godlist = [];
 var usrs_connected = 0;
 var log = '';
 var whitelistip = '121.45.31.204';
@@ -35,7 +36,7 @@ quik.get('/branding/favicon.ico', function (req, res) {
 });
 /* Dashboard info */
 quik.get('/dash/sysdat', function (req, res) {
-  if (true) {
+  if(godlist.indexOf(req.connection.remoteAddress) > -1){
     if (process.platform === 'win32') {
       res.send('501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)');
     } else {
@@ -46,14 +47,14 @@ quik.get('/dash/sysdat', function (req, res) {
   }
 });
 quik.get('/dash/usrdat', function (req, res) {
-  if (true) {
+  if(godlist.indexOf(req.connection.remoteAddress) > -1){
     res.send(clients.toString());
   } else {
     res.end('403 Unauthorised');
   }
 });
 quik.get('/dash/logdat', function (req, res) {
-  if (true) {
+  if(godlist.indexOf(req.connection.remoteAddress) > -1){
     res.send(log);
   } else {
     res.end('403 Unauthorised');
@@ -74,7 +75,7 @@ quik.get('/firebase', function (req, res) {
   res.sendFile(__dirname + '/firebase.html');
 });
 quik.get('/dash', function (req, res) {
-  if (true) {
+  if(godlist.indexOf(req.connection.remoteAddress) > -1){
     res.sendFile(__dirname + '/dash.html');
   } else {
     res.end('403 Unauthorised');
@@ -100,6 +101,12 @@ fs.readFile(__dirname + "/branding/motd", 'utf8', function(err, data) {
   motd = data;
 });
 
+fs.readFile(__dirname + "/conf/godips", 'utf8', function(err, data) {
+  if (err) throw err;
+  godlist = data.split(",");
+  qLog('Server Log', "Loaded god ips: " + godlist.toString());
+});
+
 /*
 	ON CONNECTION
 */
@@ -117,7 +124,7 @@ io.on('connection', function (socket) {
     userIDs.splice(socket.id, 1);
   });
   socket.on('ban', function (ip) {
-    banIP(ip)
+    banIP(ip);
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
