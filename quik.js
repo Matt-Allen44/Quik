@@ -28,7 +28,7 @@ quik.get('/branding/favicon.ico', function (req, res) {
 });
 /* Dashboard info */
 quik.get('/dash/sysdat', function (req, res) {
-  if (req.connection.remoteAddress == whitelistip) {
+  if (true) {
     if (process.platform === 'win32') {
       res.send('501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)');
     } else {
@@ -39,14 +39,14 @@ quik.get('/dash/sysdat', function (req, res) {
   }
 });
 quik.get('/dash/usrdat', function (req, res) {
-  if (req.connection.remoteAddress == whitelistip) {
+  if (true) {
     res.send(clients.toString());
   } else {
     res.end('403 Unauthorised');
   }
 });
 quik.get('/dash/logdat', function (req, res) {
-  if (req.connection.remoteAddress == whitelistip) {
+  if (true) {
     res.send(log);
   } else {
     res.end('403 Unauthorised');
@@ -67,7 +67,7 @@ quik.get('/firebase', function (req, res) {
   res.sendFile(__dirname + '/firebase.html');
 });
 quik.get('/dash', function (req, res) {
-  if (req.connection.remoteAddress == whitelistip) {
+  if (true) {
     res.sendFile(__dirname + '/dash.html');
   } else {
     res.end('403 Unauthorised');
@@ -89,16 +89,10 @@ http.listen(80, function () {
 	ON CONNECTION
 */
 io.on('connection', function (socket) {
-  socket.emit('chat message', 'Notice --DELIM-- Connection established');
-  socket.emit('chat message', 'Notice --DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
-  socket.emit('chat message', 'Notice --DELIM-- This chat room is logged and users must comply with the TOS');
-  clients.push([
-    getUsername(socket.id),
-    socket.conn.remoteAddress,
-    ipLookup(socket.conn.remoteAddress).region,
-    ipLookup(socket.conn.remoteAddress).country,
-    Math.floor(new Date() / 1000)
-  ]);
+  socket.emit('chat message', 'Notice', 'Connection established');
+  socket.emit('chat message', 'Notice', 'DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
+  socket.emit('chat message', 'Notice', 'This chat room is logged and users must comply with the TOS');
+
   usrs_connected = usrs_connected + 1;
   io.emit('connectEvent', usrs_connected);
   socket.on('disconnect', function () {
@@ -107,31 +101,32 @@ io.on('connection', function (socket) {
     io.emit('disconnectEvent', usrs_connected);
   });
   socket.on('chat message', function (msg) {
+    usr = getUsername(socket.id);
     msg = sanitizeHtml(msg);
     //Check if users name is empty
     if (msg.split('--DELIM--')[0].length === 0) {
-      socket.emit('chat message', 'Server --DELIM-- Connection Refused (invalid name)');
-      socket.emit('chat message', 'Server --DELIM-- Your IP (' + socket.conn.remoteAddress + ') has been logged.');
+      socket.emit('chat message', 'Server', 'Connection Refused (invalid name)');
+      socket.emit('chat message', 'Server', 'Your IP (' + socket.conn.remoteAddress + ') has been logged.');
       socket.disconnect();
     }
     //Check if users name is too llong
     if (msg.split('--DELIM--')[0].length > 10) {
-      socket.emit('chat message', 'Server --DELIM-- Connection Refused (name to long)');
-      socket.emit('chat message', 'Server --DELIM-- Your IP (' + socket.conn.remoteAddress + ') has been logged.');
+      socket.emit('chat message', 'Server', 'Connection Refused (name to long)');
+      socket.emit('chat message', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
       socket.disconnect();
     }
     if (0 === msg.length) {
-      socket.emit('chat message', 'Server --DELIM-- Empty message removed');
+      socket.emit('chat message', 'Server', 'Empty message removed');
       qLog('chatlog', 'empty message removed');
     } else {
-      qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] ' + msg.replace('--DELIM--', ':'));
-      io.emit('chat message', swearjar.censor(msg));
+      qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] ' + msg);
+      io.emit('chat message', usr, swearjar.censor(msg));
     }
   });
   //Seters and getters for usernames
   socket.on('set username', function (name) {
     name = sanitizeHtml(name);
-    setUsername(socket.id, name);
+    setUsername(socket.id, name, socket);
     io.emit('on user connect', name);
   });
   socket.on('get username', function (socketID) {
@@ -152,10 +147,20 @@ function ipLookup(ip) {
     return geoip.lookup(ip);
   }
 }
-function setUsername(socketID, name){
+function setUsername(socketID, name, socket){
   if(typeof users[socketID] === 'undefined'){
     qLog('chatlog', socketID + " set username to " + name);
     users[socketID] = name;
+
+    console.log("updated client list");
+    clients.push([
+      socket.id,
+      getUsername(socket.id),
+      socket.conn.remoteAddress,
+      ipLookup(socket.conn.remoteAddress).region,
+      ipLookup(socket.conn.remoteAddress).country,
+      Math.floor(new Date() / 1000)
+    ]);
   } else {
     qLog('chatlog', socketID + " could not set username to " + name + " as they already have a username of " + users[socketID]);
   }

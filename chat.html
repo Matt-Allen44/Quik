@@ -336,7 +336,6 @@
       var messagesSinceFocus = 0;
 
          var socket = io();
-         usr_name = "";
 
          $('form').submit(function(){
              if($('#m').val() === ""){
@@ -346,14 +345,14 @@
                  timer: 2000
                })
              } else {
-               socket.emit('chat message', usr_name + "--DELIM-- " + $('#m').val());
+               socket.emit('chat message', $('#m').val());
                $('#m').val('');
              }
              return false;
          });
 
 
-         socket.on('chat message', function(msg){
+         socket.on('chat message', function(usr, msg){
            var elem = document.getElementById('messages');
            elem.scrollTop = elem.scrollHeight;
 
@@ -372,9 +371,9 @@
 
 
            msg = twemoji.parse(msg);
-           $('#messages').append($('<li class="msg_name">').text(msg.split("--DELIM--")[0]));
+           $('#messages').append($('<li class="msg_name">').text(usr + ' '));
            //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
-           $('#messages').append((msg.split("--DELIM--")[1]));
+           $('#messages').append(msg);
            $('#messages').append($('<p/>'));
          });
 
