@@ -346,7 +346,7 @@
       var isFocused = true; //Default to true so the noise isn't played if there is an error
       var messagesSinceFocus = 0;
 
-         var socket = io.connect('https://groms.xyz', {secure: true});
+         var socket = io();
 
          $('form').submit(function(){
              if($('#m').val() === ""){

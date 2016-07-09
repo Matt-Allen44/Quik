@@ -1,7 +1,7 @@
 var quik = require('express')();
 var http = require('http').Server(quik);
 var https = require('https');
-var io = require('socket.io').listen(https);
+var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
 var swearjar = require('swearjar');
@@ -111,17 +111,20 @@ fs.readFile(__dirname + "/conf/godips", 'utf8', function(err, data) {
   qLog('Server Log', "Loaded god ips: " + godlist);
 });
 
-var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
-var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
+var runSecure = false;
+if(runSecure){
+  var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
+  var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
+  https.createServer({
+      key: privateKey,
+      cert: certificate
+  }, quik).listen(443);
+}
 
 http.listen(80, function () {
   qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
   qLog('Server Log', 'Started on :80');
 });
-https.createServer({
-    key: privateKey,
-    cert: certificate
-}, quik).listen(443);
 
 /*
 	ON CONNECTION
