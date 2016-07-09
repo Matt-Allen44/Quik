@@ -392,8 +392,8 @@
            document.getElementById("usrs_connected").text = "User list (" + msg + ")";
            document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
 
-           console.log(usr + " has left")
 
+           document.getElementById('dropdown3').removeChild(document.getElementById(usr))
            $('#messages').append($('<li class="msg_name">').text('Notice '));
            $('#messages').append(usr + ' has disconnected');
            $('#messages').append($('<p/>'));
@@ -402,7 +402,7 @@
          socket.on('connectEvent', function(usr, msg){
            document.getElementById("usrs_connected").text = "User list (" + msg + ")";
            document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
-           userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usr + "</a></li>"
+           userlist.innerHTML = userlist.innerHTML + "<li id=" + usr + "><a href=''>" + usr + "</a></li>"
 
            $('#messages').append($('<li class="msg_name">').text('Notice '));
            $('#messages').append(usr + ' has connected');
