@@ -24,10 +24,10 @@ quik.use(helmet());
 quik.use(csp({
   // Specify directives as normal.
   directives: {
-    defaultSrc: ["'self'", 'groms.xyz'],
-    scriptSrc: ["'self'", "'unsafe-inline'", "ejci.net", 'cloudflare.com','github.io','gstatic.com','google-analytics.com'],
+    defaultSrc: ["'self'", '*.groms.xyz', ''],
+    scriptSrc: ["'self'", "'unsafe-inline'", "*.ejci.net", '*.cloudflare.com','*.github.io','*.gstatic.com','*.google-analytics.com'],
     styleSrc: ['*'],
-    imgSrc: ['groms.xyz', 'data:'],
+    imgSrc: ['*.groms.xyz', 'data:'],
     sandbox: ['allow-forms', 'allow-scripts'],
     reportUri: '/report-violation',
 
