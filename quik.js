@@ -1,6 +1,6 @@
 var quik = require('express')();
 var http = require('http').Server(quik);
-var https = require('https').Server(quik);
+var https = require('https');
 var io = require('socket.io')(http);
 var sanitizeHtml = require('sanitize-html');
 var geoip = require('geoip-lite');
