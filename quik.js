@@ -25,7 +25,8 @@ quik.use(csp({
   // Specify directives as normal.
   directives: {
     defaultSrc: ["'self'", '*.groms.xyz', ''],
-    scriptSrc: ["'self'", "'unsafe-inline'", "lab.ejci.net", 'cdnjs.cloudflare.com','buttons.github.io','www.gstatic.com','www.google-analytics.com'],
+    scriptSrc: ["'self'", "'unsafe-inline'", "lab.ejci.net", 'cdnjs.cloudflare.com','buttons.github.io','www.gstatic.com','www.google-analytics.com', 'code.jquery.com', 'twemoji.maxcdn.com'],
+    styleSrc: ["'self'", "'unsafe-inline'"],
     imgSrc: ['*.groms.xyz', 'data:'],
     sandbox: ['allow-forms', 'allow-scripts'],
     reportUri: '/report-violation',
