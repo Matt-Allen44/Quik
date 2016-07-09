@@ -78,6 +78,8 @@ quik.get('/dash', function (req, res) {
   if(godlist.indexOf(req.connection.remoteAddress) > -1){
     res.sendFile(__dirname + '/dash.html');
   } else {
+    qLog("403 Logs", ("Denied " + req.connection.remoteAddress));
+    qLog("403 Logs", godlist.indexOf(req.connection.remoteAddress) > -1);
     res.end('403 Unauthorised');
   }
 });
