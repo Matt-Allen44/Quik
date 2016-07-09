@@ -9,6 +9,7 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var clients = [];
+var users = [];
 var usrs_connected = 0;
 var log = '';
 var whitelistip = '121.45.31.204';
@@ -92,7 +93,7 @@ io.on('connection', function (socket) {
   socket.emit('chat message', 'Notice --DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
   socket.emit('chat message', 'Notice --DELIM-- This chat room is logged and users must comply with the TOS');
   clients.push([
-    socket.id,
+    getUsername(socket.id),
     socket.conn.remoteAddress,
     ipLookup(socket.conn.remoteAddress).region,
     ipLookup(socket.conn.remoteAddress).country,
@@ -127,6 +128,16 @@ io.on('connection', function (socket) {
       io.emit('chat message', swearjar.censor(msg));
     }
   });
+  //Seters and getters for usernames
+  socket.on('set username', function (name) {
+    name = sanitizeHtml(name);
+    setUsername(socket.id, name);
+    io.emit('on user connect', name);
+  });
+  socket.on('get username', function (socketID) {
+    socketID = sanitizeHtml(socketID);
+    getUsername(socket.id);
+  });
 });
 function ipLookup(ip) {
   if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {
@@ -139,6 +150,22 @@ function ipLookup(ip) {
   } else {
     qLog(ip);
     return geoip.lookup(ip);
+  }
+}
+function setUsername(socketID, name){
+  if(typeof users[socketID] === 'undefined'){
+    qLog('chatlog', socketID + " set username to " + name);
+    users[socketID] = name;
+  } else {
+    qLog('chatlog', socketID + " could not set username to " + name + " as they already have a username of " + users[socketID]);
+  }
+}
+function getUsername(socketID){
+  if(typeof users[socketID] === 'undefined'){
+    qLog('chatlog', "could not get username of " + socketID);
+  } else {
+    qLog('chatlog', "succesfully got useranem of " + socketID + " - " + users[socketID]);
+    return users[socketID];
   }
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });

@@ -412,7 +412,7 @@
             } else {
              swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
              usr_name = inputValue;
-             socket.emit('chat message', usr_name + "--DELIM-- has connected");
+             socket.emit('set username', inputValue);
             }
          });
 
