@@ -408,7 +408,7 @@
            } else if(inputValue.length > 10){
               swal.showInputError("Name can't be longer than 10 characters!");
             } else if(twemoji.parse(inputValue) != inputValue){
-              swal.showInputError("You can't have emojis in your username!");
+              swal.showInputError("You can't have emojis in your username! " + '<img class="emoji" draggable="false" alt="😪" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
             } else {
              swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
              usr_name = inputValue;
