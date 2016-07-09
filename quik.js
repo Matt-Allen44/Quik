@@ -9,6 +9,7 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var clients = [];
+var userIDs = [];
 var users = [];
 var usrs_connected = 0;
 var log = '';
@@ -98,6 +99,8 @@ io.on('connection', function (socket) {
     usrs_connected = usrs_connected - 1;
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', getUsername(socket.id), usrs_connected);
+    clients.splice(userIDs[socket.id], 1);
+    userIDs.splice(socket.id, 1);
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -148,20 +151,25 @@ function ipLookup(ip) {
     return geoip.lookup(ip);
   }
 }
+
+var clientid = 0;
 function setUsername(socketID, name, socket){
   if(typeof users[socketID] === 'undefined'){
     qLog('chatlog', socketID + " set username to " + name);
     users[socketID] = name;
+    userIDs[socketID] = clientid;
 
     console.log("updated client list");
-    clients.push([
+    clients[clientid] = ([
       socket.id,
       getUsername(socket.id),
       socket.conn.remoteAddress,
       ipLookup(socket.conn.remoteAddress).region,
       ipLookup(socket.conn.remoteAddress).country,
-      Math.floor(new Date() / 1000)
+      Math.floor(new Date() / 1000),
+      clientid
     ]);
+    clientid++;
   } else {
     qLog('chatlog', socketID + " could not set username to " + name + " as they already have a username of " + users[socketID]);
   }
