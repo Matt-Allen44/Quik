@@ -126,7 +126,7 @@ io.on('connection', function (socket) {
   });
   socket.on('ban', function (ip) {
     banIP(ip);
-    socket.emit('chat message', 'Server', ip + " has been permanently banned.")
+    socket.emit('chat message', 'Server', ip + " has been permanently banned.");
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
