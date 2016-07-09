@@ -92,13 +92,12 @@ io.on('connection', function (socket) {
   socket.emit('chat message', 'Notice', 'Connection established');
   socket.emit('chat message', 'Notice', 'DELIM-- This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
   socket.emit('chat message', 'Notice', 'This chat room is logged and users must comply with the TOS');
-
   usrs_connected = usrs_connected + 1;
-  io.emit('connectEvent', usrs_connected);
+
   socket.on('disconnect', function () {
     usrs_connected = usrs_connected - 1;
     qLog('chatlog', usrs_connected + ' users connected');
-    io.emit('disconnectEvent', usrs_connected);
+    io.emit('disconnectEvent', getUsername(socket.id), usrs_connected);
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -127,7 +126,9 @@ io.on('connection', function (socket) {
   socket.on('set username', function (name) {
     name = sanitizeHtml(name);
     setUsername(socket.id, name, socket);
+
     io.emit('on user connect', name);
+    io.emit('connectEvent', getUsername(socket.id), usrs_connected);
   });
   socket.on('get username', function (socketID) {
     socketID = sanitizeHtml(socketID);

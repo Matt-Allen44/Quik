@@ -330,6 +330,17 @@
 
       /* End of brand themeing */
 
+      xmlhttp = new XMLHttpRequest();
+      xmlhttp.open('GET', '/dash/usrdat', false);
+      xmlhttp.send();
+      text = xmlhttp.responseText;
+
+      usrdat = text.split('/#');
+      userlist = document.getElementById('dropdown3')
+      for(var i = 1; i < usrdat.length; i++){
+        userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
+      }
+
       //define notification audio
       var audio = new Audio('notify.mp3');
       var isFocused = true; //Default to true so the noise isn't played if there is an error
@@ -377,14 +388,26 @@
            $('#messages').append($('<p/>'));
          });
 
-         socket.on('disconnectEvent', function(msg){
+         socket.on('disconnectEvent', function(usr, msg){
            document.getElementById("usrs_connected").text = "User list (" + msg + ")";
            document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
+
+           console.log(usr + " has left")
+
+           $('#messages').append($('<li class="msg_name">').text('Notice '));
+           $('#messages').append(usr + ' has disconnected');
+           $('#messages').append($('<p/>'));
          });
 
-         socket.on('connectEvent', function(msg){
+         socket.on('connectEvent', function(usr, msg){
            document.getElementById("usrs_connected").text = "User list (" + msg + ")";
            document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
+           userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usr + "</a></li>"
+
+           $('#messages').append($('<li class="msg_name">').text('Notice '));
+           $('#messages').append(usr + ' has connected');
+           $('#messages').append($('<p/>'));
+
          });
 
          //Prompt user for name

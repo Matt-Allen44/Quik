@@ -69,7 +69,7 @@ img.emoji {
 }
 
 .userlist {
-  width: 600px;
+  width: 900px;
   height: 100%;
 }
 
@@ -79,7 +79,7 @@ img.emoji {
 }
 
 .rightbar {
-  width: calc(100% - 680px);
+  width: calc(100% - 980px);
   height: 100%;
 }
 
