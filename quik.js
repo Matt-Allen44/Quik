@@ -8,6 +8,7 @@ var os = require('os');
 var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
+var csp = require('helmet-csp')
 var clients = [];
 var userIDs = [];
 var users = [];
@@ -19,6 +20,36 @@ var whitelistip = '121.45.31.204';
 // Called on all quik requests
 
 quik.use(helmet());
+quik.use(csp({
+  // Specify directives as normal.
+  directives: {
+    defaultSrc: ["'self'", 'groms.xyz'],
+    scriptSrc: ["'self'", "'unsafe-inline'", "ejci.net"],
+    styleSrc: ['groms.xyz','cloudflare.com'],
+    imgSrc: ['groms.xyz', 'data:'],
+    sandbox: ['allow-forms', 'allow-scripts'],
+    reportUri: '/report-violation',
+
+    objectSrc: [], // An empty array allows nothing through
+  },
+
+  // Set to true if you only want browsers to report errors, not block them.
+  // You may also set this to a function(req, res) in order to decide dynamically
+  // whether to use reportOnly mode, e.g., to allow for a dynamic kill switch.
+  reportOnly: false,
+
+  // Set to true if you want to blindly set all headers: Content-Security-Policy,
+  // X-WebKit-CSP, and X-Content-Security-Policy.
+  setAllHeaders: true,
+
+  // Set to true if you want to disable CSP on Android where it can be buggy.
+  disableAndroid: false,
+
+  // Set to false if you want to completely disable any user-agent sniffing.
+  // This may make the headers less compatible but it will be much faster.
+  // This defaults to `true`.
+  browserSniff: true
+}));
 quik.use(function (req, res, next) {
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
   if(banlist.indexOf(req.connection.remoteAddress) > -1){
