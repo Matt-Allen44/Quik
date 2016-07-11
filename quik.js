@@ -171,8 +171,9 @@ io.on('connection', function (socket) {
     //userIDs.splice(socket.id, 1);
   });
   socket.on('ban', function (ip) {
-    banIP(ip);
+    qLog("Ban Log", "Ban req for " + ip)
     socket.emit('chat message', 'Server', "the ip " + ip + " has been permanently banned.");
+    banIP(ip);
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -259,7 +260,7 @@ function getUsername(socketID){
     return users[socketID];
   }
 }
-function banIP(user, ip){
+function banIP(ip){
   qLog('adminlog', "IP banned " + ip);
   io.emit("chat message", "Server", ip + " has been banned.");
   banlist.push(ip);
