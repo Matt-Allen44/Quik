@@ -10,17 +10,24 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
+
 var clients = [];
 var userIDs = [];
 var users = [];
+var usernames = [];
+
+
+var usrs_connected = 0;
+var log = '';
+
+
+//conf variables
+var whitelistip = '121.45.31.204';
 var banlist = [];
 var godlist = "";
 var port = 80; //default to 80 if no port is provided
-var usrs_connected = 0;
-var log = '';
-var whitelistip = '121.45.31.204';
-// Called on all quik requests
 
+// Called on all quik requests
 quik.use(helmet());
 quik.use(function (req, res, next) {
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
@@ -147,9 +154,14 @@ io.on('connection', function (socket) {
   usrs_connected = usrs_connected + 1;
 
   socket.on('disconnect', function () {
+    var username = getUsername(socket.id);
     usrs_connected = usrs_connected - 1;
+
+    //remove username for restricted names
+    usernames.splice(usernames.indexOf(username.toLowerCase()), 1);
+
     qLog('chatlog', usrs_connected + ' users connected');
-    io.emit('disconnectEvent', getUsername(socket.id), usrs_connected);
+    io.emit('disconnectEvent', username, usrs_connected);
     //clients.splice(userIDs[socket.id], 1);
     //userIDs.splice(socket.id, 1);
   });
@@ -180,13 +192,25 @@ io.on('connection', function (socket) {
       io.emit('chat message', usr, swearjar.censor(msg));
     }
   });
+  
   //Seters and getters for usernames
+  /**** NOTE MULTIPLE USERNAMES OF THE SAME NAME WITH DIFFRENT
+        CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
+  ****/
   socket.on('set username', function (name) {
-    name = sanitizeHtml(name);
-    setUsername(socket.id, name, socket);
+    if(usernames.indexOf(name.toLowerCase()) > -1){
+      socket.emit("username rejected", "Server", "Username rejected (already in use)");
+    } else {
+      name = sanitizeHtml(name);
+      setUsername(socket.id, name, socket);
 
-    io.emit('on user connect', name);
-    io.emit('connectEvent', getUsername(socket.id), usrs_connected);
+      io.emit('on user connect', name);
+      io.emit('connectEvent', getUsername(socket.id), usrs_connected);
+
+      //Add username to end of usernames array
+      usernames[usernames.length] = name.toLowerCase();
+      console.log(usernames.toString());
+    }
   });
   socket.on('get username', function (socketID) {
     socketID = sanitizeHtml(socketID);
