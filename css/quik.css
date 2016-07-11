@@ -24,6 +24,7 @@ and (min-device-width : 656px){ .smallscreen { display: none; }}
     height: 400px;
 		width: auto;
     margin:20px;
+    margin-top:0px;
 }
 #messages li {
     font-size: 16px;

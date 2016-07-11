@@ -15,6 +15,7 @@ var userIDs = [];
 var users = [];
 var banlist = [];
 var godlist = "";
+var port = 80; //default to 80 if no port is provided
 var usrs_connected = 0;
 var log = '';
 var whitelistip = '121.45.31.204';
@@ -111,20 +112,30 @@ fs.readFile(__dirname + "/conf/godips", 'utf8', function(err, data) {
   qLog('Server Log', "Loaded god ips: " + godlist);
 });
 
-var runSecure = false;
-if(runSecure){
-  var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
-  var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
-  https.createServer({
-      key: privateKey,
-      cert: certificate
-  }, quik).listen(443);
-}
-
-http.listen(80, function () {
-  qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
-  qLog('Server Log', 'Started on :80');
+fs.readFile(__dirname + "/conf/netconf", 'utf8', function(err, data) {
+  if (err) throw err;
+  port = parseInt(data.split(':')[1]);
+  qLog('Server Log', "Loaded netconf with port: " + port);
+  startServer(); //Wait until netconf is loaded to start
 });
+
+
+function startServer(){
+  var runSecure = false;
+  if(runSecure){
+    var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
+    var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
+    https.createServer({
+        key: privateKey,
+        cert: certificate
+    }, quik).listen(443);
+  }
+
+  http.listen(port, function () {
+    qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
+    qLog('Server Log', 'Started on :' + port);
+  });
+}
 
 /*
 	ON CONNECTION
