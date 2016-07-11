@@ -171,7 +171,7 @@ io.on('connection', function (socket) {
     //userIDs.splice(socket.id, 1);
   });
   socket.on('ban', function (ip) {
-    qLog("Ban Log", "Ban req for " + ip)
+    qLog("Ban Log", "Ban req for " + ip + " from " + socket.conn.remoteAddress);
     socket.emit('chat message', 'Server', "the ip " + ip + " has been permanently banned.");
     banIP(ip);
   });
