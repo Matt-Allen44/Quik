@@ -158,7 +158,12 @@ io.on('connection', function (socket) {
     usrs_connected = usrs_connected - 1;
 
     //remove username for restricted names
-    usernames.splice(usernames.indexOf(username.toLowerCase()), 1);
+
+    if(typeof username !== 'undefined'){
+      if(usernames.indexOf(username.toLowerCase()) > -1){
+        usernames.splice(usernames.indexOf(username.toLowerCase()), 1);
+      }
+    }
 
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', username, usrs_connected);
@@ -192,7 +197,7 @@ io.on('connection', function (socket) {
       io.emit('chat message', usr, swearjar.censor(msg));
     }
   });
-  
+
   //Seters and getters for usernames
   /**** NOTE MULTIPLE USERNAMES OF THE SAME NAME WITH DIFFRENT
         CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
