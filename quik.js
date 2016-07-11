@@ -177,15 +177,9 @@ io.on('connection', function (socket) {
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
     msg = sanitizeHtml(msg);
-    //Check if users name is empty
-    if (msg.split('--DELIM--')[0].length === 0) {
-      socket.emit('chat message', 'Server', 'Connection Refused (invalid name)');
-      socket.emit('chat message', 'Server', 'Your IP (' + socket.conn.remoteAddress + ') has been logged.');
-      socket.disconnect();
-    }
     //Check if users name is too llong
-    if (msg.split('--DELIM--')[0].length > 10) {
-      socket.emit('chat message', 'Server', 'Connection Refused (name to long)');
+    if (msg > 250) {
+      socket.emit('chat message', 'Server', 'Connection Refused (message to long > 250 chars)');
       socket.emit('chat message', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
       socket.disconnect();
     }
