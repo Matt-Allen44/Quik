@@ -203,6 +203,9 @@
    limitations under the License.
 */
 
+// init socketio
+var socket = io();
+
 setInterval(function () {
   favicon.badge(messagesSinceFocus);
   if (messagesSinceFocus > 0) {
@@ -262,7 +265,6 @@ function quikClientStart() {
         }
         return false;
       });
-      var socket = io();
       socket.on('username rejected', function () {
         console.log('username rejected, reprompting');
         promptForUsername(true);

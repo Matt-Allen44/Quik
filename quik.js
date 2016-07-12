@@ -361,8 +361,7 @@ io.on('connection', function (socket) {
       }
     }
     qLog('chatlog', usrs_connected + ' users connected');
-    io.emit('disconnectEvent', username, usrs_connected);  //clients.splice(userIDs[socket.id], 1);
-                                                           //userIDs.splice(socket.id, 1);
+    io.emit('disconnectEvent', username, usrs_connected);
   });
   socket.on('ban', function (ip) {
     qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
