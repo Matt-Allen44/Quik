@@ -344,8 +344,8 @@ function promptForUsername(showError) {
             window.close();
           if (inputValue.length < 1) {
             swal.showInputError('You need to write something!');
-          } else if (inputValue.length > 10) {
-            swal.showInputError('Name can\'t be longer than 10 characters!');
+          } else if (inputValue.length > 20) {
+            swal.showInputError('Name can\'t be longer than 20 characters!');
           } else if (twemoji.parse(inputValue) != inputValue) {
             swal.showInputError('You can\'t have emojis in your username! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
           } else {
