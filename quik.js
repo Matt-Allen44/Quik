@@ -391,7 +391,7 @@ io.on('connection', function (socket) {
   ****/
   socket.on('set username', function (name) {
     if(name.length > 20){
-        socket.emit('username rejected', "name too long")
+        socket.emit('username rejected', "name too long");
     } else if (usernames.indexOf(name.toLowerCase()) > -1) {
         socket.emit('username rejected', 'already in use');
     } else if(name != sanitizeHtml(name)){
