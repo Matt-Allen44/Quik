@@ -23,6 +23,9 @@ Clone the git repository
 ![Joining Screen](http://i.imgur.com/oKBWSZ5.png)
 
 
-### Dependencies    
-Quik is reliant on the following packages:
-> socket.io, express@4.10.2, sanitize-html, config-js, winston, systeminformation, helmet & swearjar
+
+### Contributing
+> Find an issue from the issue tracker you wish and comment on the issue with your intentions
+> Fork the repository and fix the task, ensuring you have tested it thoroughly
+> Run your code through jshint to ensure no errors or warnings exist
+> Submit a pull request to the repository
