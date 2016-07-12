@@ -318,40 +318,45 @@ function quikClientStart(){
 }
 function promptForUsername(showError) {
       promptText = 'Enter  your desired username:';
-  if (showError || document.cookie == "") {
-      promptText = 'Username taken, please choose another';
-      document.cookie=";expires=Thu, 01 Jan 1970 00:00:00 GMT";
-      //Prompt user for name
-      swal({
-        title: 'Welcome to Quik',
-        text: promptText,
-        type: 'input',
-        showCancelButton: false,
-        closeOnConfirm: false,
-        confirmButtonColor: ' #ff5050 ',
-        confirmButtonText: 'Continue',
-        allowEscapeKey: false,
-        inputPlaceholder: 'username'
-      }, function (inputValue) {
-        if (inputValue === false)
-          window.close();
-        if (inputValue.length < 1) {
-          swal.showInputError('You need to write something!');
-        } else if (inputValue.length > 10) {
-          swal.showInputError('Name can\'t be longer than 10 characters!');
-        } else if (twemoji.parse(inputValue) != inputValue) {
-          swal.showInputError('You can\'t have emojis in your username! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
-        } else {
-          swal('Welcome ' + inputValue + '!', 'We hope you enjoy Quik!', 'success');
-          usr_name = inputValue;
-          socket.emit('set username', inputValue);
 
-          date = new Date();
-          var expires = date.setTime(date.getTime()+(30*60*1000));
-          document.cookie = usr_name + "; expires=" + expires;
+      if(!showError){
+        if(document.cookie != ""){
+          socket.emit('set username', document.cookie);
+        }
+      }
+
+      if (showError || document.cookie == "") {
+        promptText = 'Username taken, please choose another';
+        document.cookie=";expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        //Prompt user for name
+        swal({
+          title: 'Welcome to Quik',
+          text: promptText,
+          type: 'input',
+          showCancelButton: false,
+          closeOnConfirm: false,
+          confirmButtonColor: ' #ff5050 ',
+          confirmButtonText: 'Continue',
+          allowEscapeKey: false,
+          inputPlaceholder: 'username'
+        }, function (inputValue) {
+          if (inputValue === false)
+            window.close();
+          if (inputValue.length < 1) {
+            swal.showInputError('You need to write something!');
+          } else if (inputValue.length > 10) {
+            swal.showInputError('Name can\'t be longer than 10 characters!');
+          } else if (twemoji.parse(inputValue) != inputValue) {
+            swal.showInputError('You can\'t have emojis in your username! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
+          } else {
+            swal('Welcome ' + inputValue + '!', 'We hope you enjoy Quik!', 'success');
+            usr_name = inputValue;
+            socket.emit('set username', inputValue);
+
+            date = new Date();
+            var expires = date.setTime(date.getTime()+(30*60*1000));
+            document.cookie = usr_name + "; expires=" + expires;
         }
     });
-  } else {
-    socket.emit('set username', document.cookie);
   }
 }
