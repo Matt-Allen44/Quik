@@ -10,29 +10,24 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
-
 var clients = [];
 var userIDs = [];
 var users = [];
 var usernames = [];
-
-
 var usrs_connected = 0;
 var log = '';
-
-
 //conf variables
 var whitelistip = '121.45.31.204';
 var banlist = [];
-var godlist = "";
-var port = 80; //default to 80 if no port is provided
-
+var godlist = '';
+var port = 80;
+//default to 80 if no port is provided
 // Called on all quik requests
 quik.use(helmet());
 quik.use(function (req, res, next) {
   qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
-  if(banlist.indexOf(req.connection.remoteAddress) > -1){
-    qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + " access denied - IP Ban");
+  if (banlist.indexOf(req.connection.remoteAddress) > -1) {
+    qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + ' access denied - IP Ban');
     res.status(403);
     res.sendFile(__dirname + '/ipban.html');
   } else {
@@ -50,7 +45,7 @@ quik.get('/branding/favicon.ico', function (req, res) {
 });
 /* Dashboard info */
 quik.get('/dash/sysdat', function (req, res) {
-  if(godlist == req.connection.remoteAddress){
+  if (godlist == req.connection.remoteAddress) {
     if (process.platform === 'win32') {
       res.send('501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)');
     } else {
@@ -62,7 +57,7 @@ quik.get('/dash/sysdat', function (req, res) {
   }
 });
 quik.get('/dash/usrdat', function (req, res) {
-  if(godlist == req.connection.remoteAddress){
+  if (godlist == req.connection.remoteAddress) {
     res.send(clients.toString());
   } else {
     res.status(403);
@@ -70,7 +65,7 @@ quik.get('/dash/usrdat', function (req, res) {
   }
 });
 quik.get('/dash/logdat', function (req, res) {
-  if(godlist == req.connection.remoteAddress){
+  if (godlist == req.connection.remoteAddress) {
     res.send(log);
   } else {
     res.status(403);
@@ -92,10 +87,10 @@ quik.get('/firebase', function (req, res) {
   res.sendFile(__dirname + '/firebase.html');
 });
 quik.get('/dash', function (req, res) {
-  if(godlist == req.connection.remoteAddress){
+  if (godlist == req.connection.remoteAddress) {
     res.sendFile(__dirname + '/dash.html');
   } else {
-    qLog("403 Logs", ("Denied " + req.connection.remoteAddress));
+    qLog('403 Logs', 'Denied ' + req.connection.remoteAddress);
     res.status(403);
     res.sendFile(__dirname + '/ipban.html');
   }
@@ -108,45 +103,41 @@ quik.get('*', function (req, res) {
   res.status(404);
   res.sendFile(__dirname + '/404.html');
 });
-
-var motd = "";
+var motd = '';
 var fs = require('fs');
-fs.readFile(__dirname + "/branding/motd", 'utf8', function(err, data) {
-  if (err) throw err;
+fs.readFile(__dirname + '/branding/motd', 'utf8', function (err, data) {
+  if (err)
+    throw err;
   motd = data;
 });
-
-fs.readFile(__dirname + "/conf/godips", 'utf8', function(err, data) {
-  if (err) throw err;
+fs.readFile(__dirname + '/conf/godips', 'utf8', function (err, data) {
+  if (err)
+    throw err;
   godlist = data.trim();
-  qLog('Server Log', "Loaded god ips: " + godlist);
+  qLog('Server Log', 'Loaded god ips: ' + godlist);
 });
-
-fs.readFile(__dirname + "/conf/netconf", 'utf8', function(err, data) {
-  if (err) throw err;
+fs.readFile(__dirname + '/conf/netconf', 'utf8', function (err, data) {
+  if (err)
+    throw err;
   port = parseInt(data.split(':')[1]);
-  qLog('Server Log', "Loaded netconf with port: " + port);
-  startServer(); //Wait until netconf is loaded to start
+  qLog('Server Log', 'Loaded netconf with port: ' + port);
+  startServer();  //Wait until netconf is loaded to start
 });
-
-
-function startServer(){
+function startServer() {
   var runSecure = false;
-  if(runSecure){
-    var privateKey = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/privkey.pem' );
-    var certificate = fs.readFileSync( '/etc/letsencrypt/live/groms.xyz/cert.pem' );
+  if (runSecure) {
+    var privateKey = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/privkey.pem');
+    var certificate = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/cert.pem');
     https.createServer({
-        key: privateKey,
-        cert: certificate
+      key: privateKey,
+      cert: certificate
     }, quik).listen(443);
   }
-
   http.listen(port, function () {
     qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
     qLog('Server Log', 'Started on :' + port);
   });
 }
-
 /*
 	ON CONNECTION
 */
@@ -155,27 +146,22 @@ io.on('connection', function (socket) {
   socket.emit('chat message', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
   socket.emit('chat message', 'Notice', motd);
   usrs_connected = usrs_connected + 1;
-
   socket.on('disconnect', function () {
     var username = getUsername(socket.id);
     usrs_connected = usrs_connected - 1;
-
     //remove username for restricted names
-
-    if(typeof username !== 'undefined'){
-      if(usernames.indexOf(username.toLowerCase()) > -1){
+    if (typeof username !== 'undefined') {
+      if (usernames.indexOf(username.toLowerCase()) > -1) {
         usernames.splice(usernames.indexOf(username.toLowerCase()), 1);
       }
     }
-
     qLog('chatlog', usrs_connected + ' users connected');
-    io.emit('disconnectEvent', username, usrs_connected);
-    //clients.splice(userIDs[socket.id], 1);
-    //userIDs.splice(socket.id, 1);
+    io.emit('disconnectEvent', username, usrs_connected);  //clients.splice(userIDs[socket.id], 1);
+                                                           //userIDs.splice(socket.id, 1);
   });
   socket.on('ban', function (ip) {
-    qLog("Ban Log", "Ban req for " + ip + " from " + socket.conn.remoteAddress);
-    socket.emit('chat message', 'Server', "the ip " + ip + " has been permanently banned.");
+    qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
+    socket.emit('chat message', 'Server', 'the ip ' + ip + ' has been permanently banned.');
     banIP(ip);
   });
   socket.on('chat message', function (msg) {
@@ -195,21 +181,18 @@ io.on('connection', function (socket) {
       io.emit('chat message', usr, swearjar.censor(msg));
     }
   });
-
   //Seters and getters for usernames
   /**** NOTE MULTIPLE USERNAMES OF THE SAME NAME WITH DIFFRENT
         CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
   ****/
   socket.on('set username', function (name) {
-    if(usernames.indexOf(name.toLowerCase()) > -1){
-      socket.emit("username rejected", "Server", "Username rejected (already in use)");
+    if (usernames.indexOf(name.toLowerCase()) > -1) {
+      socket.emit('username rejected', 'Server', 'Username rejected (already in use)');
     } else {
       name = sanitizeHtml(name);
       setUsername(socket.id, name, socket);
-
       io.emit('on user connect', name);
       io.emit('connectEvent', getUsername(socket.id), usrs_connected);
-
       //Add username to end of usernames array
       usernames[usernames.length] = name.toLowerCase();
       console.log(usernames.toString());
@@ -232,16 +215,14 @@ function ipLookup(ip) {
     return geoip.lookup(ip);
   }
 }
-
 var clientid = 0;
-function setUsername(socketID, name, socket){
-  if(typeof users[socketID] === 'undefined'){
-    qLog('chatlog', socketID + " set username to " + name);
+function setUsername(socketID, name, socket) {
+  if (typeof users[socketID] === 'undefined') {
+    qLog('chatlog', socketID + ' set username to ' + name);
     users[socketID] = name;
     userIDs[socketID] = clientid;
-
-    console.log("updated client list");
-    clients[clientid] = ([
+    console.log('updated client list');
+    clients[clientid] = [
       socket.id,
       getUsername(socket.id),
       socket.conn.remoteAddress,
@@ -249,23 +230,23 @@ function setUsername(socketID, name, socket){
       ipLookup(socket.conn.remoteAddress).country,
       Math.floor(new Date() / 1000),
       clientid
-    ]);
+    ];
     clientid++;
   } else {
-    qLog('chatlog', socketID + " could not set username to " + name + " as they already have a username of " + users[socketID]);
+    qLog('chatlog', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
   }
 }
-function getUsername(socketID){
-  if(typeof users[socketID] === 'undefined'){
-    qLog('chatlog', "could not get username of " + socketID);
+function getUsername(socketID) {
+  if (typeof users[socketID] === 'undefined') {
+    qLog('chatlog', 'could not get username of ' + socketID);
   } else {
-    qLog('chatlog', "succesfully got useranem of " + socketID + " - " + users[socketID]);
+    qLog('chatlog', 'succesfully got useranem of ' + socketID + ' - ' + users[socketID]);
     return users[socketID];
   }
 }
-function banIP(ip){
-  qLog('adminlog', "IP banned " + ip);
-  io.emit("chat message", "Server", ip + " has been banned.");
+function banIP(ip) {
+  qLog('adminlog', 'IP banned ' + ip);
+  io.emit('chat message', 'Server', ip + ' has been banned.');
   banlist.push(ip);
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });

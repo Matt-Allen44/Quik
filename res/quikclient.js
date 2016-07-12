@@ -6,8 +6,7 @@ setInterval(function () {
     document.title = 'Quik';
   }
 }, 1000);
-
-function quikClientStart(){
+function quikClientStart() {
   /* Apply brand themeing */
   var xmlhttp, text;
   xmlhttp = new XMLHttpRequest();
@@ -110,7 +109,6 @@ function quikClientStart(){
     }
   };
 }
-
 function promptForUsername(showError) {
   if (showError) {
     promptText = 'Username taken, please choose another';
