@@ -390,19 +390,21 @@ io.on('connection', function (socket) {
         CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
   ****/
   socket.on('set username', function (name) {
-    if (usernames.indexOf(name.toLowerCase()) > -1) {
-      socket.emit('username rejected', 'already in use');
-    } if(name != sanitizeHtml(name)){
-      socket.emit('username rejected', 'anti-xss policy');
+    if(name.length > 20){
+        socket.emit('username rejected', "name too long")
+    } else if (usernames.indexOf(name.toLowerCase()) > -1) {
+        socket.emit('username rejected', 'already in use');
+    } else if(name != sanitizeHtml(name)){
+        socket.emit('username rejected', 'anti-xss policy');
     } else {
-      name = sanitizeHtml(name);
-      setUsername(socket.id, name, socket);
-      io.emit('on user connect', name);
-      io.emit('connectEvent', getUsername(socket.id), usrs_connected);
-      //Add username to end of usernames array
-      usernames[usernames.length] = name.toLowerCase();
-      console.log(usernames.toString());
-    }
+        name = sanitizeHtml(name);
+        setUsername(socket.id, name, socket);
+        io.emit('on user connect', name);
+        io.emit('connectEvent', getUsername(socket.id), usrs_connected);
+        //Add username to end of usernames array
+        usernames[usernames.length] = name.toLowerCase();
+        console.log(usernames.toString());
+      }
   });
   socket.on('get username', function (socketID) {
     socketID = sanitizeHtml(socketID);
