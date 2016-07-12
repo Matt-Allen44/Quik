@@ -363,10 +363,10 @@ io.on('connection', function (socket) {
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', username, usrs_connected);
   });
-  socket.on('ban', function (ip) {
+  socket.on('ban', function (name, socketID, ip) {
     qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
-    socket.emit('chat message', 'Server', 'the ip ' + ip + ' has been permanently banned.');
-    banIP(ip);
+    socket.emit('chat message', 'Server', 'User: ' + name + 'of the ip ' + ip + ' has been permanently banned.');
+    banIP(name,socket,ip);
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -448,9 +448,8 @@ function getUsername(socketID) {
     return users[socketID];
   }
 }
-function banIP(ip) {
+function banIP(name, socket, ip) {
   qLog('adminlog', 'IP banned ' + ip);
-  io.emit('chat message', 'Server', ip + ' has been banned.');
   banlist.push(ip);
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });

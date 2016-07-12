@@ -589,9 +589,12 @@
 
         document.getElementById('usrs_connected').text = "User List (" + (usrdat.length - 1) + ")"
         for (var i = 1; i < usrdat.length; i++) {
-            document.getElementById('usrdattable').innerHTML = document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=socket.emit('ban','" + usrdat[i].split(',')[2] + "'); alert('User banned!')> IP BAN</td><td><a onClick=socket.emit('give Admin','" + usrdat[i].split(',')[2] + "');> GIVE ADMIN</td></tr>"
-            console.log(usrdat[i].split(',')[1]);
+            document.getElementById('usrdattable').innerHTML = document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=ban('" + usrdat[i] + "')> IP BAN</td></tr>";
             userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
+        }
+
+        function ban(){
+          
         }
 
         /* Get log data */
