@@ -1,107 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
-    <meta charset="UTF-8">
-    <meta content=
-    "A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik"
-    name="description">
-    <meta content=
-    "Chat, Instant, Message, HTML, CSS, Javascript, NodeJS, SocketIO, Socket.IO"
-    name="keywords">
-    <meta content="Matthew Allen" name="author">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <link href="/branding/favicon.ico" rel="icon">
-    <!-- Compiled and minified CSS -->
-    <link href=
-    "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css"
-    rel="stylesheet">
-    <link href=
-    "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"
-    rel="stylesheet" type="text/css"><!-- Compiled and minified JavaScript -->
+  <title>Quik | A Free, Lightweight & Open Web Chat Application</title>
+  <meta charset="UTF-8">
+  <meta content=
+     "A Free, Lightweight & Open Web Chat Application implemented in NodeJS. The source is completely open and can be found at http://www.github.com/Matt-Allen44/quik"
+     name="description">
+  <meta content=
+     "Chat, Instant, Message, HTML, CSS, Javascript, NodeJS, SocketIO, Socket.IO"
+     name="keywords">
+  <meta content="Matthew Allen" name="author">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="/branding/favicon.ico" rel="icon">
+  <!-- Compiled and minified CSS -->
+  <link href=
+     "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css"
+     rel="stylesheet">
+  <link href=
+     "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css"
+     rel="stylesheet" type="text/css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+  <script src=
+     "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+  <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
+  <script>
+     twemoji.size = '16x16';
+  </script>
+  <script src=
+     "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <!-- <script src="https://lab.ejci.net/favico.js/favico.min.js"> -->
+  </script>
+  <script>
+     var favicon=new Favico({
+         animation:'slide',
+         bgColor : '#000',
+         textColor : '#fff',
+         position : 'up'
+     });
+     var socket = io();
+  </script>
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+  <script src="/res/quikclient.js"></script>
+  <script>
+     // Initialize Firebase
+     var config = {
+       apiKey: "AIzaSyByC4lJaLHZ1R4RtC-HSuuZBCG9Q4bWxLo",
+       authDomain: "quik-app.firebaseapp.com",
+       databaseURL: "https://quik-app.firebaseio.com",
+       storageBucket: "quik-app.appspot.com",
+     };
+     firebase.initializeApp(config);
+  </script>
+  <script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    <script src="https://code.jquery.com/jquery-1.11.1.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js">
-    </script>
-    <script src=
-    "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js">
-    </script>
-    <script src="//twemoji.maxcdn.com/twemoji.min.js">
-    </script>
-    <script>
-    twemoji.size = '16x16';
-    </script>
-    <script src=
-    "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js">
-    </script>
-    <!-- <script src="https://lab.ejci.net/favico.js/favico.min.js"> -->
-    </script>
-    <script>
-      var favicon=new Favico({
-          animation:'slide',
-          bgColor : '#000',
-          textColor : '#fff',
-          position : 'up'
-      });
-      var socket = io();
-    </script>
-    <!-- Place this tag in your head or just before your close body tag. -->
+     ga('create', 'UA-80505829-1', 'auto');
+     ga('send', 'pageview');
 
-    <script async defer src="https://buttons.github.io/buttons.js">
-    </script>
-    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js">
-    </script>
-    <script>
-        // Initialize Firebase
-        var config = {
-          apiKey: "AIzaSyByC4lJaLHZ1R4RtC-HSuuZBCG9Q4bWxLo",
-          authDomain: "quik-app.firebaseapp.com",
-          databaseURL: "https://quik-app.firebaseio.com",
-          storageBucket: "quik-app.appspot.com",
-        };
-        firebase.initializeApp(config);
-    </script>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+  <link href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript">
+     // FirebaseUI config.
+     var uiConfig = {
+       'signInSuccessUrl': '/',
+       'signInOptions': [
+         // Leave the lines as is for the providers you want to offer your users.
+         firebase.auth.GoogleAuthProvider.PROVIDER_ID
+       ],
+       // Terms of service url.
+       'tosUrl': '',
+     };
 
-      ga('create', 'UA-80505829-1', 'auto');
-      ga('send', 'pageview');
+     // Initialize the FirebaseUI Widget using Firebase.
+     var ui = new firebaseui.auth.AuthUI(firebase.auth());
+     // The start method will wait until the DOM is loaded.
+     ui.start('#firebaseui-auth-container', uiConfig);
 
-    </script>
-    <script src=
-    "https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js">
-    </script>
-    <link href=
-    "https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" rel=
-    "stylesheet" type="text/css">
-    <script type="text/javascript">
-        // FirebaseUI config.
-
-        var uiConfig = {
-          'signInSuccessUrl': '/',
-          'signInOptions': [
-            // Leave the lines as is for the providers you want to offer your users.
-            firebase.auth.GoogleAuthProvider.PROVIDER_ID
-          ],
-          // Terms of service url.
-          'tosUrl': '',
-        };
-
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
-
-        firebase.auth().onAuthStateChanged(function(user) {
-          console.log(user.displayName)
-          //TODO: Implemented firebase auth here
-        });
-    </script>
-    <link href="/css/quik.css" rel="stylesheet" type="text/css">
+     firebase.auth().onAuthStateChanged(function(user) {
+       console.log(user.displayName)
+       //TODO: Implemented firebase auth here
+     });
+  </script>
+  <link href="/res/quik.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -109,6 +97,10 @@
     <div id="loader"></div>
     <div class="loading">Loading&#8230;</div>
   </div>
+
+  <script>
+    quikClientStart();
+  </script>
 
     <div id="content">
       <nav class="bigscreen branding_theme_class">
@@ -293,184 +285,6 @@
               </div>
           </form>
       </div>
-      <script async>
-
-               setInterval(function() {
-                 favicon.badge(messagesSinceFocus);
-
-                 if(messagesSinceFocus > 0){
-                   document.title = "Quik (Unread)"
-                 } else {
-                   document.title = "Quik"
-                 }
-
-               }, 1000);
-
-        /* Apply brand themeing */
-
-        var xmlhttp, text;
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('GET', '/branding/theme', true);
-        xmlhttp.send();
-
-        xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            text = xmlhttp.responseText;
-            document.getElementById("loader-wrapper").style.display='none';
-
-            var brandingColorClass = text.split(",")[0].split(":")[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
-            console.log('Branding color class: ' + brandingColorClass)
-
-            var brandingColorHex = text.split(",")[1].split(":")[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
-            console.log('Branding color hex: ' + brandingColorHex)
-
-            var brandingAccentClass = text.split(",")[3].split(":")[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
-            console.log('Branding accent class: ' + brandingAccentClass)
-
-            var brandingAccentHex = text.split(",")[4].split(":")[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
-            console.log('Branding accent hex: ' + brandingAccentHex)
-
-            var brandingTitle = text.split(",")[2].split(":")[1];
-            document.title = brandingTitle
-            promptForUsername()
-
-
-
-                    /* End of brand themeing */
-
-                    usrdat = text.split('/#');
-                    userlist = document.getElementById('dropdown3')
-                    for(var i = 1; i < usrdat.length; i++){
-                      userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
-                    }
-
-                    //define notification audio
-                    var audio = new Audio('notify.mp3');
-                    var isFocused = true; //Default to true so the noise isn't played if there is an error
-                    var messagesSinceFocus = 0;
-
-                       $('form').submit(function(){
-                           if($('#m').val() === ""){
-                             swal({
-                               title: 'Error sending message!',
-                               text: 'Please ensure you have entered text',
-                               timer: 2000
-                             })
-                           } else {
-                             socket.emit('chat message', $('#m').val());
-                             $('#m').val('');
-                             var elem = document.getElementById('messages');
-                             elem.scrollTop = elem.scrollHeight;
-                           }
-                           return false;
-                       });
-
-                       var socket = io();
-
-                       socket.on('username rejected', function(){
-                         console.log("username rejected, reprompting")
-                         promptForUsername(true);
-                       });
-
-                       socket.on('chat message', function(usr, msg){
-                         var elem = document.getElementById('messages');
-                         elem.scrollTop = elem.scrollHeight;
-
-                         $(window).focus(function(){
-                           isFocused = true;
-                           messagesSinceFocus=0;
-                         }).blur(function(){
-                           isFocused = false;
-                         });
-
-                         if(!isFocused){
-                           messagesSinceFocus++;
-                           //Alert user if they are not focused on the tab
-                           audio.play();
-                         }
-
-
-                         msg = twemoji.parse(msg);
-                         $('#messages').append($('<li class="msg_name">').text(usr + ' '));
-                         //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
-                         $('#messages').append(msg);
-                         $('#messages').append($('<p/>'));
-                       });
-
-                       socket.on('disconnectEvent', function(usr, msg){
-                         document.getElementById("usrs_connected").text = "User list (" + msg + ")";
-                         document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
-
-
-                         document.getElementById('dropdown3').removeChild(document.getElementById(usr))
-                         $('#messages').append($('<li class="msg_name">').text('Notice '));
-                         $('#messages').append(usr + ' has disconnected');
-                         $('#messages').append($('<p/>'));
-                       });
-
-                       socket.on('connectEvent', function(usr, msg){
-                         document.getElementById("usrs_connected").text = "User list (" + msg + ")";
-                         document.getElementById("usrs_connectedMobi").text = "Users connected: " + msg;
-                         userlist.innerHTML = userlist.innerHTML + "<li id=" + usr + "><a href=''>" + usr + "</a></li>"
-
-                         $('#messages').append($('<li class="msg_name">').text('Notice '));
-                         $('#messages').append(usr + ' has connected');
-                         $('#messages').append($('<p/>'));
-
-                       });
-
-                       function promptForUsername(showError){
-                         if(showError){
-                           promptText="Username taken, please choose another"
-                         } else {
-                           promptText="Enter  your desired username:";
-                         }
-                         //Prompt user for name
-                         swal({
-                               title: "Welcome to Quik",
-                               text: promptText,
-                               type: "input",
-                               showCancelButton: false,
-                               closeOnConfirm: false,
-                               confirmButtonColor: " #ff5050 ",
-                               confirmButtonText: "Continue",
-                               allowEscapeKey: false,
-                               inputPlaceholder: "username"
-                             }, function (inputValue) {
-                               if (inputValue === false) window.close();
-
-
-                               if (inputValue.length < 1) {
-                                 swal.showInputError("You need to write something!");
-                                } else if(inputValue.length > 10){
-                                  swal.showInputError("Name can't be longer than 10 characters!");
-                                } else if(twemoji.parse(inputValue) != inputValue){
-                                  swal.showInputError("You can't have emojis in your username! " + '<img class="emoji" draggable="false" alt="😪" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
-                                } else {
-                                 swal("Welcome " + inputValue + "!", "We hope you enjoy Quik!", "success");
-                                 usr_name = inputValue;
-                                 socket.emit('set username', inputValue);
-                                }
-                             });
-                         }
-
-                    $('.dropdown-button').dropdown({
-                         inDuration: 300,
-                         outDuration: 225,
-                         constrain_width: true,
-                         hover: false,
-                         gutter: 0,
-                         belowOrigin: false
-                         }
-                    );
-                  }
-                };
-
-      </script>
     </div>
 </body>
 </html>

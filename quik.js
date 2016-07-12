@@ -39,8 +39,11 @@ quik.use(function (req, res, next) {
     next();
   }
 });
-quik.get('/css/quik.css', function (req, res) {
-  res.sendFile(__dirname + '/css/quik.css');
+quik.get('/res/quik.css', function (req, res) {
+  res.sendFile(__dirname + '/res/quik.css');
+});
+quik.get('/res/quikclient.js', function (req, res) {
+  res.sendFile(__dirname + '/res/quikclient.js');
 });
 quik.get('/branding/favicon.ico', function (req, res) {
   res.sendFile(__dirname + '/branding/favicon.ico');

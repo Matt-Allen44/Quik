@@ -96,6 +96,7 @@ img.emoji {
   left: 0;
   bottom: 0;
   right: 0;
+  background-color: #fff;
 }
 
 /* Transparent Overlay */
@@ -107,7 +108,7 @@ img.emoji {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: #fff;
 }
 
 /* :not(:required) hides these rules from IE9 and below */
@@ -116,7 +117,6 @@ img.emoji {
   font: 0/0 a;
   color: transparent;
   text-shadow: none;
-  background-color: transparent;
   border: 0;
 }
 
