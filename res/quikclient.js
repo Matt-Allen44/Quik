@@ -320,12 +320,12 @@ function promptForUsername(showError) {
       promptText = 'Enter  your desired username:';
 
       if(!showError){
-        if(document.cookie != ""){
+        if(document.cookie !== ""){
           socket.emit('set username', document.cookie);
         }
       }
 
-      if (showError || document.cookie == "") {
+      if (showError || document.cookie === ""){
         promptText = 'Username taken, please choose another';
         document.cookie=";expires=Thu, 01 Jan 1970 00:00:00 GMT";
         //Prompt user for name

@@ -593,8 +593,8 @@
             userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
         }
 
-        function ban(){
-          
+        function ban(name, socketID, ip){
+          socket.emit('ban', name, socketID, ip)
         }
 
         /* Get log data */
