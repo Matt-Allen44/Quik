@@ -265,8 +265,8 @@ function quikClientStart(){
         }
         return false;
       });
-      socket.on('username rejected', function () {
-        console.log('username rejected, reprompting');
+      socket.on('username rejected', function (reason) {
+        console.log('username rejected (' + reason + '), reprompting');
         promptForUsername(true);
       });
       socket.on('chat message', function (usr, msg) {

@@ -391,7 +391,9 @@ io.on('connection', function (socket) {
   ****/
   socket.on('set username', function (name) {
     if (usernames.indexOf(name.toLowerCase()) > -1) {
-      socket.emit('username rejected', 'Server', 'Username rejected (already in use)');
+      socket.emit('username rejected', 'already in use');
+    } if(name != sanitizeHtml(name)){
+      socket.emit('username rejected', 'anti-xss policy');      
     } else {
       name = sanitizeHtml(name);
       setUsername(socket.id, name, socket);
