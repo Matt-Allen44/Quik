@@ -589,11 +589,12 @@
 
         document.getElementById('usrs_connected').text = "User List (" + (usrdat.length - 1) + ")"
         for (var i = 1; i < usrdat.length; i++) {
-            document.getElementById('usrdattable').innerHTML = document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=ban('" + usrdat[i] + "')> IP BAN</td></tr>";
+            document.getElementById('usrdattable').innerHTML = document.getElementById('usrdattable').innerHTML + "<tr><td title=" + usrdat[i].split(',')[0] + ">" + usrdat[i].split(',')[1] + "</td><td>" + usrdat[i].split(',')[2] + "</td><td>" + usrdat[i].split(',')[3] + "</td><td>" + usrdat[i].split(',')[4] + "</td><td>" + usrdat[i].split(',')[5] + "</td><td><a onClick=ban('" + usrdat[i].split(",")[1] + "','" + usrdat[i].split(",")[0] + "','" + usrdat[i].split(",")[2] + "')> IP BAN</td></tr>";
             userlist.innerHTML = userlist.innerHTML + "<li><a href=''>" + usrdat[i].split(',')[1] + "</a></li>"
         }
 
         function ban(name, socketID, ip){
+          console.log("Banned " + name + ", " + socketID + ", " + ip);
           socket.emit('ban', name, socketID, ip)
         }
 

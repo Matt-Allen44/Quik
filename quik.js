@@ -373,9 +373,13 @@ io.on('connection', function (socket) {
     io.emit('disconnectEvent', username, usrs_connected);
   });
   socket.on('ban', function (name, socketID, ip) {
-    qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
-    socket.emit('chat message', 'Server', 'User: ' + name + 'of the ip ' + ip + ' has been permanently banned.');
-    banIP(name,socket,ip);
+    if (godlist == socket.handshake.address) {
+      qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
+      socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.');
+      banIP(name,socket,ip);
+    } else {
+      qLog("banllog", "Rejected ban request (403) from " + ip);
+    }
   });
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
@@ -390,7 +394,7 @@ io.on('connection', function (socket) {
       socket.emit('chat message', 'Server', 'Empty message removed');
       qLog('chatlog', 'empty message removed');
     } else {
-      qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] ' + msg);
+      qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
       io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
     }
   });
@@ -462,7 +466,7 @@ function getUsername(socketID) {
   }
 }
 function banIP(name, socket, ip) {
-  qLog('adminlog', 'IP banned ' + ip);
+  qLog('adminlog', 'IP banned ' + ip + " (" + socket + ")");
   banlist.push(ip);
 }
 winston.add(winston.transports.File, { filename: 'quik.log' });
