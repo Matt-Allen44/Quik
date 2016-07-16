@@ -316,6 +316,38 @@ function quikClientStart(){
     }
   };
 }
+
+function joinRoom(room){
+  socket.emit('set room', room);
+}
+function promptForRoom() {
+        swal({
+          title: 'Connect to room',
+          text: 'Enter your desired room',
+          type: 'input',
+          showCancelButton: false,
+          closeOnConfirm: false,
+          confirmButtonColor: ' #ff5050 ',
+          confirmButtonText: 'Continue',
+          allowEscapeKey: false,
+          inputPlaceholder: 'username'
+        }, function (inputValue) {
+          if (inputValue === false)
+            window.close();
+          if (inputValue.length < 1) {
+            swal.showInputError('You need to write something!');
+          } else if (inputValue.split("/").length > 2) {
+            swal.showInputError('Name can\'t include slash characters');
+          } else if (twemoji.parse(inputValue) != inputValue) {
+            swal.showInputError('You can\'t have emojis in your room! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
+          } else {
+            room = inputValue;
+            //socket.emit('set room', room);
+            window.location.replace("/" + room);
+        }
+    });
+}
+
 function promptForUsername(showError) {
       promptText = 'Enter  your desired username:';
 

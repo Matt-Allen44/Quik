@@ -301,10 +301,6 @@
         <div class="loading">Loading&#8230;</div>
     </div>
 
-    <script>
-        quikClientStart();
-    </script>
-
     <div id="content">
         <nav class="bigscreen branding_theme_class">
             <div class="nav-wrapper">
@@ -376,17 +372,12 @@
 
                         <ul class='dropdown-content branding_theme_class' id='dropdown2'>
                             <li>
-                                <a href="/room/1">Room 1</a>
+                                <a id="room1button" href="/room/1"></a>
                             </li>
 
 
                             <li>
-                                <a href="/room/2">Room 2</a>
-                            </li>
-
-
-                            <li>
-                                <a href="/room/3">Room 3</a>
+                                <a onClick='promptForRoom()'>Change room</a>
                             </li>
                         </ul>
                         <!-- Dropdown Trigger -->
@@ -447,6 +438,18 @@
             </form>
         </div>
     </div>
-</body>
 
+    <script>
+        quikClientStart();
+        
+        if(window.location.pathname == '/'){
+          joinRoom('lobby');
+          document.getElementById('room1button').text = 'Current room: /lobby';
+        } else {
+          document.getElementById('room1button').text = 'Current room: ' + window.location.pathname;
+          joinRoom(window.location.pathname);
+        }
+    </script>
+
+</body>
 </html>

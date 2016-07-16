@@ -219,6 +219,7 @@ var clients = [];
 var userIDs = [];
 var users = [];
 var usernames = [];
+var userRoom = [];
 var usrs_connected = 0;
 var log = '';
 //conf variables
@@ -226,6 +227,7 @@ var whitelistip = '121.45.31.204';
 var banlist = [];
 var godlist = '';
 var port = 80;
+var room = 'lobby';
 //default to 80 if no port is provided
 // Called on all quik requests
 quik.use(helmet());
@@ -285,9 +287,6 @@ quik.get('/branding/theme', function (req, res) {
   res.sendFile(__dirname + '/branding/theme');
 });
 /* End of branding related requests */
-quik.get('/', function (req, res) {
-  res.sendFile(__dirname + '/chat.html');
-});
 quik.get('/firebase', function (req, res) {
   res.sendFile(__dirname + '/firebase.html');
 });
@@ -305,8 +304,12 @@ quik.get('/notify.mp3', function (req, res) {
 });
 //The 404 Route (ALWAYS Keep this as the last route)
 quik.get('*', function (req, res) {
-  res.status(404);
-  res.sendFile(__dirname + '/404.html');
+  if(req.url.split("/").length > 2){
+    res.status(404);
+    res.sendFile(__dirname + '/404.html');
+  } else {
+    res.sendFile(__dirname + '/chat.html');
+  }
 });
 var motd = '';
 var fs = require('fs');
@@ -347,6 +350,12 @@ function startServer() {
 	ON CONNECTION
 */
 io.on('connection', function (socket) {
+  socket.on('set room', function (room) {
+      socket.emit('chat message', 'Rooms', 'Connected to rooms' + room);
+      userRoom[socket.id]  = room;
+      socket.join(room);
+  });
+
   socket.emit('chat message', 'Notice', 'Connection established');
   socket.emit('chat message', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
   socket.emit('chat message', 'Notice', motd);
@@ -382,7 +391,7 @@ io.on('connection', function (socket) {
       qLog('chatlog', 'empty message removed');
     } else {
       qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] ' + msg);
-      io.emit('chat message', usr, swearjar.censor(msg));
+      io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
     }
   });
   //Seters and getters for usernames

@@ -2,6 +2,11 @@
   "name": "Quik",
   "version": "0.1.0",
   "description": "Quik is a free and open source chat application",
+  "repository" :
+  { "type" : "git"
+  , "url" : "https://github.com/matt-allen44/quik.git"
+},
+{ "license" : "Apache 2.0" },
   "dependencies": {
     "config-js": "1.1.9",
     "express": "4.10.2",
