@@ -215,6 +215,7 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
+var redis = require('redis');
 var clients = [];
 var userIDs = [];
 var users = [];
