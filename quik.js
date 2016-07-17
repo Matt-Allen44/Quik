@@ -222,6 +222,7 @@ var redis = require('redis');
 var redisHost;
 var redisPort;
 var redisPass;
+var redisClient;
 
 fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
   if (err)
@@ -231,11 +232,9 @@ fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
   redisPass = data.split(',')[2].split(':')[1];
 
   qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
-
+  redisClient = redis.createClient(redisPort , redisHost);
+  redisClient.auth('QuikRedis987453*', function (err) { if (err) throw err; });
 });
-
-var redisClient = redis.createClient(redisPort , redisHost);
-redisClient.auth(redisPass, function (err) { if (err) throw err; });
 
 var clients = [];
 var userIDs = [];
@@ -418,6 +417,14 @@ io.on('connection', function (socket) {
     } else {
       qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
       io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
+
+      if(typeof userRoom[socket.id] === 'undefined'){
+        qLog('RedisClient', 'Logging failed (userRoom undefined)');
+      } else {
+        var date = new Date();
+        var json=[usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
+        redisClient.lpush(userRoom[socket.id], JSON.stringify(json)); // push into redis
+      }
     }
   });
   //Seters and getters for usernames

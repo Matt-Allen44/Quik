@@ -205,6 +205,7 @@
 
 // init socketio
 var socket = io();
+var messagesSinceFocus = 0;
 
 setInterval(function () {
   favicon.badge(messagesSinceFocus);
@@ -249,7 +250,6 @@ function quikClientStart(){
       var audio = new Audio('notify.mp3');
       var isFocused = true;
       //Default to true so the noise isn't played if there is an error
-      var messagesSinceFocus = 0;
       $('form').submit(function () {
         if ($('#m').val() === '') {
           swal({
