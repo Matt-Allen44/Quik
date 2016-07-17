@@ -324,6 +324,14 @@ quik.get('/dash', function (req, res) {
 quik.get('/notify.mp3', function (req, res) {
   res.sendFile(__dirname + '/notify.mp3');
 });
+//Database requests
+quik.get('/redis/history', function (req, res) {
+  redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
+    res.end("" + JSON.stringify(reply, null, 4));
+  });
+
+});
+
 //The 404 Route (ALWAYS Keep this as the last route)
 quik.get('*', function (req, res) {
   if(req.url.split("/").length > 2){
