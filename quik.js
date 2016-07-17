@@ -327,6 +327,12 @@ quik.get('/notify.mp3', function (req, res) {
 //Database requests
 quik.get('/redis/history', function (req, res) {
   redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
+    if (err){
+      res.status(422);
+      res.end("Lookup failed for " + req.query.room);
+    }
+
+    res.status(200);
     res.end("" + JSON.stringify(reply, null, 4));
   });
 
