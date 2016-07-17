@@ -215,7 +215,28 @@ var winston = require('winston');
 var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
+var fs = require('fs');
+
 var redis = require('redis');
+
+var redisHost;
+var redisPort;
+var redisPass;
+
+fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
+  if (err)
+    throw err;
+  redisHost = data.split(',')[0].split(':')[1];
+  redisPort = data.split(',')[1].split(':')[1];
+  redisPass = data.split(',')[2].split(':')[1];
+
+  qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
+
+});
+
+var redisClient = redis.createClient(redisPort , redisHost);
+redisClient.auth(redisPass, function (err) { if (err) throw err; });
+
 var clients = [];
 var userIDs = [];
 var users = [];
@@ -229,6 +250,7 @@ var banlist = [];
 var godlist = '';
 var port = 80;
 var room = 'lobby';
+var motd = '';
 //default to 80 if no port is provided
 // Called on all quik requests
 quik.use(helmet());
@@ -312,8 +334,7 @@ quik.get('*', function (req, res) {
     res.sendFile(__dirname + '/chat.html');
   }
 });
-var motd = '';
-var fs = require('fs');
+
 fs.readFile(__dirname + '/branding/motd', 'utf8', function (err, data) {
   if (err)
     throw err;
