@@ -392,7 +392,7 @@ function promptForUsername(showError) {
     });
   }
   if(window.location.pathname == '/'){
-    loadMessages(100,'/lobby')
+    loadMessages(100,'/lobby');
   } else {
     loadMessages(100,window.location.pathname);
   }
@@ -406,7 +406,7 @@ function loadMessages(nummessages, room){
   xmlhttp.onreadystatechange = function () {
     var msgdata = JSON.parse(xmlhttp.responseText);
     for(var i = 2; i < nummessages; i++){
-      if(JSON.parse(msgdata[i])[0] == ""){} else {
+      if(JSON.parse(msgdata[i])[0] === ""){} else {
         $('#messages').append($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class="tiny material-icons">replay</i>'));
         $('#messages').append($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
         $('#messages').append(JSON.parse(msgdata[i])[4]);
