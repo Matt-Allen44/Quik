@@ -393,17 +393,18 @@ function promptForUsername(showError) {
   }
   if (!showError){
     if(window.location.pathname == '/'){
-      loadMessages(10,'/lobby');
+      //if first arg is zero, all messages are returned
+      loadMessages(0,'/lobby');
       console.log("Loaded from lobby");
     } else {
-      loadMessages(10,window.location.pathname);
+      //if first arg is zero, all messages are returned
+      loadMessages(0,window.location.pathname);
       console.log("Loaded from pathname");
     }
   }
 }
 
 function loadMessages(nummessages, room){
-  console.count("Load called")
   var xmlhttp, text;
   xmlhttp = new XMLHttpRequest();
   xmlhttp.open('GET', '/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/',''), true);
@@ -411,15 +412,18 @@ function loadMessages(nummessages, room){
   xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       var msgdata = JSON.parse(xmlhttp.responseText);
-      for(var i = msgdata.length-1; i > -1; i--){
+      for(var i = 0; i < msgdata.length; i++){
         console.count("append loop (" + nummessages + ")");
-        if(JSON.parse(msgdata[i])[0] == ""){} else {
-          $('#messages').append($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class="tiny material-icons">replay</i>'));
-          $('#messages').append($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
-          $('#messages').append(JSON.parse(msgdata[i])[4]);
-          $('#messages').append($('<p/>'));
+        if(JSON.parse(msgdata[i])[0] === ""){} else {
+          $('#messages').prepend($('<p/>'));
+          $('#messages').prepend(JSON.parse(msgdata[i])[4]);
+          $('#messages').prepend($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
+          $('#messages').prepend($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class=" tiny material-icons">replay</i>'));
+
         }
       }
-    };
-  }
+      var elem = document.getElementById('messages');
+      elem.scrollTop = elem.scrollHeight;
+    }
+  };
 }
