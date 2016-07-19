@@ -345,11 +345,16 @@ quik.get('/api/redis/history', function (req, res) {
 });
 
 quik.get('/api/quik/userlist', function (req, res) {
-    var dat = [];
-    for(var i = 0; i < roomUsers[req.query.room].length; i++){
-      dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
+    try {
+      var dat = [];
+      for(var i = 0; i < roomUsers[req.query.room].length; i++){
+        dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
+      }
+      res.end(JSON.stringify({"clients": dat}));
+    } catch(err){
+      res.status(422);
+      res.end("Lookup failed for " + req.query.room + " (no data)");
     }
-    res.end(JSON.stringify({"clients": dat}));
 });
 
 quik.get('/api/quik/user', function (req, res) {

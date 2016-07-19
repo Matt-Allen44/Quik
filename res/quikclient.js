@@ -314,6 +314,8 @@ function quikClientStart(){
 }
 
 function joinRoom(room){
+  document.getElementById('usrs_connectedMobi').text = 'Connected to ' + room;
+  document.getElementById('dropdown_chat').text = 'Connected to ' + room;
   socket.emit('set room', room);
 }
 function promptForRoom() {
