@@ -233,7 +233,7 @@ fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
 
   qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
   redisClient = redis.createClient(redisPort , redisHost);
-  redisClient.auth('QuikRedis987453*', function (err) { if (err) throw err; });
+  redisClient.auth(redisPass, function (err) { if (err) throw err; });
 });
 
 var clients = [];
