@@ -345,7 +345,7 @@ quik.get('/api/redis/history', function (req, res) {
 });
 
 quik.get('/api/quik/userlist', function (req, res) {
-  res.end(roomUsers[req.query.room].toString())
+  res.end(roomUsers[req.query.room].toString());
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
@@ -397,17 +397,14 @@ function startServer() {
 io.on('connection', function (socket) {
   socket.on('set room', function (room) {
       socket.emit('chat message', 'Rooms', 'Connected to rooms' + room);
-
       userRoom[socket.id]  = room;
 
+      //Add user to room list
       var roomUsersObj = roomUsers[room.replace("/","")];
-
       if(typeof roomUsersObj === 'undefined'){
         roomUsers[room.replace("/","")] = [];
       }
-
       roomUsers[room.replace("/","")][roomUsers[room.replace("/","")].length] = socket.id;
-
 
       socket.join(room);
 
@@ -424,9 +421,7 @@ io.on('connection', function (socket) {
     usrs_connected = usrs_connected - 1;
     //remove username for restricted names
     if (typeof username !== 'undefined') {
-      if (usernames.indexOf(username.toLowerCase()) > -1) {
-        usernames.splice(usernames.indexOf(username.toLowerCase()), 1);
-      }
+      roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1)
     }
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', username, usrs_connected);
@@ -523,16 +518,16 @@ io.on('connection', function (socket) {
   });
 });
 function ipLookup(ip) {
-  if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {
+  /*if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {*/
     var array = {
       city: 'Local Client',
       region: 'Local Client',
       country: 'Local Client'
     };
     return array;
-  } else {
+  /*} else {
     return geoip.lookup(ip);
-  }
+  }*/
 }
 var clientid = 0;
 function setUsername(socketID, name, socket) {
