@@ -224,7 +224,6 @@ function quikClientStart(){
   xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       text = xmlhttp.responseText;
-      document.getElementById('loader-wrapper').style.display = 'none';
       var brandingColorClass = text.split(',')[0].split(':')[1];
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
       console.log('Branding color class: ' + brandingColorClass);
@@ -391,10 +390,16 @@ function promptForUsername(showError) {
         }
     });
   }
-  if(window.location.pathname == '/'){
-    loadMessages(100,'/lobby');
-  } else {
-    loadMessages(100,window.location.pathname);
+  if (!showError){
+    if(window.location.pathname == '/'){
+      //if first arg is zero, all messages are returned
+      loadMessages(0,'/lobby');
+      console.log("Loaded from lobby");
+    } else {
+      //if first arg is zero, all messages are returned
+      loadMessages(0,window.location.pathname);
+      console.log("Loaded from pathname");
+    }
   }
 }
 
@@ -404,14 +409,21 @@ function loadMessages(nummessages, room){
   xmlhttp.open('GET', '/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/',''), true);
   xmlhttp.send();
   xmlhttp.onreadystatechange = function () {
-    var msgdata = JSON.parse(xmlhttp.responseText);
-    for(var i = 2; i < nummessages; i++){
-      if(JSON.parse(msgdata[i])[0] === ""){} else {
-        $('#messages').append($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class="tiny material-icons">replay</i>'));
-        $('#messages').append($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
-        $('#messages').append(JSON.parse(msgdata[i])[4]);
-        $('#messages').append($('<p/>'));
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      var msgdata = JSON.parse(xmlhttp.responseText);
+      for(var i = 0; i < msgdata.length; i++){
+        console.count("append loop (" + nummessages + ")");
+        if(JSON.parse(msgdata[i])[0] === ""){} else {
+          $('#messages').prepend($('<p/>'));
+          $('#messages').prepend(JSON.parse(msgdata[i])[4]);
+          $('#messages').prepend($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
+          $('#messages').prepend($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class=" tiny material-icons">replay</i>'));
+
+        }
       }
+      var elem = document.getElementById('messages');
+      elem.scrollTop = elem.scrollHeight;
+      document.getElementById('loader-wrapper').style.display = 'none';
     }
   };
 }
