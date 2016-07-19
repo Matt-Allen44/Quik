@@ -240,7 +240,13 @@ var clients = [];
 var userIDs = [];
 var users = [];
 var usernames = [];
+
+// In --> userid out --> userroom
 var userRoom = [];
+
+// In --> userroom out --> userid
+var roomUsers = {};
+
 var usrs_connected = 0;
 var log = '';
 //conf variables
@@ -325,7 +331,7 @@ quik.get('/notify.mp3', function (req, res) {
   res.sendFile(__dirname + '/notify.mp3');
 });
 //Database requests
-quik.get('/redis/history', function (req, res) {
+quik.get('/api/redis/history', function (req, res) {
   redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
     if (err){
       res.status(422);
@@ -336,6 +342,10 @@ quik.get('/redis/history', function (req, res) {
     res.end("" + JSON.stringify(reply, null, 4));
   });
 
+});
+
+quik.get('/api/quik/userlist', function (req, res) {
+  res.end(roomUsers[req.query.room].toString())
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
@@ -387,7 +397,18 @@ function startServer() {
 io.on('connection', function (socket) {
   socket.on('set room', function (room) {
       socket.emit('chat message', 'Rooms', 'Connected to rooms' + room);
+
       userRoom[socket.id]  = room;
+
+      var roomUsersObj = roomUsers[room.replace("/","")];
+
+      if(typeof roomUsersObj === 'undefined'){
+        roomUsers[room.replace("/","")] = [];
+      }
+
+      roomUsers[room.replace("/","")][roomUsers[room.replace("/","")].length] = socket.id;
+
+
       socket.join(room);
 
       jsonLogDat=['', '', socket.id, new Date(), 'User connected to ' + room];

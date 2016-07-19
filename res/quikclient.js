@@ -406,7 +406,7 @@ function promptForUsername(showError) {
 function loadMessages(nummessages, room){
   var xmlhttp, text;
   xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('GET', '/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/',''), true);
+  xmlhttp.open('GET', '/api/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/',''), true);
   xmlhttp.send();
   xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
