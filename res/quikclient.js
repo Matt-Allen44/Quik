@@ -404,6 +404,13 @@ function promptForUsername(showError) {
   }
 }
 
+function spam(num){
+  for(var k = 0; k < num; k++){
+      console.count("Sent msg")
+      socket.emit('chat message', "hiya");
+  }
+}
+
 function loadMessages(nummessages, room){
   var xmlhttp, text;
   xmlhttp = new XMLHttpRequest();
