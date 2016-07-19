@@ -434,9 +434,13 @@ function updateUserlist(){
   xmlhttp.onreadystatechange = function () {
     userlist.innerHTML = "";
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      var msgdata = xmlhttp.responseText.split(",");
-      for(var i = 0; i < msgdata.length; i++){
-        userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata[i] + '><a href=\'\'>' + msgdata[i] + '</a></li>';
+      var msgdata = JSON.parse(xmlhttp.responseText);
+      console.log(msgdata.clients);
+
+      for(var i = 0; i < msgdata.clients.length; i++){
+        console.log("yoyoyo");
+        console.log(msgdata.clients[i]);
+        userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata.clients[i][0][0] + '><a href=\'\'>' + msgdata.clients[i][0][1] + '</a></li>';
       }
       var elem = document.getElementById('messages');
       elem.scrollTop = elem.scrollHeight;

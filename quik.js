@@ -345,7 +345,15 @@ quik.get('/api/redis/history', function (req, res) {
 });
 
 quik.get('/api/quik/userlist', function (req, res) {
-  res.end(roomUsers[req.query.room].toString());
+    var dat = [];
+    for(var i = 0; i < roomUsers[req.query.room].length; i++){
+      dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
+    }
+    res.end(JSON.stringify({"clients": dat}));
+});
+
+quik.get('/api/quik/user', function (req, res) {
+  res.end(clients[req.query.userid].toString());
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
@@ -404,7 +412,7 @@ io.on('connection', function (socket) {
       if(typeof roomUsersObj === 'undefined'){
         roomUsers[room.replace("/","")] = [];
       }
-      roomUsers[room.replace("/","")][roomUsers[room.replace("/","")].length] = socket.id;
+      roomUsers[room.replace("/","")][roomUsers[room.replace("/","")].length] = [socket.id];
 
       socket.join(room);
 
