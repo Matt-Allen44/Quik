@@ -206,6 +206,7 @@
 // init socketio
 var socket = io();
 var messagesSinceFocus = 0;
+var room = "";
 
 setInterval(function () {
   favicon.badge(messagesSinceFocus);
@@ -289,17 +290,13 @@ function quikClientStart(){
         $('#messages').append($('<p/>'));
       });
       socket.on('disconnectEvent', function (usr, msg) {
-        document.getElementById('usrs_connected').text = 'User list (' + msg + ')';
-        document.getElementById('usrs_connectedMobi').text = 'Users connected: ' + msg;
-        document.getElementById('dropdown3').removeChild(document.getElementById(usr));
+        updateUserlist();
         $('#messages').append($('<li class="msg_name">').text('Notice '));
         $('#messages').append(usr + ' has disconnected');
         $('#messages').append($('<p/>'));
       });
       socket.on('connectEvent', function (usr, msg) {
-        document.getElementById('usrs_connected').text = 'User list (' + msg + ')';
-        document.getElementById('usrs_connectedMobi').text = 'Users connected: ' + msg;
-        userlist.innerHTML = userlist.innerHTML + '<li id=' + usr + '><a href=\'\'>' + usr + '</a></li>';
+        updateUserlist();
         $('#messages').append($('<li class="msg_name">').text('Notice '));
         $('#messages').append(usr + ' has connected');
         $('#messages').append($('<p/>'));
@@ -393,11 +390,13 @@ function promptForUsername(showError) {
   if (!showError){
     if(window.location.pathname == '/'){
       //if first arg is zero, all messages are returned
-      loadMessages(0,'/lobby');
+      room = '/lobby';
+      loadMessages(0,room);
       console.log("Loaded from lobby");
     } else {
       //if first arg is zero, all messages are returned
-      loadMessages(0,window.location.pathname);
+      room = window.location.pathname;
+      loadMessages(0,room);
       console.log("Loaded from pathname");
     }
   }
@@ -420,6 +419,24 @@ function loadMessages(nummessages, room){
           $('#messages').prepend($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class=" tiny material-icons">replay</i>'));
 
         }
+      }
+      var elem = document.getElementById('messages');
+      elem.scrollTop = elem.scrollHeight;
+      document.getElementById('loader-wrapper').style.display = 'none';
+    }
+  };
+}
+function updateUserlist(){
+  var xmlhttp, text;
+  xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', '/api/quik/userlist?room=' + room.replace('/',''), true);
+  xmlhttp.send();
+  xmlhttp.onreadystatechange = function () {
+    userlist.innerHTML = "";
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+      var msgdata = xmlhttp.responseText.split(",");
+      for(var i = 0; i < msgdata.length; i++){
+        userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata[i] + '><a href=\'\'>' + msgdata[i] + '</a></li>';
       }
       var elem = document.getElementById('messages');
       elem.scrollTop = elem.scrollHeight;
