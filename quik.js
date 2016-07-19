@@ -429,7 +429,7 @@ io.on('connection', function (socket) {
     usrs_connected = usrs_connected - 1;
     //remove username for restricted names
     if (typeof username !== 'undefined') {
-      roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1)
+      roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1);
     }
     qLog('chatlog', usrs_connected + ' users connected');
     io.emit('disconnectEvent', username, usrs_connected);
