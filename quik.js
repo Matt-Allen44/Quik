@@ -227,13 +227,12 @@ var redisClient;
 fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
   if (err)
     throw err;
-  redisHost = data.split(',')[0].split(':')[1];
-  redisPort = data.split(',')[1].split(':')[1];
-  redisPass = data.split(',')[2].split(':')[1];
+  redisHost = data.split(',')[0].split(':')[1].trim();
+  redisPort = data.split(',')[1].split(':')[1].trim();
+  redisPass = data.split(',')[2].split(':')[1].trim();
 
   qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
-  redisClient = redis.createClient(redisPort , redisHost);
-  redisClient.auth("QuikDongo1238798*", function (err) { if (err) throw err; });
+  redisClient.auth(redisPass, function (err) { if (err) throw err; });
 });
 
 var clients = [];
