@@ -315,7 +315,7 @@ function quikClientStart(){
 function appendMessage(usr, msg){
   console.log("Appending message from " + usr + " with text " + msg);
   console.trace();
-  $('#messages').append($('<img src="https://tracker.moodle.org/secure/attachment/30912/f3.png" style="height:28px; margin-top:2px; margin-right: 6px; float:left">'));
+  $('#messages').append($('<img src="https://tracker.moodle.org/secure/attachment/30912/f3.png" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
   $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
   $('#messages').append($('<br/>'));
