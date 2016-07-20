@@ -216,9 +216,10 @@ var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
 var fs = require('fs');
+var quikbot = require('./quikbot.js');
+quikbot.test();
 
 var redis = require('redis');
-
 var redisHost;
 var redisPort;
 var redisPass;
@@ -292,6 +293,7 @@ quik.get('/dash/sysdat', function (req, res) {
   }
 });
 quik.get('/dash/usrdat', function (req, res) {
+  quikbot.test();
   if (godlist == req.connection.remoteAddress) {
     res.send(clients.toString());
   } else {
@@ -460,31 +462,41 @@ io.on('connection', function (socket) {
   socket.on('chat message', function (msg) {
     usr = getUsername(socket.id);
     msg = sanitizeHtml(msg);
-    //Check if users name is too llong
-    if (msg > 250) {
-      socket.emit('chat message', 'Server', 'Connection Refused (message to long > 250 chars)');
-      socket.emit('chat message', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
-      socket.disconnect();
-    }
-    if (0 === msg.length) {
-      socket.emit('chat message', 'Server', 'Empty message removed');
-      qLog('chatlog', 'empty message removed');
-    } else {
-      qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
-      io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
 
-      if(typeof userRoom[socket.id] === 'undefined'){
-        qLog('RedisClient', 'Logging failed (userRoom undefined)');
+    if(messageIsLegal(msg, socket)){
+      if(msg.charAt(0) === '!' || msg.charAt(0) === '/'){
+        /* QUIKBOT INTERGRATION */
+        var command = msg.split(' ')[0].substr(1,msg.length);
+
+        switch(command){
+          case 'broadcast':
+            var message =  msg.split(' ').slice(1,msg.split(' ').length);
+            if(message.toString().length > 0){
+              io.emit('chat message', 'Broadcast', message.toString().replace(",",""));
+            } else {
+              socket.emit('chat message', 'Quikbot (ERROR)', "No broadcast message entered")
+            }
+            break;
+          default:
+            socket.emit('chat message', 'Quikbot (ERROR)', command + " is an unkown command");
+        }
       } else {
-        var date = new Date();
+        qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
+        io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
 
-        var jsonRoom=[usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
-        redisClient.select(0);
-        redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
+        if(typeof userRoom[socket.id] === 'undefined'){
+          qLog('RedisClient', 'Logging failed (userRoom undefined)');
+        } else {
+          var date = new Date();
 
-        var jsonIPLog=[usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
-        redisClient.select(1);
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+          var jsonRoom=[usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
+          redisClient.select(0);
+          redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
+
+          var jsonIPLog=[usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
+          redisClient.select(1);
+          redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+        }
       }
     }
   });
@@ -563,6 +575,21 @@ function setUsername(socketID, name, socket) {
   } else {
     qLog('chatlog', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
   }
+}
+function messageIsLegal(msg, socket){
+  //Check if users name is too llong
+  if (msg.length > 250) {
+    socket.emit('chat message', 'Server', 'Connection Refused (message to long > 250 chars)');
+    socket.emit('chat message', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
+    socket.disconnect();
+  } else if (0 === msg.trim().length) {
+    socket.emit('chat message', 'Server', 'Empty message removed');
+    qLog('chatlog', 'empty message removed');
+  } else {
+    return true;
+  }
+  console.log("ILLEGAL MESSAGE")
+  return false;
 }
 function getUsername(socketID) {
   if (typeof users[socketID] === 'undefined') {
