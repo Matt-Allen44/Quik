@@ -22,10 +22,14 @@ body {
         display: none;
     }
 }
+#messageOuter {
+  display:flex;
+  height:calc(100vh - 150px);
+  width:100%;
+}
 #messages {
     overflow-y: scroll;
-    height: 400px;
-    width: auto;
+    width: 95vw;
     margin: 20px;
     margin-top: 0px;
 }
@@ -196,4 +200,23 @@ img.emoji {
         -o-transform: rotate(360deg);
         transform: rotate(360deg);
     }
+}
+
+.content {
+  height:100vh;
+}
+
+.upper {
+  height:50px;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width:100%;
+  height:50px;
+}
+
+.mid {
+  height:calc(100% - 100px)
 }

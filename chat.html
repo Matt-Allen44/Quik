@@ -263,7 +263,8 @@
         <div class="loading">Loading&#8230;</div>
     </div>
 
-    <div id="content">
+    <div id="content" class="content">
+      <div id="upper" class="upper">
         <nav class="bigscreen branding_theme_class">
             <div class="nav-wrapper">
                 <a class="left brand-logo" href="#"><img height="64" src="/branding/logo.png" style="padding:8px">
@@ -377,16 +378,22 @@
              </script>
             -->
         </nav>
+    </div>
 
+    <div id="mid" class="mid">
 
         <div style="width:100%; position: fixed; display: block; left:25px; padding-top:50px">
+          <div id="messageOuter">
             <ul id="messages" style="">
             </ul>
+          </div>
         </div>
+    </div>
 
+    <div id="footer" class="footer">
 
         <div>
-            <form action="" style="position: fixed; bottom: 0; width:100%">
+            <form action="" >
                 <div style="padding-left:25px; display:inline">
                     <input autocomplete="off" id="m" placeholder="message here" style="width: calc(100% - 220px);border-bottom: 1px solid branding_theme_hex; -webkit-box-shadow: 0 1px 0 0 branding_theme_hex; -moz-box-shadow: 0 1px 0 0 branding_theme_hex; box-shadow: 0 1px 0 0 branding_theme_hex;">
                 </div>
