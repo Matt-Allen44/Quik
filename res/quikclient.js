@@ -294,11 +294,11 @@ function quikClientStart(){
       });
       socket.on('disconnectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage(usr, msg);
+        appendMessage('Quikbot', usr + " has left the channel.");
       });
       socket.on('connectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage(usr, msg);
+        appendMessage('Quikbot', "Welcome " + usr + " to the channel.");
       });
       $('.dropdown-button').dropdown({
         inDuration: 300,
@@ -313,9 +313,11 @@ function quikClientStart(){
 }
 
 function appendMessage(usr, msg){
+  console.log("Appending message from " + usr + " with text " + msg);
+  console.trace();
   $('#messages').append($('<img src="https://tracker.moodle.org/secure/attachment/30912/f3.png" style="height:28px; margin-top:2px; margin-right: 6px; float:left">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
-  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date()));
+  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
   $('#messages').append($('<br/>'));
   $('#messages').append(msg);
   $('#messages').append($('<br/><br/>'));
@@ -445,11 +447,7 @@ function updateUserlist(){
     userlist.innerHTML = "";
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       var msgdata = JSON.parse(xmlhttp.responseText);
-      console.log(msgdata.clients);
-
       for(var i = 0; i < msgdata.clients.length; i++){
-        console.log("yoyoyo");
-        console.log(msgdata.clients[i]);
         userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata.clients[i][0][0] + '><a href=\'\'>' + msgdata.clients[i][0][1] + '</a></li>';
       }
       var elem = document.getElementById('messages');

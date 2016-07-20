@@ -248,7 +248,6 @@ var userRoom = [];
 // In --> userroom out --> userid
 var roomUsers = {};
 
-var usrs_connected = 0;
 var log = '';
 //conf variables
 var whitelistip = '121.45.31.204';
@@ -435,16 +434,14 @@ io.on('connection', function (socket) {
   socket.emit('chat message', 'Notice', 'Connection established');
   socket.emit('chat message', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
   socket.emit('chat message', 'Notice', motd);
-  usrs_connected = usrs_connected + 1;
+
   socket.on('disconnect', function () {
     var username = getUsername(socket.id);
-    usrs_connected = usrs_connected - 1;
     //remove username for restricted names
     if (typeof username !== 'undefined') {
       roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1);
     }
-    qLog('chatlog', usrs_connected + ' users connected');
-    io.emit('disconnectEvent', username, usrs_connected);
+    io.emit('disconnectEvent', username);
 
     jsonLogDat=[username, '', socket.id, new Date(), 'User disconnected from the server'];
     redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
@@ -478,7 +475,7 @@ io.on('connection', function (socket) {
             if(message.toString().length > 0){
               io.emit('chat message', 'Broadcast', message.toString().replace(",",""));
             } else {
-              socket.emit('chat message', 'Quikbot (ERROR)', "No broadcast message entered")
+              socket.emit('chat message', 'Quikbot (ERROR)', "No broadcast message entered");
             }
             break;
           default:
@@ -534,7 +531,7 @@ io.on('connection', function (socket) {
     } else {
         setUsername(socket.id, name, socket);
         io.emit('on user connect', name);
-        io.emit('connectEvent', getUsername(socket.id), usrs_connected);
+        io.emit('connectEvent', getUsername(socket.id));
         //Add username to end of usernames array
         usernames[usernames.length] = name.toLowerCase();
 
@@ -592,7 +589,6 @@ function messageIsLegal(msg, socket){
   } else {
     return true;
   }
-  console.log("ILLEGAL MESSAGE")
   return false;
 }
 function getUsername(socketID) {
