@@ -431,7 +431,7 @@ function loadMessages(nummessages, room){
 function updateUserlist(){
   var xmlhttp, text;
   xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('GET', '/api/quik/userlist?room=' + room.replace('/',''), true);
+  xmlhttp.open('GET', '/api/quik/roomdata?room=' + room.replace('/',''), true);
   xmlhttp.send();
   xmlhttp.onreadystatechange = function () {
     userlist.innerHTML = "";

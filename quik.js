@@ -232,6 +232,7 @@ fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
   redisPass = data.split(',')[2].split(':')[1].trim();
 
   qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
+  redisClient = redis.createClient(redisPort , redisHost);
   redisClient.auth(redisPass, function (err) { if (err) throw err; });
 });
 
@@ -343,13 +344,14 @@ quik.get('/api/redis/history', function (req, res) {
 
 });
 
-quik.get('/api/quik/userlist', function (req, res) {
+quik.get('/api/quik/roomdata', function (req, res) {
     try {
+      var roomdat = {"name": req.query.room, "connected users": roomUsers[req.query.room].length};
       var dat = [];
       for(var i = 0; i < roomUsers[req.query.room].length; i++){
         dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
       }
-      res.end(JSON.stringify({"clients": dat}));
+      res.end(JSON.stringify({"room": roomdat, "clients": dat}));
     } catch(err){
       res.status(422);
       res.end("Lookup failed for " + req.query.room + " (no data)");
