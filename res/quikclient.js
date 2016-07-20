@@ -208,6 +208,11 @@ var socket = io();
 var messagesSinceFocus = 0;
 var room = "";
 
+var brandingColorClass;
+var brandingColorHex;
+var brandingAccentClass;
+var brandingAccentHex;
+
 setInterval(function () {
   favicon.badge(messagesSinceFocus);
   if (messagesSinceFocus > 0) {
@@ -225,16 +230,16 @@ function quikClientStart(){
   xmlhttp.onreadystatechange = function () {
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       text = xmlhttp.responseText;
-      var brandingColorClass = text.split(',')[0].split(':')[1];
+      brandingColorClass = text.split(',')[0].split(':')[1];
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
       console.log('Branding color class: ' + brandingColorClass);
-      var brandingColorHex = text.split(',')[1].split(':')[1];
+      brandingColorHex = text.split(',')[1].split(':')[1];
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
       console.log('Branding color hex: ' + brandingColorHex);
-      var brandingAccentClass = text.split(',')[3].split(':')[1];
+      brandingAccentClass = text.split(',')[3].split(':')[1];
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
       console.log('Branding accent class: ' + brandingAccentClass);
-      var brandingAccentHex = text.split(',')[4].split(':')[1];
+      brandingAccentHex = text.split(',')[4].split(':')[1];
       document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
       console.log('Branding accent hex: ' + brandingAccentHex);
       var brandingTitle = text.split(',')[2].split(':')[1];
@@ -284,22 +289,16 @@ function quikClientStart(){
           audio.play();
         }
         msg = twemoji.parse(msg);
-        $('#messages').append($('<li class="msg_name">').text(usr + ' '));
-        //$('#messages').append($('<li class="msg_text">').text(msg.split("--DELIM--")[1]));
-        $('#messages').append(msg);
-        $('#messages').append($('<p/>'));
+        appendMessage(usr, msg);
+
       });
       socket.on('disconnectEvent', function (usr, msg) {
         updateUserlist();
-        $('#messages').append($('<li class="msg_name">').text('Notice '));
-        $('#messages').append(usr + ' has disconnected');
-        $('#messages').append($('<p/>'));
+        appendMessage(usr, msg);
       });
       socket.on('connectEvent', function (usr, msg) {
         updateUserlist();
-        $('#messages').append($('<li class="msg_name">').text('Notice '));
-        $('#messages').append(usr + ' has connected');
-        $('#messages').append($('<p/>'));
+        appendMessage(usr, msg);
       });
       $('.dropdown-button').dropdown({
         inDuration: 300,
@@ -311,6 +310,15 @@ function quikClientStart(){
       });
     }
   };
+}
+
+function appendMessage(usr, msg){
+  $('#messages').append($('<img src="https://tracker.moodle.org/secure/attachment/30912/f3.png" style="height:28px; margin-top:2px; margin-right: 6px; float:left">'));
+  $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
+  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date()));
+  $('#messages').append($('<br/>'));
+  $('#messages').append(msg);
+  $('#messages').append($('<br/><br/>'));
 }
 
 function joinRoom(room){

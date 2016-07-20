@@ -270,6 +270,10 @@ quik.use(function (req, res, next) {
     next();
   }
 });
+quik.get('/user/*', function (req, res) {
+  res.status(501);
+  res.end('User profiles not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/46');
+});
 quik.get('/res/quik.css', function (req, res) {
   res.sendFile(__dirname + '/res/quik.css');
 });
