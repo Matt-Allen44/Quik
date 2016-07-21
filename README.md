@@ -9,12 +9,16 @@
 ![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
 ### Quick start
+#### A Redis Database is required to run Quik - this is used for logging and chat history functionality
+
 Clone the git repository
 > git clone https://github.com/Matt-Allen44/Quik.git
 
 > npm install
 
-> npm startNodeJS or npm startNode  (depends on your enviromental variable for node)
+> configure your /conf files
+
+> node quik.js {OR} nodejs quik.js (depending on how your NodeJS is installed)
 
 > access localhost using any web browser
 
