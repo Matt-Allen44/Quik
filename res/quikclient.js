@@ -324,9 +324,15 @@ function appendMessage(usr, msg, flair){
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
   $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
   $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
+
+  if(usr === 'Quikbot' || usr === 'Rooms' || usr === 'Notice'){
+    $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
+  }
+
   $('#messages').append($('<br/>'));
   $('#messages').append(msg);
   $('#messages').append($('<br/><br/>'));
+  scrollDown();
 }
 
 function joinRoom(room){
@@ -438,8 +444,7 @@ function loadMessages(nummessages, room){
 
         }
       }
-      var elem = document.getElementById('messages');
-      elem.scrollTop = elem.scrollHeight;
+      scrollDown();
       document.getElementById('loader-wrapper').style.display = 'none';
     }
   };
@@ -461,4 +466,8 @@ function updateUserlist(){
       document.getElementById('loader-wrapper').style.display = 'none';
     }
   };
+}
+function scrollDown(){
+  var elem = document.getElementById('messages');
+  elem.scrollTop = elem.scrollHeight;
 }

@@ -483,9 +483,9 @@ io.on('connection', function (socket) {
           case 'broadcast':
             var message =  msg.split(' ').slice(1,msg.split(' ').length);
             if(message.toString().length > 0){
-              io.emit('chat message', 'Broadcast', message.toString().replace(",",""));
+              io.emit('chat message', 'Quikbot', 'Broadcast from ' + usr + ': ' + message.toString().replace(","," "));
             } else {
-              socket.emit('chat message', 'Quikbot (ERROR)', "No broadcast message entered");
+              socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
             }
             break;
           default:
