@@ -1,4 +1,7 @@
 node_modules
+
 quik.log
+
 conf/godips
+
 conf/redisconf
