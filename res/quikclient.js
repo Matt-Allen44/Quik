@@ -289,16 +289,21 @@ function quikClientStart(){
           audio.play();
         }
         msg = twemoji.parse(msg);
-        appendMessage(usr, msg);
+
+        if(usr === 'Rooms' || usr === 'Notice'){
+          appendMessage(usr, msg, 'Bot');
+        } else {
+          appendMessage(usr, msg, 'User');
+        }
 
       });
       socket.on('disconnectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage('Quikbot', usr + " has left the channel.");
+        appendMessage('Quikbot', usr + " has left the channel.", 'Bot');
       });
       socket.on('connectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage('Quikbot', "Welcome " + usr + " to the channel.");
+        appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot');
       });
       $('.dropdown-button').dropdown({
         inDuration: 300,
@@ -312,11 +317,12 @@ function quikClientStart(){
   };
 }
 
-function appendMessage(usr, msg){
+function appendMessage(usr, msg, flair){
   console.log("Appending message from " + usr + " with text " + msg);
   console.trace();
   $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
+  $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
   $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
   $('#messages').append($('<br/>'));
   $('#messages').append(msg);
