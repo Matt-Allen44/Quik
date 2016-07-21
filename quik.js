@@ -216,8 +216,7 @@ var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
 var fs = require('fs');
-var quikbot = require('./quikbot.js');
-quikbot.test();
+var quikbot = require('./quikbot.js')(io);
 
 var redis = require('redis');
 var redisHost;
@@ -447,11 +446,14 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function () {
     var username = getUsername(socket.id);
+
+    if(typeof username != 'undefined'){
+      io.to(userRoom[socket.id]).emit('disconnectEvent', username);
+    }
     //remove username for restricted names
     if (typeof username !== 'undefined') {
       roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1);
     }
-    io.emit('disconnectEvent', username);
 
     jsonLogDat=[username, '', socket.id, new Date(), 'User disconnected from the server'];
     redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
@@ -481,9 +483,17 @@ io.on('connection', function (socket) {
 
         switch(command){
           case 'broadcast':
-            var message =  msg.split(' ').slice(1,msg.split(' ').length);
-            if(message.toString().length > 0){
-              io.emit('chat message', 'Quikbot', 'Broadcast from ' + usr + ': ' + message.toString().replace(","," "));
+            var broadcastMessage =  msg.split(' ').slice(1,msg.split(' ').length);
+            if(broadcastMessage.toString().length > 0){
+              io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(","," "));
+            } else {
+              socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
+            }
+            break;
+          case 'emit':
+            var emitMessage =  msg.split(' ').slice(1,msg.split(' ').length);
+            if(emitMessage.toString().length > 0){
+              io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(","," "));
             } else {
               socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
             }
