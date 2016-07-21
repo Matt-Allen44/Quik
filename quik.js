@@ -282,6 +282,16 @@ quik.get('/res/quikclient.js', function (req, res) {
 quik.get('/branding/favicon.ico', function (req, res) {
   res.sendFile(__dirname + '/branding/favicon.ico');
 });
+quik.get('/api/userimg/*', function (req, res) {
+  var usr = req.url.replace('api/userimg/', '').replace("/", '');
+  var profilePictureExists = fs.existsSync(__dirname + '/public/usr/imgs/' + usr + '.png');
+
+  if(profilePictureExists){
+    res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
+  } else {
+    res.sendFile(__dirname + '/public/usr/imgs/default.png');
+  }
+});
 /* Dashboard info */
 quik.get('/dash/sysdat', function (req, res) {
   if (godlist == req.connection.remoteAddress) {
