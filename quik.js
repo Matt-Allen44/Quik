@@ -288,7 +288,7 @@ quik.get('/api/userimg/*', function (req, res) {
   if(profilePictureExists){
     res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
   } else {
-    res.sendFile(__dirname + '/public/usr/imgs/default.png');
+    res.sendFile(__dirname + '/public/usr/imgs/defaults/' + usr.charAt(0) + '.png');
   }
 });
 /* Dashboard info */
@@ -497,6 +497,10 @@ io.on('connection', function (socket) {
             } else {
               socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
             }
+            break;
+          case 'help':
+            socket.emit('chat message', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels');
+            socket.emit('chat message', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel');
             break;
           default:
             socket.emit('chat message', 'Quikbot (ERROR)', command + " is an unkown command");
