@@ -250,7 +250,7 @@ function quikClientStart() {
             promptForUsername();
             /* End of brand themeing */
             usrdat = text.split('/#');
-            userlist = document.getElementById('dropdown3');
+            userlist = document.getElementById('dropdown3USRS');
             for (var i = 1; i < usrdat.length; i++) {
                 userlist.innerHTML = userlist.innerHTML + '<li><a href=\'\'>' + usrdat[i].split(',')[1] + '</a></li>';
             }
@@ -497,6 +497,37 @@ function promptForUsername(showError) {
             console.log("Loaded from pathname");
         }
     }
+}
+
+
+function promptForFlair(showError) {
+
+    promptText = 'Username taken, please choose another';
+    document.cookie = ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    //Prompt user for name
+    swal({
+        title: 'Set Flair',
+        text: 'Enter your desired flair',
+        type: 'input',
+        showCancelButton: false,
+        closeOnConfirm: false,
+        confirmButtonColor: ' #ff5050 ',
+        confirmButtonText: 'Continue',
+        allowEscapeKey: false,
+        inputPlaceholder: 'username'
+    }, function(inputValue) {
+        if (inputValue === false)
+            window.close();
+        if (inputValue.length < 1) {
+            swal.showInputError('You need to write something!');
+        } else if (inputValue.length > 20) {
+            swal.showInputError('Flair can\'t be longer than 20 characters!');
+        } else if (twemoji.parse(inputValue) != inputValue) {
+            swal.showInputError('You can\'t have emojis in your flair! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
+        } else {
+            socket.emit('chat message', '/setflair ' + inputValue);
+        }
+    });
 }
 
 function loadMessages(nummessages, room) {
