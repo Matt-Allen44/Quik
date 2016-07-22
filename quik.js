@@ -516,7 +516,8 @@ io.on('connection', function(socket) {
                         }
                         break;
                     case 'setflair':
-                        var flair = msg.split(' ').slice(1, msg.split(' ').length);
+                        var flair = msg.split(' ').slice(1, msg.split(' ').length).toString();
+                            flair = flair.replace(new RegExp(',', 'g'), ' ');
                         socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Error');
                         userflairs[socket.id] = flair;
                         break;
