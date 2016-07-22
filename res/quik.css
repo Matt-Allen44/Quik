@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 body {
+    background-color: #fff;
     font: 13px Helvetica, Arial;
     width: 100%;
     margin: auto;
@@ -26,6 +27,7 @@ body {
   display:flex;
   height:calc(100vh - 150px);
   width:100%;
+  background-color: #fff;
 }
 #messages {
     overflow-y: scroll;

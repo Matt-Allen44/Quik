@@ -293,6 +293,10 @@ quik.get('/api/userimg/*', function (req, res) {
     res.sendFile(__dirname + '/public/usr/imgs/defaults/' + usr.charAt(0) + '.png');
   }
 });
+quik.get('/api/channellist*', function (req, res) {
+  res.status(501);
+  res.end('Channel list not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/49');
+});
 /* Dashboard info */
 quik.get('/dash/sysdat', function (req, res) {
   if (godlist == req.connection.remoteAddress) {
