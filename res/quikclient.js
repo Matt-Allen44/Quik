@@ -208,6 +208,8 @@ var socket = io();
 var messagesSinceFocus = 0;
 var room = "";
 
+var lastUserWhoSentAMessage = "";
+
 var brandingColorClass;
 var brandingColorHex;
 var brandingAccentClass;
@@ -221,6 +223,7 @@ setInterval(function () {
     document.title = 'Quik';
   }
 }, 1000);
+
 function quikClientStart(){
   /* Apply brand themeing */
   var xmlhttp, text;
@@ -291,11 +294,19 @@ function quikClientStart(){
         msg = twemoji.parse(msg);
 
         if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
-          appendMessage(usr, msg, 'Bot', false);
+          if(usr === lastUserWhoSentAMessage){
+            appendMessageNoHeader(usr, msg, 'Bot', false);
+          } else {
+            appendMessage(usr, msg, 'Bot', false);
+          }
         } else {
-          appendMessage(usr, msg, flair, false);
+          if(usr === lastUserWhoSentAMessage){
+            appendMessageNoHeader(usr, msg, flair, false);
+          } else {
+            appendMessage(usr, msg, flair, false);
+          }
         }
-
+        lastUserWhoSentAMessage = usr;
       });
       socket.on('chat message private', function (usr, msg, flair) {
         var elem = document.getElementById('messages');
@@ -314,11 +325,19 @@ function quikClientStart(){
         msg = twemoji.parse(msg);
 
         if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
-          appendMessage(usr, msg, 'Bot', 'Bot', true);
+          if(usr === lastUserWhoSentAMessage){
+            appendMessageNoHeader(usr, msg, 'Bot', false);
+          } else {
+            appendMessage(usr, msg, 'Bot', false);
+          }
         } else {
-          appendMessage(usr, msg, 'User', flair, true);
+          if(usr === lastUserWhoSentAMessage){
+            appendMessageNoHeader(usr, msg, flair, true);
+          } else {
+            appendMessage(usr, msg, flair, true);
+          }
         }
-
+        lastUserWhoSentAMessage = usr;
       });
       socket.on('disconnectEvent', function (usr, msg) {
         updateUserlist();
@@ -341,8 +360,7 @@ function quikClientStart(){
 }
 
 function appendMessage(usr, msg, flair, private){
-  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
-  console.trace();
+  $('#messages').append($('<br/>'));
   $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
   $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
@@ -354,13 +372,26 @@ function appendMessage(usr, msg, flair, private){
 
   $('#messages').append($('<br/>'));
   $('#messages').append(msg);
-  $('#messages').append($('<br/><br/>'));
+  scrollDown();
+}
+
+function appendMessageNoHeader(usr, msg, flair, private){
+  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
+  console.trace();
+
+  $('#messages').append($('<br/>'));
+
+  //Hackjob used to align the text, should be reworked
+  //TODO: Rework this section
+  $('#messages').append($('<img style="height:11px;margin-top:2px; margin-right: 32px; float:left;">'));
+  $('#messages').append(msg);
   scrollDown();
 }
 
 function prependMessage(usr, msg, flair, private){
   console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
   console.trace();
+  $('#messages').append($('<br/>'));
   $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
   $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
@@ -476,7 +507,6 @@ function loadMessages(nummessages, room){
     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
       var msgdata = JSON.parse(xmlhttp.responseText);
       for(var i = 0; i < msgdata.length; i++){
-        console.count("append loop (" + nummessages + ")");
         if(JSON.parse(msgdata[i])[0] === ""){} else {
           prependMessage(JSON.parse(msgdata[i])[0], JSON.parse(msgdata[i])[4], 'History', true);
         }
