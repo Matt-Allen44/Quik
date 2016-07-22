@@ -285,6 +285,7 @@ quik.get('/branding/favicon.ico', function (req, res) {
 quik.get('/api/userimg/*', function (req, res) {
   var usr = req.url.replace('api/userimg/', '').replace("/", '');
   var profilePictureExists = fs.existsSync(__dirname + '/public/usr/imgs/' + usr + '.png');
+  console.log("Exists? " + profilePictureExists + " - " + __dirname + '/public/usr/imgs/' + usr);
 
   if(profilePictureExists){
     res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
@@ -347,6 +348,7 @@ quik.get('/notify.mp3', function (req, res) {
 });
 //Database requests
 quik.get('/api/redis/history', function (req, res) {
+  redisClient.select(0);
   redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
     if (err){
       res.status(422);

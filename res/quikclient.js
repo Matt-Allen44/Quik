@@ -358,6 +358,24 @@ function appendMessage(usr, msg, flair, private){
   scrollDown();
 }
 
+function prependMessage(usr, msg, flair, private){
+  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
+  console.trace();
+  $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
+  $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
+  $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
+  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
+
+  if(private){
+    $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
+  }
+
+  $('#messages').append($('<br/>'));
+  $('#messages').append(msg);
+  $('#messages').append($('<br/><br/>'));
+  scrollDown();
+}
+
 function joinRoom(room){
   document.getElementById('usrs_connectedMobi').text = 'Connected to ' + room;
   document.getElementById('dropdown_chat').text = 'Connected to ' + room;
@@ -460,11 +478,7 @@ function loadMessages(nummessages, room){
       for(var i = 0; i < msgdata.length; i++){
         console.count("append loop (" + nummessages + ")");
         if(JSON.parse(msgdata[i])[0] === ""){} else {
-          $('#messages').prepend($('<p/>'));
-          $('#messages').prepend(JSON.parse(msgdata[i])[4]);
-          $('#messages').prepend($('<li class="msg_name">').text(JSON.parse(msgdata[i])[0] + ' '));
-          $('#messages').prepend($('<i title="This message was sent before you connected (' + JSON.parse(msgdata[i])[3] + ')"  class=" tiny material-icons">replay</i>'));
-
+          prependMessage(JSON.parse(msgdata[i])[0], JSON.parse(msgdata[i])[4], 'History', true);
         }
       }
       scrollDown();
