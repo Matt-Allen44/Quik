@@ -224,16 +224,18 @@ var redisPort;
 var redisPass;
 var redisClient;
 
-fs.readFile(__dirname + '/conf/redisconf', 'utf8', function (err, data) {
-  if (err)
-    throw err;
-  redisHost = data.split(',')[0].split(':')[1].trim();
-  redisPort = data.split(',')[1].split(':')[1].trim();
-  redisPass = data.split(',')[2].split(':')[1].trim();
+fs.readFile(__dirname + '/conf/redisconf', 'utf8', function(err, data) {
+    if (err)
+        throw err;
+    redisHost = data.split(',')[0].split(':')[1].trim();
+    redisPort = data.split(',')[1].split(':')[1].trim();
+    redisPass = data.split(',')[2].split(':')[1].trim();
 
-  qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
-  redisClient = redis.createClient(redisPort , redisHost);
-  redisClient.auth(redisPass, function (err) { if (err) throw err; });
+    qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
+    redisClient = redis.createClient(redisPort, redisHost);
+    redisClient.auth(redisPass, function(err) {
+        if (err) throw err;
+    });
 });
 
 var clients = [];
@@ -259,391 +261,406 @@ var motd = '';
 //default to 80 if no port is provided
 // Called on all quik requests
 quik.use(helmet());
-quik.use(function (req, res, next) {
-  qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
-  if (banlist.indexOf(req.connection.remoteAddress) > -1) {
-    qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + ' access denied - IP Ban');
-    res.status(403);
-    res.sendFile(__dirname + '/ipban.html');
-  } else {
-    next();
-  }
+quik.use(function(req, res, next) {
+    qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url));
+    if (banlist.indexOf(req.connection.remoteAddress) > -1) {
+        qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + ' access denied - IP Ban');
+        res.status(403);
+        res.sendFile(__dirname + '/ipban.html');
+    } else {
+        next();
+    }
 });
-quik.get('/user/*', function (req, res) {
-  res.status(501);
-  res.end('User profiles not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/46');
+quik.get('/user/*', function(req, res) {
+    res.status(501);
+    res.end('User profiles not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/46');
 });
-quik.get('/res/quik.css', function (req, res) {
-  res.sendFile(__dirname + '/res/quik.css');
+quik.get('/res/quik.css', function(req, res) {
+    res.sendFile(__dirname + '/res/quik.css');
 });
-quik.get('/res/quikclient.js', function (req, res) {
-  res.sendFile(__dirname + '/res/quikclient.js');
+quik.get('/res/quikclient.js', function(req, res) {
+    res.sendFile(__dirname + '/res/quikclient.js');
 });
-quik.get('/branding/favicon.ico', function (req, res) {
-  res.sendFile(__dirname + '/branding/favicon.ico');
+quik.get('/branding/favicon.ico', function(req, res) {
+    res.sendFile(__dirname + '/branding/favicon.ico');
 });
-quik.get('/api/userimg/*', function (req, res) {
-  var usr = req.url.replace('api/userimg/', '').replace("/", '');
-  var profilePictureExists = fs.existsSync(__dirname + '/public/usr/imgs/' + usr + '.png');
-  console.log("Exists? " + profilePictureExists + " - " + __dirname + '/public/usr/imgs/' + usr);
+quik.get('/api/userimg/*', function(req, res) {
+    var usr = req.url.replace('api/userimg/', '').replace("/", '');
+    var profilePictureExists = fs.existsSync(__dirname + '/public/usr/imgs/' + usr + '.png');
+    console.log("Exists? " + profilePictureExists + " - " + __dirname + '/public/usr/imgs/' + usr);
 
-  if(profilePictureExists){
-    res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
-  } else {
-    res.sendFile(__dirname + '/public/usr/imgs/defaults/' + usr.charAt(0) + '.png');
-  }
+    if (profilePictureExists) {
+        res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
+    } else {
+        res.sendFile(__dirname + '/public/usr/imgs/defaults/' + usr.charAt(0) + '.png');
+    }
 });
-quik.get('/api/channellist*', function (req, res) {
-  res.status(501);
-  res.end('Channel list not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/49');
+quik.get('/api/channellist*', function(req, res) {
+    res.status(501);
+    res.end('Channel list not yet implemented - see https://github.com/Matt-Allen44/Quik/issues/49');
 });
 /* Dashboard info */
-quik.get('/dash/sysdat', function (req, res) {
-  if (godlist == req.connection.remoteAddress) {
-    if (process.platform === 'win32') {
-      res.send('501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)');
+quik.get('/dash/sysdat', function(req, res) {
+    if (godlist == req.connection.remoteAddress) {
+        if (process.platform === 'win32') {
+            res.send('501 Not Implemented (SYSDAT NOT SUPPORTED ON WINDOWS)');
+        } else {
+            res.send('200 OK');
+        }
     } else {
-      res.send('200 OK');
+        res.status(403);
+        res.sendFile(__dirname + '/ipban.html');
     }
-  } else {
-    res.status(403);
-    res.sendFile(__dirname + '/ipban.html');
-  }
 });
-quik.get('/dash/usrdat', function (req, res) {
-  quikbot.test();
-  if (godlist == req.connection.remoteAddress) {
-    res.send(clients.toString());
-  } else {
-    res.status(403);
-    res.sendFile(__dirname + '/ipban.html');
-  }
+quik.get('/dash/usrdat', function(req, res) {
+    quikbot.test();
+    if (godlist == req.connection.remoteAddress) {
+        res.send(clients.toString());
+    } else {
+        res.status(403);
+        res.sendFile(__dirname + '/ipban.html');
+    }
 });
-quik.get('/dash/logdat', function (req, res) {
-  if (godlist == req.connection.remoteAddress) {
-    res.send(log);
-  } else {
-    res.status(403);
-    res.sendFile(__dirname + '/ipban.html');
-  }
+quik.get('/dash/logdat', function(req, res) {
+    if (godlist == req.connection.remoteAddress) {
+        res.send(log);
+    } else {
+        res.status(403);
+        res.sendFile(__dirname + '/ipban.html');
+    }
 });
 /* Branding related requests */
-quik.get('/branding/logo.png', function (req, res) {
-  res.sendFile(__dirname + '/branding/logo.png');
+quik.get('/branding/logo.png', function(req, res) {
+    res.sendFile(__dirname + '/branding/logo.png');
 });
-quik.get('/branding/theme', function (req, res) {
-  res.sendFile(__dirname + '/branding/theme');
+quik.get('/branding/theme', function(req, res) {
+    res.sendFile(__dirname + '/branding/theme');
 });
 /* End of branding related requests */
-quik.get('/firebase', function (req, res) {
-  res.sendFile(__dirname + '/firebase.html');
+quik.get('/firebase', function(req, res) {
+    res.sendFile(__dirname + '/firebase.html');
 });
-quik.get('/dash', function (req, res) {
-  if (godlist == req.connection.remoteAddress) {
-    res.sendFile(__dirname + '/dash.html');
-  } else {
-    qLog('403 Logs', 'Denied ' + req.connection.remoteAddress);
-    res.status(403);
-    res.sendFile(__dirname + '/ipban.html');
-  }
+quik.get('/dash', function(req, res) {
+    if (godlist == req.connection.remoteAddress) {
+        res.sendFile(__dirname + '/dash.html');
+    } else {
+        qLog('403 Logs', 'Denied ' + req.connection.remoteAddress);
+        res.status(403);
+        res.sendFile(__dirname + '/ipban.html');
+    }
 });
-quik.get('/notify.mp3', function (req, res) {
-  res.sendFile(__dirname + '/notify.mp3');
+quik.get('/notify.mp3', function(req, res) {
+    res.sendFile(__dirname + '/notify.mp3');
 });
 //Database requests
-quik.get('/api/redis/history', function (req, res) {
-  redisClient.select(0);
-  redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
-    if (err){
-      res.status(422);
-      res.end("Lookup failed for " + req.query.room);
-    }
+quik.get('/api/redis/history', function(req, res) {
+    redisClient.select(0);
+    redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
+        if (err) {
+            res.status(422);
+            res.end("Lookup failed for " + req.query.room);
+        }
 
-    res.status(200);
-    res.end("" + JSON.stringify(reply, null, 4));
-  });
+        res.status(200);
+        res.end("" + JSON.stringify(reply, null, 4));
+    });
 
 });
 
-quik.get('/api/quik/roomdata', function (req, res) {
+quik.get('/api/quik/roomdata', function(req, res) {
     try {
-      var roomdat = {"name": req.query.room, "connected users": roomUsers[req.query.room].length};
-      var dat = [];
-      for(var i = 0; i < roomUsers[req.query.room].length; i++){
-        dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
-      }
-      res.end(JSON.stringify({"room": roomdat, "clients": dat}));
-    } catch(err){
-      res.status(422);
-      res.end("Lookup failed for " + req.query.room + " (no data)");
+        var roomdat = {
+            "name": req.query.room,
+            "connected users": roomUsers[req.query.room].length
+        };
+        var dat = [];
+        for (var i = 0; i < roomUsers[req.query.room].length; i++) {
+            dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
+        }
+        res.end(JSON.stringify({
+            "room": roomdat,
+            "clients": dat
+        }));
+    } catch (err) {
+        res.status(422);
+        res.end("Lookup failed for " + req.query.room + " (no data)");
     }
 });
 
-quik.get('/api/quik/user', function (req, res) {
-  res.end(clients[req.query.userid].toString());
+quik.get('/api/quik/user', function(req, res) {
+    res.end(clients[req.query.userid].toString());
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-quik.get('*', function (req, res) {
-  if(req.url.split("/").length > 2){
-    res.status(404);
-    res.sendFile(__dirname + '/404.html');
-  } else {
-    res.sendFile(__dirname + '/chat.html');
-  }
+quik.get('*', function(req, res) {
+    if (req.url.split("/").length > 2) {
+        res.status(404);
+        res.sendFile(__dirname + '/404.html');
+    } else {
+        res.sendFile(__dirname + '/chat.html');
+    }
 });
 
-fs.readFile(__dirname + '/branding/motd', 'utf8', function (err, data) {
-  if (err)
-    throw err;
-  motd = data;
+fs.readFile(__dirname + '/branding/motd', 'utf8', function(err, data) {
+    if (err)
+        throw err;
+    motd = data;
 });
-fs.readFile(__dirname + '/conf/godips', 'utf8', function (err, data) {
-  if (err)
-    throw err;
-  godlist = data.trim();
-  qLog('Server Log', 'Loaded god ips: ' + godlist);
+fs.readFile(__dirname + '/conf/godips', 'utf8', function(err, data) {
+    if (err)
+        throw err;
+    godlist = data.trim();
+    qLog('Server Log', 'Loaded god ips: ' + godlist);
 });
-fs.readFile(__dirname + '/conf/netconf', 'utf8', function (err, data) {
-  if (err)
-    throw err;
-  port = parseInt(data.split(':')[1]);
-  qLog('Server Log', 'Loaded netconf with port: ' + port);
-  startServer();  //Wait until netconf is loaded to start
+fs.readFile(__dirname + '/conf/netconf', 'utf8', function(err, data) {
+    if (err)
+        throw err;
+    port = parseInt(data.split(':')[1]);
+    qLog('Server Log', 'Loaded netconf with port: ' + port);
+    startServer(); //Wait until netconf is loaded to start
 });
+
 function startServer() {
-  var runSecure = false;
-  if (runSecure) {
-    var privateKey = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/privkey.pem');
-    var certificate = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/cert.pem');
-    https.createServer({
-      key: privateKey,
-      cert: certificate
-    }, quik).listen(443);
-  }
-  http.listen(port, function () {
-    qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
-    qLog('Server Log', 'Started on :' + port);
-  });
+    var runSecure = false;
+    if (runSecure) {
+        var privateKey = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/privkey.pem');
+        var certificate = fs.readFileSync('/etc/letsencrypt/live/groms.xyz/cert.pem');
+        https.createServer({
+            key: privateKey,
+            cert: certificate
+        }, quik).listen(443);
+    }
+    http.listen(port, function() {
+        qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
+        qLog('Server Log', 'Started on :' + port);
+    });
 }
 /*
 	ON CONNECTION
 */
-io.on('connection', function (socket) {
-  socket.on('set room', function (room) {
-      socket.emit('chat message private', 'Rooms', 'Connected to rooms' + room, 'Bot');
-      userRoom[socket.id]  = room;
-      userflairs[socket.id] = 'Quik User';
+io.on('connection', function(socket) {
+    socket.on('set room', function(room) {
+        socket.emit('chat message private', 'Rooms', 'Connected to rooms' + room, 'Bot');
+        userRoom[socket.id] = room;
+        userflairs[socket.id] = 'Quik User';
 
-      //Add user to room list
-      var roomUsersObj = roomUsers[room.replace("/","")];
-      if(typeof roomUsersObj === 'undefined'){
-        roomUsers[room.replace("/","")] = [];
-      }
-      roomUsers[room.replace("/","")][roomUsers[room.replace("/","")].length] = [socket.id];
-
-      socket.join(room);
-
-      jsonLogDat=['', '', socket.id, new Date(), 'User connected to ' + room];
-      redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-  });
-
-  socket.emit('chat message private', 'Notice', 'Connection established', 'Bot');
-  socket.emit('chat message private', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik', 'Bot');
-  socket.emit('chat message private', 'Notice', motd, 'Bot');
-
-  socket.on('disconnect', function () {
-    var username = getUsername(socket.id);
-
-    if(typeof username != 'undefined'){
-      io.to(userRoom[socket.id]).emit('disconnectEvent', username);
-    }
-    //remove username for restricted names
-    if (typeof username !== 'undefined') {
-      roomUsers[userRoom[socket.id].replace("/","")] = roomUsers[userRoom[socket.id].replace("/","")].splice(roomUsers[userRoom[socket.id].replace("/","")].indexOf(socket.id),1);
-    }
-
-    jsonLogDat=[username, '', socket.id, new Date(), 'User disconnected from the server'];
-    redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-  });
-  socket.on('ban', function (name, socketID, ip) {
-    if (godlist == socket.handshake.address) {
-      qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
-      jsonLogDat=[name, '', socket.id, new Date(), 'Accepted ban request (200) from ' +  socket.conn.remoteAddress + ' for ' + ip];
-      redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-
-      socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.', 'Bot');
-      banIP(name,socket,ip);
-    } else {
-      qLog("banllog", "Rejected ban request (403) from " + ip);
-      jsonLogDat=[name, '', socket.id, new Date(), 'Rejected ban request (403) from ' + socket.conn.remoteAddress];
-      redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-    }
-  });
-  socket.on('chat message', function (msg) {
-    usr = getUsername(socket.id);
-    msg = sanitizeHtml(msg);
-
-    if(messageIsLegal(msg, socket)){
-      if(msg.charAt(0) === '!' || msg.charAt(0) === '/'){
-        /* QUIKBOT INTERGRATION */
-        var command = msg.split(' ')[0].substr(1,msg.length);
-
-        switch(command){
-          case 'broadcast':
-            var broadcastMessage =  msg.split(' ').slice(1,msg.split(' ').length);
-            if(broadcastMessage.toString().length > 0){
-              io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(","," "), 'Global Broadcast');
-            } else {
-              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
-            }
-            break;
-          case 'emit':
-            var emitMessage =  msg.split(' ').slice(1,msg.split(' ').length);
-            if(emitMessage.toString().length > 0){
-              io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(","," "), 'Channel Broadcast');
-            } else {
-              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
-            }
-            break;
-          case 'setflair':
-            var flair =  msg.split(' ').slice(1,msg.split(' ').length);
-            socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Error');
-            userflairs[socket.id] = flair;
-            break;
-          case 'help':
-            socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels', 'Bot');
-            socket.emit('chat message private', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel', 'Bot');
-            break;
-          default:
-            socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command", 'Error');
+        //Add user to room list
+        var roomUsersObj = roomUsers[room.replace("/", "")];
+        if (typeof roomUsersObj === 'undefined') {
+            roomUsers[room.replace("/", "")] = [];
         }
-      } else {
-        qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
-        io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg), userflairs[socket.id], false);
+        roomUsers[room.replace("/", "")][roomUsers[room.replace("/", "")].length] = [socket.id];
 
-        if(typeof userRoom[socket.id] === 'undefined'){
-          qLog('RedisClient', 'Logging failed (userRoom undefined)');
+        socket.join(room);
+
+        jsonLogDat = ['', '', socket.id, new Date(), 'User connected to ' + room];
+        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+    });
+
+    socket.emit('chat message private', 'Notice', 'Connection established', 'Bot');
+    socket.emit('chat message private', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik', 'Bot');
+    socket.emit('chat message private', 'Notice', motd, 'Bot');
+
+    socket.on('disconnect', function() {
+        var username = getUsername(socket.id);
+
+        if (typeof username != 'undefined') {
+            io.to(userRoom[socket.id]).emit('disconnectEvent', username);
+        }
+        //remove username for restricted names
+        if (typeof username !== 'undefined') {
+            roomUsers[userRoom[socket.id].replace("/", "")] = roomUsers[userRoom[socket.id].replace("/", "")].splice(roomUsers[userRoom[socket.id].replace("/", "")].indexOf(socket.id), 1);
+        }
+
+        jsonLogDat = [username, '', socket.id, new Date(), 'User disconnected from the server'];
+        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+    });
+    socket.on('ban', function(name, socketID, ip) {
+        if (godlist == socket.handshake.address) {
+            qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
+            jsonLogDat = [name, '', socket.id, new Date(), 'Accepted ban request (200) from ' + socket.conn.remoteAddress + ' for ' + ip];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.', 'Bot');
+            banIP(name, socket, ip);
         } else {
-          var date = new Date();
-
-          var jsonRoom=[usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
-          redisClient.select(0);
-          redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
-
-          var jsonIPLog=[usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
-          redisClient.select(1);
-          redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+            qLog("banllog", "Rejected ban request (403) from " + ip);
+            jsonLogDat = [name, '', socket.id, new Date(), 'Rejected ban request (403) from ' + socket.conn.remoteAddress];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
         }
-      }
-    }
-  });
-  //Seters and getters for usernames
-  /**** NOTE MULTIPLE USERNAMES OF THE SAME NAME WITH DIFFRENT
-        CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
-  ****/
-  socket.on('set username', function (name) {
-    var PRE_SANITIZE_NAME = name;
-    name = sanitizeHtml(name);
+    });
+    socket.on('chat message', function(msg) {
+        usr = getUsername(socket.id);
+        msg = sanitizeHtml(msg);
 
-    redisClient.select(1);
-    var jsonLogDat;
-    var date = new Date();
+        if (messageIsLegal(msg, socket)) {
+            if (msg.charAt(0) === '!' || msg.charAt(0) === '/') {
+                /* QUIKBOT INTERGRATION */
+                var command = msg.split(' ')[0].substr(1, msg.length);
 
-    if(name.length > 20){
-        socket.emit('username rejected', "name too long");
+                switch (command) {
+                    case 'broadcast':
+                        var broadcastMessage = msg.split(' ').slice(1, msg.split(' ').length);
+                        if (broadcastMessage.toString().length > 0) {
+                            io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(",", " "), 'Global Broadcast');
+                        } else {
+                            socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
+                        }
+                        break;
+                    case 'emit':
+                        var emitMessage = msg.split(' ').slice(1, msg.split(' ').length);
+                        if (emitMessage.toString().length > 0) {
+                            io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(",", " "), 'Channel Broadcast');
+                        } else {
+                            socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
+                        }
+                        break;
+                    case 'setflair':
+                        var flair = msg.split(' ').slice(1, msg.split(' ').length);
+                        socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Error');
+                        userflairs[socket.id] = flair;
+                        break;
+                    case 'help':
+                        socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels', 'Bot');
+                        socket.emit('chat message private', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel', 'Bot');
+                        break;
+                    default:
+                        socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command", 'Error');
+                }
+            } else {
+                qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
+                io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg), userflairs[socket.id], false);
 
-        jsonLogDat=[name, '', socket.id, date, 'Username "' + name + '" rejected as it exceeds the maximum name length of 20 characters (' + name.length + ')'];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-    } else if (usernames.indexOf(name.toLowerCase()) > -1) {
-        socket.emit('username rejected', 'already in use');
+                if (typeof userRoom[socket.id] === 'undefined') {
+                    qLog('RedisClient', 'Logging failed (userRoom undefined)');
+                } else {
+                    var date = new Date();
 
-        jsonLogDat=[name, '', socket.id, date, 'Username "' + PRE_SANITIZE_NAME + '" rejected as it is already in use'];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-    } else if(PRE_SANITIZE_NAME != sanitizeHtml(name)){
-        socket.emit('username rejected', 'anti-xss policy');
+                    var jsonRoom = [usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
+                    redisClient.select(0);
+                    redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
 
-        jsonLogDat=[name, '', socket.id, date, 'Username "' + name + '" rejected as it violates the anti-xss policy'];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-    } else {
-        setUsername(socket.id, name, socket);
-        io.emit('on user connect', name);
-        io.emit('connectEvent', getUsername(socket.id));
-        //Add username to end of usernames array
-        usernames[usernames.length] = name.toLowerCase();
+                    var jsonIPLog = [usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
+                    redisClient.select(1);
+                    redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+                }
+            }
+        }
+    });
+    //Seters and getters for usernames
+    /**** NOTE MULTIPLE USERNAMES OF THE SAME NAME WITH DIFFRENT
+          CASING ARE NOT ALLOWED EG. mAtt and MATT and considered the SAME
+    ****/
+    socket.on('set username', function(name) {
+        var PRE_SANITIZE_NAME = name;
+        name = sanitizeHtml(name);
 
-        jsonLogDat=[name, '', socket.id, date, 'Username "' + name + '" was set'];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
-      }
-  });
-  socket.on('get username', function (socketID) {
-    socketID = sanitizeHtml(socketID);
-    getUsername(socket.id);
-  });
+        redisClient.select(1);
+        var jsonLogDat;
+        var date = new Date();
+
+        if (name.length > 20) {
+            socket.emit('username rejected', "name too long");
+
+            jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" rejected as it exceeds the maximum name length of 20 characters (' + name.length + ')'];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        } else if (usernames.indexOf(name.toLowerCase()) > -1) {
+            socket.emit('username rejected', 'already in use');
+
+            jsonLogDat = [name, '', socket.id, date, 'Username "' + PRE_SANITIZE_NAME + '" rejected as it is already in use'];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        } else if (PRE_SANITIZE_NAME != sanitizeHtml(name)) {
+            socket.emit('username rejected', 'anti-xss policy');
+
+            jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" rejected as it violates the anti-xss policy'];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        } else {
+            setUsername(socket.id, name, socket);
+            io.emit('on user connect', name);
+            io.emit('connectEvent', getUsername(socket.id));
+            //Add username to end of usernames array
+            usernames[usernames.length] = name.toLowerCase();
+
+            jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" was set'];
+            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        }
+    });
+    socket.on('get username', function(socketID) {
+        socketID = sanitizeHtml(socketID);
+        getUsername(socket.id);
+    });
 });
+
 function ipLookup(ip) {
-  /*if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {*/
+    /*if (ip == '127.0.0.1' || ip == 'localhost' || ip == '::1') {*/
     var array = {
-      city: 'Local Client',
-      region: 'Local Client',
-      country: 'Local Client'
+        city: 'Local Client',
+        region: 'Local Client',
+        country: 'Local Client'
     };
     return array;
-  /*} else {
-    return geoip.lookup(ip);
-  }*/
+    /*} else {
+      return geoip.lookup(ip);
+    }*/
 }
 var clientid = 0;
+
 function setUsername(socketID, name, socket) {
-  if (typeof users[socketID] === 'undefined') {
-    qLog('chatlog', socketID + ' set username to ' + name);
-    users[socketID] = name;
-    userIDs[socketID] = clientid;
-    console.log('updated client list');
-    clients[clientid] = [
-      socket.id,
-      getUsername(socket.id),
-      socket.conn.remoteAddress,
-      ipLookup(socket.conn.remoteAddress).region,
-      ipLookup(socket.conn.remoteAddress).country,
-      Math.floor(new Date() / 1000),
-      clientid
-    ];
-    clientid++;
-  } else {
-    qLog('chatlog', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
-  }
+    if (typeof users[socketID] === 'undefined') {
+        qLog('chatlog', socketID + ' set username to ' + name);
+        users[socketID] = name;
+        userIDs[socketID] = clientid;
+        console.log('updated client list');
+        clients[clientid] = [
+            socket.id,
+            getUsername(socket.id),
+            socket.conn.remoteAddress,
+            ipLookup(socket.conn.remoteAddress).region,
+            ipLookup(socket.conn.remoteAddress).country,
+            Math.floor(new Date() / 1000),
+            clientid
+        ];
+        clientid++;
+    } else {
+        qLog('chatlog', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
+    }
 }
-function messageIsLegal(msg, socket){
-  //Check if users name is too llong
-  if (msg.length > 250) {
-    socket.emit('chat message private', 'Quikbot', 'Connection Refused (message to long > 250 chars)', 'Bot');
-    socket.emit('chat message private', 'Quikbot', '(' + socket.conn.remoteAddress + ') has been logged.', 'Bot');
-    socket.disconnect();
-  } else if (0 === msg.trim().length) {
-    socket.emit('chat message private', 'Quikbot', 'Empty message removed', 'Bot');
-    qLog('chatlog', 'empty message removed');
-  } else {
-    return true;
-  }
-  return false;
+
+function messageIsLegal(msg, socket) {
+    //Check if users name is too llong
+    if (msg.length > 250) {
+        socket.emit('chat message private', 'Quikbot', 'Connection Refused (message to long > 250 chars)', 'Bot');
+        socket.emit('chat message private', 'Quikbot', '(' + socket.conn.remoteAddress + ') has been logged.', 'Bot');
+        socket.disconnect();
+    } else if (0 === msg.trim().length) {
+        socket.emit('chat message private', 'Quikbot', 'Empty message removed', 'Bot');
+        qLog('chatlog', 'empty message removed');
+    } else {
+        return true;
+    }
+    return false;
 }
+
 function getUsername(socketID) {
-  if (typeof users[socketID] === 'undefined') {
-    qLog('chatlog', 'could not get username of ' + socketID);
-  } else {
-    qLog('chatlog', 'succesfully got useranem of ' + socketID + ' - ' + users[socketID]);
-    return users[socketID];
-  }
+    if (typeof users[socketID] === 'undefined') {
+        qLog('chatlog', 'could not get username of ' + socketID);
+    } else {
+        qLog('chatlog', 'succesfully got useranem of ' + socketID + ' - ' + users[socketID]);
+        return users[socketID];
+    }
 }
+
 function banIP(name, socket, ip) {
-  qLog('adminlog', 'IP banned ' + ip + " (" + socket + ")");
-  banlist.push(ip);
+    qLog('adminlog', 'IP banned ' + ip + " (" + socket + ")");
+    banlist.push(ip);
 }
-winston.add(winston.transports.File, { filename: 'quik.log' });
+winston.add(winston.transports.File, {
+    filename: 'quik.log'
+});
+
 function qLog(type, msg) {
-  msg = new Date() + msg;
-  console.log('[' + type + '] ' + msg);
-  log += '[' + type + '] ' + msg + '\n';
-  winston.log(type, msg);
+    msg = new Date() + msg;
+    console.log('[' + type + '] ' + msg);
+    log += '[' + type + '] ' + msg + '\n';
+    winston.log(type, msg);
 }

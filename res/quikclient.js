@@ -215,224 +215,225 @@ var brandingColorHex;
 var brandingAccentClass;
 var brandingAccentHex;
 
-setInterval(function () {
-  favicon.badge(messagesSinceFocus);
-  if (messagesSinceFocus > 0) {
-    document.title = 'Quik (Unread)';
-  } else {
-    document.title = 'Quik';
-  }
+setInterval(function() {
+    favicon.badge(messagesSinceFocus);
+    if (messagesSinceFocus > 0) {
+        document.title = 'Quik (Unread)';
+    } else {
+        document.title = 'Quik';
+    }
 }, 1000);
 
-function quikClientStart(){
-  /* Apply brand themeing */
-  var xmlhttp, text;
-  xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('GET', '/branding/theme', true);
-  xmlhttp.send();
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      text = xmlhttp.responseText;
-      brandingColorClass = text.split(',')[0].split(':')[1];
-      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
-      console.log('Branding color class: ' + brandingColorClass);
-      brandingColorHex = text.split(',')[1].split(':')[1];
-      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
-      console.log('Branding color hex: ' + brandingColorHex);
-      brandingAccentClass = text.split(',')[3].split(':')[1];
-      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
-      console.log('Branding accent class: ' + brandingAccentClass);
-      brandingAccentHex = text.split(',')[4].split(':')[1];
-      document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
-      console.log('Branding accent hex: ' + brandingAccentHex);
-      var brandingTitle = text.split(',')[2].split(':')[1];
-      document.title = brandingTitle;
-      promptForUsername();
-      /* End of brand themeing */
-      usrdat = text.split('/#');
-      userlist = document.getElementById('dropdown3');
-      for (var i = 1; i < usrdat.length; i++) {
-        userlist.innerHTML = userlist.innerHTML + '<li><a href=\'\'>' + usrdat[i].split(',')[1] + '</a></li>';
-      }
-      //define notification audio
-      var audio = new Audio('notify.mp3');
-      var isFocused = true;
-      //Default to true so the noise isn't played if there is an error
-      $('form').submit(function () {
-        if ($('#m').val() === '') {
-          swal({
-            title: 'Error sending message!',
-            text: 'Please ensure you have entered text',
-            timer: 2000
-          });
-        } else {
-          socket.emit('chat message', $('#m').val());
-          $('#m').val('');
-          var elem = document.getElementById('messages');
-          elem.scrollTop = elem.scrollHeight;
-        }
-        return false;
-      });
-      socket.on('username rejected', function (reason) {
-        console.log('username rejected (' + reason + '), reprompting');
-        promptForUsername(true);
-      });
-      socket.on('chat message', function (usr, msg, flair) {
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-        $(window).focus(function () {
-          isFocused = true;
-          messagesSinceFocus = 0;
-        }).blur(function () {
-          isFocused = false;
-        });
-        if (!isFocused) {
-          messagesSinceFocus++;
-          //Alert user if they are not focused on the tab
-          audio.play();
-        }
-        msg = twemoji.parse(msg);
+function quikClientStart() {
+    /* Apply brand themeing */
+    var xmlhttp, text;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', '/branding/theme', true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            text = xmlhttp.responseText;
+            brandingColorClass = text.split(',')[0].split(':')[1];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
+            console.log('Branding color class: ' + brandingColorClass);
+            brandingColorHex = text.split(',')[1].split(':')[1];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
+            console.log('Branding color hex: ' + brandingColorHex);
+            brandingAccentClass = text.split(',')[3].split(':')[1];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
+            console.log('Branding accent class: ' + brandingAccentClass);
+            brandingAccentHex = text.split(',')[4].split(':')[1];
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
+            console.log('Branding accent hex: ' + brandingAccentHex);
+            var brandingTitle = text.split(',')[2].split(':')[1];
+            document.title = brandingTitle;
+            promptForUsername();
+            /* End of brand themeing */
+            usrdat = text.split('/#');
+            userlist = document.getElementById('dropdown3');
+            for (var i = 1; i < usrdat.length; i++) {
+                userlist.innerHTML = userlist.innerHTML + '<li><a href=\'\'>' + usrdat[i].split(',')[1] + '</a></li>';
+            }
+            //define notification audio
+            var audio = new Audio('notify.mp3');
+            var isFocused = true;
+            //Default to true so the noise isn't played if there is an error
+            $('form').submit(function() {
+                if ($('#m').val() === '') {
+                    swal({
+                        title: 'Error sending message!',
+                        text: 'Please ensure you have entered text',
+                        timer: 2000
+                    });
+                } else {
+                    socket.emit('chat message', $('#m').val());
+                    $('#m').val('');
+                    var elem = document.getElementById('messages');
+                    elem.scrollTop = elem.scrollHeight;
+                }
+                return false;
+            });
+            socket.on('username rejected', function(reason) {
+                console.log('username rejected (' + reason + '), reprompting');
+                promptForUsername(true);
+            });
+            socket.on('chat message', function(usr, msg, flair) {
+                var elem = document.getElementById('messages');
+                elem.scrollTop = elem.scrollHeight;
+                $(window).focus(function() {
+                    isFocused = true;
+                    messagesSinceFocus = 0;
+                }).blur(function() {
+                    isFocused = false;
+                });
+                if (!isFocused) {
+                    messagesSinceFocus++;
+                    //Alert user if they are not focused on the tab
+                    audio.play();
+                }
+                msg = twemoji.parse(msg);
 
-        if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
-          if(usr === lastUserWhoSentAMessage){
-            appendMessageNoHeader(usr, msg, 'Bot', false);
-          } else {
-            appendMessage(usr, msg, 'Bot', false);
-          }
-        } else {
-          if(usr === lastUserWhoSentAMessage){
-            appendMessageNoHeader(usr, msg, flair, false);
-          } else {
-            appendMessage(usr, msg, flair, false);
-          }
-        }
-        lastUserWhoSentAMessage = usr;
-      });
-      socket.on('chat message private', function (usr, msg, flair) {
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-        $(window).focus(function () {
-          isFocused = true;
-          messagesSinceFocus = 0;
-        }).blur(function () {
-          isFocused = false;
-        });
-        if (!isFocused) {
-          messagesSinceFocus++;
-          //Alert user if they are not focused on the tab
-          audio.play();
-        }
-        msg = twemoji.parse(msg);
+                if (usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot') {
+                    if (usr === lastUserWhoSentAMessage) {
+                        appendMessageNoHeader(usr, msg, 'Bot', false);
+                    } else {
+                        appendMessage(usr, msg, 'Bot', false);
+                    }
+                } else {
+                    if (usr === lastUserWhoSentAMessage) {
+                        appendMessageNoHeader(usr, msg, flair, false);
+                    } else {
+                        appendMessage(usr, msg, flair, false);
+                    }
+                }
+                lastUserWhoSentAMessage = usr;
+            });
+            socket.on('chat message private', function(usr, msg, flair) {
+                var elem = document.getElementById('messages');
+                elem.scrollTop = elem.scrollHeight;
+                $(window).focus(function() {
+                    isFocused = true;
+                    messagesSinceFocus = 0;
+                }).blur(function() {
+                    isFocused = false;
+                });
+                if (!isFocused) {
+                    messagesSinceFocus++;
+                    //Alert user if they are not focused on the tab
+                    audio.play();
+                }
+                msg = twemoji.parse(msg);
 
-        if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
-          if(usr === lastUserWhoSentAMessage){
-            appendMessageNoHeader(usr, msg, 'Bot', false);
-          } else {
-            appendMessage(usr, msg, 'Bot', false);
-          }
-        } else {
-          if(usr === lastUserWhoSentAMessage){
-            appendMessageNoHeader(usr, msg, flair, true);
-          } else {
-            appendMessage(usr, msg, flair, true);
-          }
+                if (usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot') {
+                    if (usr === lastUserWhoSentAMessage) {
+                        appendMessageNoHeader(usr, msg, 'Bot', false);
+                    } else {
+                        appendMessage(usr, msg, 'Bot', false);
+                    }
+                } else {
+                    if (usr === lastUserWhoSentAMessage) {
+                        appendMessageNoHeader(usr, msg, flair, true);
+                    } else {
+                        appendMessage(usr, msg, flair, true);
+                    }
+                }
+                lastUserWhoSentAMessage = usr;
+            });
+            socket.on('disconnectEvent', function(usr, msg) {
+                updateUserlist();
+                appendMessage('Quikbot', usr + " has left the channel.", 'Bot', false);
+            });
+            socket.on('connectEvent', function(usr, msg) {
+                updateUserlist();
+                appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot', false);
+            });
+            $('.dropdown-button').dropdown({
+                inDuration: 300,
+                outDuration: 225,
+                constrain_width: true,
+                hover: false,
+                gutter: 0,
+                belowOrigin: false
+            });
         }
-        lastUserWhoSentAMessage = usr;
-      });
-      socket.on('disconnectEvent', function (usr, msg) {
-        updateUserlist();
-        appendMessage('Quikbot', usr + " has left the channel.", 'Bot', false);
-      });
-      socket.on('connectEvent', function (usr, msg) {
-        updateUserlist();
-        appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot', false);
-      });
-      $('.dropdown-button').dropdown({
-        inDuration: 300,
-        outDuration: 225,
-        constrain_width: true,
-        hover: false,
-        gutter: 0,
-        belowOrigin: false
-      });
+    };
+}
+
+function appendMessage(usr, msg, flair, private) {
+    $('#messages').append($('<br/>'));
+    $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
+    $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
+    $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
+    $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
+
+    if (private) {
+        $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
     }
-  };
+
+    $('#messages').append($('<br/>'));
+    $('#messages').append(msg);
+    scrollDown();
 }
 
-function appendMessage(usr, msg, flair, private){
-  $('#messages').append($('<br/>'));
-  $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
-  $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
-  $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
-  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
+function appendMessageNoHeader(usr, msg, flair, private) {
+    console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
+    console.trace();
 
-  if(private){
-    $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
-  }
+    $('#messages').append($('<br/>'));
 
-  $('#messages').append($('<br/>'));
-  $('#messages').append(msg);
-  scrollDown();
+    //Hackjob used to align the text, should be reworked
+    //TODO: Rework this section
+    $('#messages').append($('<img style="height:11px;margin-top:2px; margin-right: 32px; float:left;">'));
+    $('#messages').append(msg);
+    scrollDown();
 }
 
-function appendMessageNoHeader(usr, msg, flair, private){
-  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
-  console.trace();
+function prependMessage(usr, msg, flair, private) {
+    console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
+    console.trace();
+    $('#messages').append($('<br/>'));
+    $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
+    $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
+    $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
+    $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
 
-  $('#messages').append($('<br/>'));
+    if (private) {
+        $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
+    }
 
-  //Hackjob used to align the text, should be reworked
-  //TODO: Rework this section
-  $('#messages').append($('<img style="height:11px;margin-top:2px; margin-right: 32px; float:left;">'));
-  $('#messages').append(msg);
-  scrollDown();
+    $('#messages').append($('<br/>'));
+    $('#messages').append(msg);
+    $('#messages').append($('<br/><br/>'));
+    scrollDown();
 }
 
-function prependMessage(usr, msg, flair, private){
-  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
-  console.trace();
-  $('#messages').append($('<br/>'));
-  $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
-  $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
-  $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
-  $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
-
-  if(private){
-    $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
-  }
-
-  $('#messages').append($('<br/>'));
-  $('#messages').append(msg);
-  $('#messages').append($('<br/><br/>'));
-  scrollDown();
+function joinRoom(room) {
+    document.getElementById('usrs_connectedMobi').text = 'Connected to ' + room;
+    document.getElementById('dropdown_chat').text = 'Connected to ' + room;
+    socket.emit('set room', room);
 }
 
-function joinRoom(room){
-  document.getElementById('usrs_connectedMobi').text = 'Connected to ' + room;
-  document.getElementById('dropdown_chat').text = 'Connected to ' + room;
-  socket.emit('set room', room);
-}
 function promptForRoom() {
-        swal({
-          title: 'Connect to room',
-          text: 'Enter your desired room',
-          type: 'input',
-          showCancelButton: false,
-          closeOnConfirm: false,
-          confirmButtonColor: ' #ff5050 ',
-          confirmButtonText: 'Continue',
-          allowEscapeKey: false,
-          inputPlaceholder: 'username'
-        }, function (inputValue) {
-          if (inputValue === false)
+    swal({
+        title: 'Connect to room',
+        text: 'Enter your desired room',
+        type: 'input',
+        showCancelButton: false,
+        closeOnConfirm: false,
+        confirmButtonColor: ' #ff5050 ',
+        confirmButtonText: 'Continue',
+        allowEscapeKey: false,
+        inputPlaceholder: 'username'
+    }, function(inputValue) {
+        if (inputValue === false)
             window.close();
-          if (inputValue.length < 1) {
+        if (inputValue.length < 1) {
             swal.showInputError('You need to write something!');
-          } else if (inputValue.split("/").length > 2) {
+        } else if (inputValue.split("/").length > 2) {
             swal.showInputError('Name can\'t include slash characters');
-          } else if (twemoji.parse(inputValue) != inputValue) {
+        } else if (twemoji.parse(inputValue) != inputValue) {
             swal.showInputError('You can\'t have emojis in your room! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
-          } else {
+        } else {
             room = inputValue;
             //socket.emit('set room', room);
             window.location.replace("/" + room);
@@ -441,100 +442,102 @@ function promptForRoom() {
 }
 
 function promptForUsername(showError) {
-      promptText = 'Enter  your desired username:';
+    promptText = 'Enter  your desired username:';
 
-      if(!showError){
-        if(document.cookie !== ""){
-          socket.emit('set username', document.cookie);
+    if (!showError) {
+        if (document.cookie !== "") {
+            socket.emit('set username', document.cookie);
         }
-      }
+    }
 
-      if (showError || document.cookie === ""){
+    if (showError || document.cookie === "") {
         promptText = 'Username taken, please choose another';
-        document.cookie=";expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
         //Prompt user for name
         swal({
-          title: 'Welcome to Quik',
-          text: promptText,
-          type: 'input',
-          showCancelButton: false,
-          closeOnConfirm: false,
-          confirmButtonColor: ' #ff5050 ',
-          confirmButtonText: 'Continue',
-          allowEscapeKey: false,
-          inputPlaceholder: 'username'
-        }, function (inputValue) {
-          if (inputValue === false)
-            window.close();
-          if (inputValue.length < 1) {
-            swal.showInputError('You need to write something!');
-          } else if (inputValue.length > 20) {
-            swal.showInputError('Name can\'t be longer than 20 characters!');
-          } else if (twemoji.parse(inputValue) != inputValue) {
-            swal.showInputError('You can\'t have emojis in your username! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
-          } else {
-            swal('Welcome ' + inputValue + '!', 'We hope you enjoy Quik!', 'success');
-            usr_name = inputValue;
-            socket.emit('set username', inputValue);
+            title: 'Welcome to Quik',
+            text: promptText,
+            type: 'input',
+            showCancelButton: false,
+            closeOnConfirm: false,
+            confirmButtonColor: ' #ff5050 ',
+            confirmButtonText: 'Continue',
+            allowEscapeKey: false,
+            inputPlaceholder: 'username'
+        }, function(inputValue) {
+            if (inputValue === false)
+                window.close();
+            if (inputValue.length < 1) {
+                swal.showInputError('You need to write something!');
+            } else if (inputValue.length > 20) {
+                swal.showInputError('Name can\'t be longer than 20 characters!');
+            } else if (twemoji.parse(inputValue) != inputValue) {
+                swal.showInputError('You can\'t have emojis in your username! ' + '<img class="emoji" draggable="false" alt="\uD83D\uDE2A" src="http://twemoji.maxcdn.com/16x16/1f62a.png">');
+            } else {
+                swal('Welcome ' + inputValue + '!', 'We hope you enjoy Quik!', 'success');
+                usr_name = inputValue;
+                socket.emit('set username', inputValue);
 
-            date = new Date();
-            var expires = date.setTime(date.getTime()+(30*60*1000));
-            document.cookie = usr_name + "; expires=" + expires;
-        }
-    });
-  }
-  if (!showError){
-    if(window.location.pathname == '/'){
-      //if first arg is zero, all messages are returned
-      room = '/lobby';
-      loadMessages(0,room);
-      console.log("Loaded from lobby");
-    } else {
-      //if first arg is zero, all messages are returned
-      room = window.location.pathname;
-      loadMessages(0,room);
-      console.log("Loaded from pathname");
+                date = new Date();
+                var expires = date.setTime(date.getTime() + (30 * 60 * 1000));
+                document.cookie = usr_name + "; expires=" + expires;
+            }
+        });
     }
-  }
+    if (!showError) {
+        if (window.location.pathname == '/') {
+            //if first arg is zero, all messages are returned
+            room = '/lobby';
+            loadMessages(0, room);
+            console.log("Loaded from lobby");
+        } else {
+            //if first arg is zero, all messages are returned
+            room = window.location.pathname;
+            loadMessages(0, room);
+            console.log("Loaded from pathname");
+        }
+    }
 }
 
-function loadMessages(nummessages, room){
-  var xmlhttp, text;
-  xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('GET', '/api/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/',''), true);
-  xmlhttp.send();
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      var msgdata = JSON.parse(xmlhttp.responseText);
-      for(var i = 0; i < msgdata.length; i++){
-        if(JSON.parse(msgdata[i])[0] === ""){} else {
-          prependMessage(JSON.parse(msgdata[i])[0], JSON.parse(msgdata[i])[4], 'History', true);
+function loadMessages(nummessages, room) {
+    var xmlhttp, text;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', '/api/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/', ''), true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var msgdata = JSON.parse(xmlhttp.responseText);
+            for (var i = 0; i < msgdata.length; i++) {
+                if (JSON.parse(msgdata[i])[0] === "") {} else {
+                    prependMessage(JSON.parse(msgdata[i])[0], JSON.parse(msgdata[i])[4], 'History', true);
+                }
+            }
+            scrollDown();
+            document.getElementById('loader-wrapper').style.display = 'none';
         }
-      }
-      scrollDown();
-      document.getElementById('loader-wrapper').style.display = 'none';
-    }
-  };
+    };
 }
-function updateUserlist(){
-  var xmlhttp, text;
-  xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('GET', '/api/quik/roomdata?room=' + room.replace('/',''), true);
-  xmlhttp.send();
-  xmlhttp.onreadystatechange = function () {
-    userlist.innerHTML = "";
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      var msgdata = JSON.parse(xmlhttp.responseText);
-      for(var i = 0; i < msgdata.clients.length; i++){
-        userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata.clients[i][0][0] + '><a href=\'\'>' + msgdata.clients[i][0][1] + '</a></li>';
-      }
-      var elem = document.getElementById('messages');
-      elem.scrollTop = elem.scrollHeight;
-      document.getElementById('loader-wrapper').style.display = 'none';
-    }
-  };
+
+function updateUserlist() {
+    var xmlhttp, text;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET', '/api/quik/roomdata?room=' + room.replace('/', ''), true);
+    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+        userlist.innerHTML = "";
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var msgdata = JSON.parse(xmlhttp.responseText);
+            for (var i = 0; i < msgdata.clients.length; i++) {
+                userlist.innerHTML = userlist.innerHTML + '<li id=' + msgdata.clients[i][0][0] + '><a href=\'\'>' + msgdata.clients[i][0][1] + '</a></li>';
+            }
+            var elem = document.getElementById('messages');
+            elem.scrollTop = elem.scrollHeight;
+            document.getElementById('loader-wrapper').style.display = 'none';
+        }
+    };
 }
-function scrollDown(){
-  var elem = document.getElementById('messages');
-  elem.scrollTop = elem.scrollHeight;
+
+function scrollDown() {
+    var elem = document.getElementById('messages');
+    elem.scrollTop = elem.scrollHeight;
 }
