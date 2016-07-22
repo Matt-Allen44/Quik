@@ -274,7 +274,7 @@ function quikClientStart(){
         console.log('username rejected (' + reason + '), reprompting');
         promptForUsername(true);
       });
-      socket.on('chat message', function (usr, msg) {
+      socket.on('chat message', function (usr, msg, flair) {
         var elem = document.getElementById('messages');
         elem.scrollTop = elem.scrollHeight;
         $(window).focus(function () {
@@ -293,11 +293,11 @@ function quikClientStart(){
         if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
           appendMessage(usr, msg, 'Bot', false);
         } else {
-          appendMessage(usr, msg, 'User', false);
+          appendMessage(usr, msg, flair, false);
         }
 
       });
-      socket.on('chat message private', function (usr, msg) {
+      socket.on('chat message private', function (usr, msg, flair) {
         var elem = document.getElementById('messages');
         elem.scrollTop = elem.scrollHeight;
         $(window).focus(function () {
@@ -314,9 +314,9 @@ function quikClientStart(){
         msg = twemoji.parse(msg);
 
         if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
-          appendMessage(usr, msg, 'Bot', true);
+          appendMessage(usr, msg, 'Bot', 'Bot', true);
         } else {
-          appendMessage(usr, msg, 'User', true);
+          appendMessage(usr, msg, 'User', flair, true);
         }
 
       });
@@ -341,7 +341,7 @@ function quikClientStart(){
 }
 
 function appendMessage(usr, msg, flair, private){
-  console.log("Appending message from " + usr + " with text " + msg);
+  console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
   console.trace();
   $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
   $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));

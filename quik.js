@@ -240,6 +240,7 @@ var clients = [];
 var userIDs = [];
 var users = [];
 var usernames = [];
+var userflairs = [];
 
 // In --> userid out --> userroom
 var userRoom = [];
@@ -424,8 +425,9 @@ function startServer() {
 */
 io.on('connection', function (socket) {
   socket.on('set room', function (room) {
-      socket.emit('chat message private', 'Rooms', 'Connected to rooms' + room);
+      socket.emit('chat message private', 'Rooms', 'Connected to rooms' + room, 'Bot');
       userRoom[socket.id]  = room;
+      userflairs[socket.id] = 'Quik User';
 
       //Add user to room list
       var roomUsersObj = roomUsers[room.replace("/","")];
@@ -440,9 +442,9 @@ io.on('connection', function (socket) {
       redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
   });
 
-  socket.emit('chat message private', 'Notice', 'Connection established');
-  socket.emit('chat message private', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
-  socket.emit('chat message private', 'Notice', motd);
+  socket.emit('chat message private', 'Notice', 'Connection established', 'Bot');
+  socket.emit('chat message private', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik', 'Bot');
+  socket.emit('chat message private', 'Notice', motd, 'Bot');
 
   socket.on('disconnect', function () {
     var username = getUsername(socket.id);
@@ -464,7 +466,7 @@ io.on('connection', function (socket) {
       jsonLogDat=[name, '', socket.id, new Date(), 'Accepted ban request (200) from ' +  socket.conn.remoteAddress + ' for ' + ip];
       redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
 
-      socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.');
+      socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.', 'Bot');
       banIP(name,socket,ip);
     } else {
       qLog("banllog", "Rejected ban request (403) from " + ip);
@@ -485,29 +487,34 @@ io.on('connection', function (socket) {
           case 'broadcast':
             var broadcastMessage =  msg.split(' ').slice(1,msg.split(' ').length);
             if(broadcastMessage.toString().length > 0){
-              io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(","," "));
+              io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(","," "), 'Global Broadcast');
             } else {
-              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered");
+              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
             }
             break;
           case 'emit':
             var emitMessage =  msg.split(' ').slice(1,msg.split(' ').length);
             if(emitMessage.toString().length > 0){
-              io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(","," "));
+              io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(","," "), 'Channel Broadcast');
             } else {
-              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered");
+              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered", 'Error');
             }
             break;
+          case 'setflair':
+            var flair =  msg.split(' ').slice(1,msg.split(' ').length);
+            socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Error');
+            userflairs[socket.id] = flair;
+            break;
           case 'help':
-            socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels');
-            socket.emit('chat message private', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel');
+            socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels', 'Bot');
+            socket.emit('chat message private', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel', 'Bot');
             break;
           default:
-            socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command");
+            socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command", 'Error');
         }
       } else {
         qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
-        io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg));
+        io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg), userflairs[socket.id], false);
 
         if(typeof userRoom[socket.id] === 'undefined'){
           qLog('RedisClient', 'Logging failed (userRoom undefined)');
@@ -604,11 +611,11 @@ function setUsername(socketID, name, socket) {
 function messageIsLegal(msg, socket){
   //Check if users name is too llong
   if (msg.length > 250) {
-    socket.emit('chat message private', 'Server', 'Connection Refused (message to long > 250 chars)');
-    socket.emit('chat message private', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
+    socket.emit('chat message private', 'Quikbot', 'Connection Refused (message to long > 250 chars)', 'Bot');
+    socket.emit('chat message private', 'Quikbot', '(' + socket.conn.remoteAddress + ') has been logged.', 'Bot');
     socket.disconnect();
   } else if (0 === msg.trim().length) {
-    socket.emit('chat message private', 'Server', 'Empty message removed');
+    socket.emit('chat message private', 'Quikbot', 'Empty message removed', 'Bot');
     qLog('chatlog', 'empty message removed');
   } else {
     return true;
