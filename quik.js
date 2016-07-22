@@ -469,7 +469,9 @@ io.on('connection', function(socket) {
         }
         //remove username for restricted names
         if (typeof username !== 'undefined') {
-            roomUsers[userRoom[socket.id].replace("/", "")] = roomUsers[userRoom[socket.id].replace("/", "")].splice(roomUsers[userRoom[socket.id].replace("/", "")].indexOf(socket.id), 1);
+          var index = usernames.indexOf(username);
+          console.log('Removing name ' + username + ' from index ' + index);
+          usernames.splice(index, 1);
         }
 
         jsonLogDat = [username, '', socket.id, new Date(), 'User disconnected from the server'];
@@ -581,6 +583,7 @@ io.on('connection', function(socket) {
             io.emit('connectEvent', getUsername(socket.id));
             //Add username to end of usernames array
             usernames[usernames.length] = name.toLowerCase();
+            console.log('Usernames: ' + usernames.toString());
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" was set'];
             redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
