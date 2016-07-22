@@ -424,7 +424,7 @@ function startServer() {
 */
 io.on('connection', function (socket) {
   socket.on('set room', function (room) {
-      socket.emit('chat message', 'Rooms', 'Connected to rooms' + room);
+      socket.emit('chat message private', 'Rooms', 'Connected to rooms' + room);
       userRoom[socket.id]  = room;
 
       //Add user to room list
@@ -440,9 +440,9 @@ io.on('connection', function (socket) {
       redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
   });
 
-  socket.emit('chat message', 'Notice', 'Connection established');
-  socket.emit('chat message', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
-  socket.emit('chat message', 'Notice', motd);
+  socket.emit('chat message private', 'Notice', 'Connection established');
+  socket.emit('chat message private', 'Notice', 'This application is released under the Apache 2.0 License, hack on the source at https://github.com/Matt-Allen44/Quik');
+  socket.emit('chat message private', 'Notice', motd);
 
   socket.on('disconnect', function () {
     var username = getUsername(socket.id);
@@ -487,7 +487,7 @@ io.on('connection', function (socket) {
             if(broadcastMessage.toString().length > 0){
               io.emit('chat message', 'Quikbot', broadcastMessage.toString().replace(","," "));
             } else {
-              socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
+              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered");
             }
             break;
           case 'emit':
@@ -495,15 +495,15 @@ io.on('connection', function (socket) {
             if(emitMessage.toString().length > 0){
               io.to(userRoom[socket.id]).emit('chat message', 'Quikbot', emitMessage.toString().replace(","," "));
             } else {
-              socket.emit('chat message', 'Quikbot', "Error: No broadcast message entered");
+              socket.emit('chat message private', 'Quikbot', "Error: No broadcast message entered");
             }
             break;
           case 'help':
-            socket.emit('chat message', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels');
-            socket.emit('chat message', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel');
+            socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels');
+            socket.emit('chat message private', 'Quikbot', 'Command: /emit {msg}  Usage: Emit a given messsage to all users on your channel');
             break;
           default:
-            socket.emit('chat message', 'Quikbot (ERROR)', command + " is an unkown command");
+            socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command");
         }
       } else {
         qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
@@ -604,11 +604,11 @@ function setUsername(socketID, name, socket) {
 function messageIsLegal(msg, socket){
   //Check if users name is too llong
   if (msg.length > 250) {
-    socket.emit('chat message', 'Server', 'Connection Refused (message to long > 250 chars)');
-    socket.emit('chat message', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
+    socket.emit('chat message private', 'Server', 'Connection Refused (message to long > 250 chars)');
+    socket.emit('chat message private', 'Server', '(' + socket.conn.remoteAddress + ') has been logged.');
     socket.disconnect();
   } else if (0 === msg.trim().length) {
-    socket.emit('chat message', 'Server', 'Empty message removed');
+    socket.emit('chat message private', 'Server', 'Empty message removed');
     qLog('chatlog', 'empty message removed');
   } else {
     return true;

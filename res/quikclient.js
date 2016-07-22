@@ -290,20 +290,43 @@ function quikClientStart(){
         }
         msg = twemoji.parse(msg);
 
-        if(usr === 'Rooms' || usr === 'Notice'){
-          appendMessage(usr, msg, 'Bot');
+        if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
+          appendMessage(usr, msg, 'Bot', false);
         } else {
-          appendMessage(usr, msg, 'User');
+          appendMessage(usr, msg, 'User', false);
+        }
+
+      });
+      socket.on('chat message private', function (usr, msg) {
+        var elem = document.getElementById('messages');
+        elem.scrollTop = elem.scrollHeight;
+        $(window).focus(function () {
+          isFocused = true;
+          messagesSinceFocus = 0;
+        }).blur(function () {
+          isFocused = false;
+        });
+        if (!isFocused) {
+          messagesSinceFocus++;
+          //Alert user if they are not focused on the tab
+          audio.play();
+        }
+        msg = twemoji.parse(msg);
+
+        if(usr === 'Rooms' || usr === 'Notice' || usr === 'Quikbot'){
+          appendMessage(usr, msg, 'Bot', true);
+        } else {
+          appendMessage(usr, msg, 'User', true);
         }
 
       });
       socket.on('disconnectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage('Quikbot', usr + " has left the channel.", 'Bot');
+        appendMessage('Quikbot', usr + " has left the channel.", 'Bot', false);
       });
       socket.on('connectEvent', function (usr, msg) {
         updateUserlist();
-        appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot');
+        appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot', false);
       });
       $('.dropdown-button').dropdown({
         inDuration: 300,
@@ -317,7 +340,7 @@ function quikClientStart(){
   };
 }
 
-function appendMessage(usr, msg, flair){
+function appendMessage(usr, msg, flair, private){
   console.log("Appending message from " + usr + " with text " + msg);
   console.trace();
   $('#messages').append($('<img src="/api/userimg/' + usr + '" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
@@ -325,7 +348,7 @@ function appendMessage(usr, msg, flair){
   $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
   $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
 
-  if(usr === 'Quikbot' || usr === 'Rooms' || usr === 'Notice'){
+  if(private){
     $('#messages').append($('<li class="msg_notice" style="font-size:12px;">').text('this message is only visible to you'));
   }
 
