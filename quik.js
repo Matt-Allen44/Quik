@@ -391,14 +391,12 @@ quik.get('/api/quik/user', function(req, res) {
     res.end(clients[req.query.userid].toString());
 });
 
-//The 404 Route (ALWAYS Keep this as the last route)
+quik.get('/c/*', function(req, res) {
+    res.sendFile(__dirname + '/chat.html');
+});
+
 quik.get('*', function(req, res) {
-    if (req.url.split("/").length > 2) {
-        res.status(404);
-        res.sendFile(__dirname + '/404.html');
-    } else {
-        res.sendFile(__dirname + '/chat.html');
-    }
+  res.redirect('/c/lobby');
 });
 
 fs.readFile(__dirname + '/branding/motd', 'utf8', function(err, data) {

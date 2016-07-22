@@ -403,7 +403,6 @@ function prependMessage(usr, msg, flair, private) {
 
     $('#messages').append($('<br/>'));
     $('#messages').append(msg);
-    $('#messages').append($('<br/><br/>'));
     scrollDown();
 }
 
@@ -436,7 +435,7 @@ function promptForRoom() {
         } else {
             room = inputValue;
             //socket.emit('set room', room);
-            window.location.replace("/" + room);
+            window.location.replace("/c/" + room);
         }
     });
 }
