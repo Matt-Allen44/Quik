@@ -632,15 +632,13 @@ function setUsername(socketID, name, socket) {
         qLog('chatlog', socketID + ' set username to ' + name);
         users[socketID] = name;
         userIDs[socketID] = clientid;
-        console.log('updated client list');
         clients[clientid] = [
             socket.id,
             getUsername(socket.id),
             socket.conn.remoteAddress,
             ipLookup(socket.conn.remoteAddress).region,
             ipLookup(socket.conn.remoteAddress).country,
-            Math.floor(new Date() / 1000),
-            clientid
+            Math.floor(new Date() / 1000)
         ];
         clientid++;
     } else {
