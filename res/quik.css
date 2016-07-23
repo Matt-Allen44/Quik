@@ -25,13 +25,13 @@ body {
 }
 #messageOuter {
   display:flex;
-  height:calc(100vh - 150px);
+  height:calc(100vh - 190px);
   width:100%;
   background-color: #fff;
 }
 #messages {
     overflow-y: scroll;
-    width: calc(100vw -   25px);
+    width: calc(100vw -   30px);
     margin-top: 0px;
 }
 #messages li {

@@ -208,9 +208,10 @@ var socket = io();
 var messagesSinceFocus = 0;
 
 var room = "";
-var roomDescription = "This is the default room description and cannot currently be changed"
+var roomDescription;
 
 var lastUserWhoSentAMessage = "";
+var numberOfConnectedUsers = 0;
 
 var brandingColorClass;
 var brandingColorHex;
@@ -279,6 +280,10 @@ function quikClientStart() {
                 console.log('username rejected (' + reason + '), reprompting');
                 promptForUsername(true);
             });
+            socket.on('set desc', function(desc) {
+                roomDescription = desc;
+                document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
+            });
             socket.on('chat message', function(usr, msg, flair) {
                 var elem = document.getElementById('messages');
                 elem.scrollTop = elem.scrollHeight;
@@ -346,6 +351,7 @@ function quikClientStart() {
                 appendMessage('Quikbot', usr + " has left the channel.", 'Bot', false);
             });
             socket.on('connectEvent', function(usr, msg) {
+                socket.emit('get desc');
                 updateUserlist();
                 appendMessage('Quikbot', "Welcome " + usr + " to the channel.", 'Bot', false);
             });
@@ -378,9 +384,6 @@ function appendMessage(usr, msg, flair, private) {
 }
 
 function appendMessageNoHeader(usr, msg, flair, private) {
-    console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
-    console.trace();
-
     $('#messages').append($('<br/>'));
 
     //Hackjob used to align the text, should be reworked
@@ -391,8 +394,6 @@ function appendMessageNoHeader(usr, msg, flair, private) {
 }
 
 function prependMessage(usr, msg, flair, private) {
-    console.log("Appending message from " + usr + " with text " + msg + " with flair " + flair);
-    console.trace();
     $('#messages').append($('<br/>'));
     $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
     $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
@@ -567,6 +568,7 @@ function updateUserlist() {
             }
             var elem = document.getElementById('messages');
             elem.scrollTop = elem.scrollHeight;
+            numberOfConnectedUsers = msgdata.clients.length;
             document.getElementById('statusbar_Row').innerHTML = msgdata.clients.length + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
             document.getElementById('statusbar_Room').innerHTML = room;
         }

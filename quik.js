@@ -249,6 +249,8 @@ var userRoom = [];
 
 // In --> userroom out --> userid
 var roomUsers = {};
+//List of room descriptions
+var roomDescs = [];
 
 var log = '';
 //conf variables
@@ -386,7 +388,7 @@ quik.get('/api/quik/user', function(req, res) {
 quik.get('*', function(req, res) {
   if (req.url.split("/").length > 2) {
         res.status(404);
-        res.sendFile(__dirname + '/html/404.html');   
+        res.sendFile(__dirname + '/html/404.html');
     } else {
        res.sendFile(__dirname + '/html/chat.html');
     }
@@ -493,6 +495,11 @@ io.on('connection', function(socket) {
             redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
         }
     });
+
+    socket.on('get desc', function(msg) {
+      io.sockets.in(userRoom[socket.id]).emit('set desc', roomDescs[userRoom[socket.id]]);
+    });
+
     socket.on('chat message', function(msg) {
         usr = getUsername(socket.id);
         msg = sanitizeHtml(msg);
@@ -522,8 +529,17 @@ io.on('connection', function(socket) {
                     case 'setflair':
                         var flair = msg.split(' ').slice(1, msg.split(' ').length).toString();
                             flair = flair.replace(new RegExp(',', 'g'), ' ');
-                        socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Error');
+                        socket.emit('chat message private', 'Quikbot', "Your flair was set to " + flair, 'Bot');
                         userflairs[socket.id] = flair;
+                        break;
+                    case 'setroomdescription':
+                        var desc = msg.split(' ').slice(1, msg.split(' ').length).toString();
+                            desc = desc.replace(new RegExp(',', 'g'), ' ');
+                        socket.emit('chat message private', 'Quikbot', "Room description set to " + desc, 'Bot');
+
+                        roomDescs[userRoom[socket.id]] = desc;
+                        io.sockets.in(userRoom[socket.id]).emit('set desc', desc);
+
                         break;
                     case 'help':
                         socket.emit('chat message private', 'Quikbot', 'Command: /broadcast {msg}  Usage: Broadcast a given messsage to all users across all channels', 'Bot');
