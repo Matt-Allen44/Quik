@@ -223,6 +223,10 @@
 
 <body>
     <script>
+      setTimeout(function() {
+          window.location.replace("/");
+      }, 5000);
+
         swal({
             title: "404 Page Not Found",
             type: "warning",
@@ -233,9 +237,7 @@
             allowEscapeKey: false,
             inputPlaceholder: "username"
         }, function() {
-            setTimeout(function() {
                 window.location.replace("/");
-            }, 2000);
         });
     </script>
 </body>

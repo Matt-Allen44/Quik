@@ -392,8 +392,13 @@ quik.get('/c/*', function(req, res) {
     res.sendFile(__dirname + '/html/chat.html');
 });
 
+quik.get('/', function(req, res) {
+  res.sendFile(__dirname + '/html/index.html');
+});
+
 quik.get('*', function(req, res) {
-  res.redirect('/c/lobby');
+  res.status(400);
+  res.sendFile(__dirname + '/html/404.html');
 });
 
 fs.readFile(__dirname + '/branding/motd', 'utf8', function(err, data) {
