@@ -266,7 +266,7 @@ quik.use(function(req, res, next) {
     if (banlist.indexOf(req.connection.remoteAddress) > -1) {
         qLog('Server Request', util.format('%s %s %s', req.connection.remoteAddress, req.method, req.url) + ' access denied - IP Ban');
         res.status(403);
-        res.sendFile(__dirname + '/ipban.html');
+        res.sendFile(__dirname + '/html/ipban.html');
     } else {
         next();
     }
@@ -309,7 +309,7 @@ quik.get('/dash/sysdat', function(req, res) {
         }
     } else {
         res.status(403);
-        res.sendFile(__dirname + '/ipban.html');
+        res.sendFile(__dirname + '/html/ipban.html');
     }
 });
 quik.get('/dash/usrdat', function(req, res) {
@@ -318,7 +318,7 @@ quik.get('/dash/usrdat', function(req, res) {
         res.send(clients.toString());
     } else {
         res.status(403);
-        res.sendFile(__dirname + '/ipban.html');
+        res.sendFile(__dirname + '/html/ipban.html');
     }
 });
 quik.get('/dash/logdat', function(req, res) {
@@ -326,7 +326,7 @@ quik.get('/dash/logdat', function(req, res) {
         res.send(log);
     } else {
         res.status(403);
-        res.sendFile(__dirname + '/ipban.html');
+        res.sendFile(__dirname + '/html/ipban.html');
     }
 });
 /* Branding related requests */
@@ -337,16 +337,13 @@ quik.get('/branding/theme', function(req, res) {
     res.sendFile(__dirname + '/branding/theme');
 });
 /* End of branding related requests */
-quik.get('/firebase', function(req, res) {
-    res.sendFile(__dirname + '/firebase.html');
-});
 quik.get('/dash', function(req, res) {
     if (godlist == req.connection.remoteAddress) {
-        res.sendFile(__dirname + '/dash.html');
+        res.sendFile(__dirname + '/html/dash.html');
     } else {
         qLog('403 Logs', 'Denied ' + req.connection.remoteAddress);
         res.status(403);
-        res.sendFile(__dirname + '/ipban.html');
+        res.sendFile(__dirname + '/html/ipban.html');
     }
 });
 quik.get('/notify.mp3', function(req, res) {
@@ -392,7 +389,7 @@ quik.get('/api/quik/user', function(req, res) {
 });
 
 quik.get('/c/*', function(req, res) {
-    res.sendFile(__dirname + '/chat.html');
+    res.sendFile(__dirname + '/html/chat.html');
 });
 
 quik.get('*', function(req, res) {
