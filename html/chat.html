@@ -223,6 +223,7 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+    
     <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
     <script>
         twemoji.size = '16x16';
@@ -328,7 +329,7 @@
                             </li>
                         </ul>
                         <!-- Dropdown Trigger -->
-                        <a class='dropdown-button btn branding_accent_class tightlist' data-activates='dropdown2' id='dropdown_chat' href='#'></a>
+                        <a class='dropdown-button btn branding_accent_class tightlist' data-activates='dropdown2' id='dropdown_chat' href='#'>Channels</a>
                         <!-- Dropdown Structure -->
 
 
@@ -341,7 +342,7 @@
                             </li>
                         </ul>
                         <!-- Dropdown Trigger -->
-                        <a class='dropdown-button btn branding_accent_class' data-activates='dropdown3' href='#' id="usrs_connected">User Options</a>
+                        <a class='dropdown-button btn branding_accent_class' data-activates='dropdown3' href='#' id="usrs_connected">Users</a>
                         <!-- Dropdown Structure -->
 
                         <ul class='dropdown-content branding_theme_class' id='dropdown3'>
@@ -367,8 +368,6 @@
                 </ul>
             </div>
         </nav>
-
-
         <nav class="smallscreen branding_theme_class">
             <div class="nav-wrapper">
                 <a class="brand-logo center-align" href="#" style="width: 100%; text-align: center;"><img height="32" src="/branding/logo.png" style="padding:8px">
@@ -376,7 +375,7 @@
             </div>
 
             <div class="nav-wrapper">
-                <a id="usrs_connectedMobi" style="float:left; padding-left: 10px; color: branding_accent_hex">/</a> <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px; color: branding_accent_hex">View
+                <a id="usrs_connectedMobi" style="float:left; padding-left: 10px; color: branding_accent_hex">Users</a> <a href="http://www.github.com/matt-allen44/quik" style="float:right; padding-right: 10px; color: branding_accent_hex">View
               us on Github</a>
             </div>
             <!---
@@ -393,9 +392,15 @@
         </nav>
     </div>
 
-    <div id="mid" class="mid">
+    <div id="uppermid" class="uppermid">
+      <div class='statustext'>
+        <p id='statusbar_Room' class='statusbar_Room'>Room</p>
+        <p id='statusbar_Row' class='statusbar_Row'></p>
+      </div>
+    </div>
 
-        <div style="width:100%; position: fixed; display: block; left:25px; padding-top:35px">
+    <div id="mid" class="mid">
+        <div style="width:100%; position: fixed; display: block; left:25px;">
           <div id="messageOuter">
             <ul id="messages" style="">
             </ul>

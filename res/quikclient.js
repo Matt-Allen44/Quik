@@ -206,7 +206,9 @@
 // init socketio
 var socket = io();
 var messagesSinceFocus = 0;
+
 var room = "";
+var roomDescription = "This is the default room description and cannot currently be changed"
 
 var lastUserWhoSentAMessage = "";
 
@@ -406,9 +408,13 @@ function prependMessage(usr, msg, flair, private) {
     scrollDown();
 }
 
+function updateStatus(){
+  document.getElementById('connectedtostatus').innerHTML = 'Connected to <b>' + room + '</b>';
+}
+
 function joinRoom(room) {
-    document.getElementById('usrs_connectedMobi').text = 'Connected to ' + room;
-    document.getElementById('dropdown_chat').text = 'Connected to ' + room;
+    //document.getElementById('usrs_connectedMobi').text = 'Channels';
+    //document.getElementById('connectedtostatus').text = 'Channels';
     socket.emit('set room', room);
 }
 
@@ -498,7 +504,6 @@ function promptForUsername(showError) {
     }
 }
 
-
 function promptForFlair(showError) {
 
     promptText = 'Username taken, please choose another';
@@ -562,7 +567,8 @@ function updateUserlist() {
             }
             var elem = document.getElementById('messages');
             elem.scrollTop = elem.scrollHeight;
-            document.getElementById('loader-wrapper').style.display = 'none';
+            document.getElementById('statusbar_Row').innerHTML = msgdata.clients.length + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
+            document.getElementById('statusbar_Room').innerHTML = room;
         }
     };
 }

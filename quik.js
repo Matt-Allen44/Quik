@@ -365,7 +365,6 @@ quik.get('/api/redis/history', function(req, res) {
 });
 
 quik.get('/api/quik/roomdata', function(req, res) {
-    try {
         var roomdat = {
             "name": req.query.room,
             "connected users": roomUsers[req.query.room].length
@@ -378,28 +377,31 @@ quik.get('/api/quik/roomdata', function(req, res) {
             "room": roomdat,
             "clients": dat
         }));
-    } catch (err) {
-        res.status(422);
-        res.end("Lookup failed for " + req.query.room + " (no data)");
-    }
 });
 
 quik.get('/api/quik/user', function(req, res) {
     res.end(clients[req.query.userid].toString());
 });
 
-quik.get('/c/*', function(req, res) {
-    res.sendFile(__dirname + '/html/chat.html');
+quik.get('*', function(req, res) {
+  if (req.url.split("/").length > 2) {
+        res.status(404);
+        res.sendFile(__dirname + '/html/404.html');   
+    } else {
+       res.sendFile(__dirname + '/html/chat.html');
+    }
 });
 
 quik.get('/', function(req, res) {
   res.sendFile(__dirname + '/html/index.html');
 });
 
+/*
 quik.get('*', function(req, res) {
-  res.status(400);
+  res.status(404);
   res.sendFile(__dirname + '/html/404.html');
 });
+*/
 
 fs.readFile(__dirname + '/branding/motd', 'utf8', function(err, data) {
     if (err)

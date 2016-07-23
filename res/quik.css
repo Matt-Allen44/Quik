@@ -249,8 +249,13 @@ img.emoji {
   height:50px;
 }
 
+.uppermid {
+  padding-top:25px;
+  height: 75px;
+}
+
 .mid {
-  height:calc(100% - 100px)
+  height:calc(100% - 125px)
 }
 
 .tightlist {
@@ -260,4 +265,19 @@ img.emoji {
 .tightlist a {
   margin-left: 0px !important;
   margin-right: 0px !important;
+}
+
+.statustext {
+  padding-left: 25px;
+  padding-top:5px;
+}
+
+.statusbar_Room {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.statusbar_Row {
+  font-size:14px;
+  color: #a6a6a6;
 }
