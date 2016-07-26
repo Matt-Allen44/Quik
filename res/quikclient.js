@@ -283,8 +283,8 @@ function quikClientStart() {
             socket.on('set desc', function(desc) {
                 if(desc){
                   console.log("Set desc to " + desc)
-                  document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
                   roomDescription = desc;
+                  document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
                 }
             });
             socket.on('chat message', function(usr, msg, flair) {
