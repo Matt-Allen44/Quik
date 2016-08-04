@@ -237,19 +237,28 @@ function quikClientStart() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             text = xmlhttp.responseText;
             brandingColorClass = text.split(',')[0].split(':')[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
             console.log('Branding color class: ' + brandingColorClass);
             brandingColorHex = text.split(',')[1].split(':')[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
             console.log('Branding color hex: ' + brandingColorHex);
             brandingAccentClass = text.split(',')[3].split(':')[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
             console.log('Branding accent class: ' + brandingAccentClass);
             brandingAccentHex = text.split(',')[4].split(':')[1];
-            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
             console.log('Branding accent hex: ' + brandingAccentHex);
             var brandingTitle = text.split(',')[2].split(':')[1];
             document.title = brandingTitle;
+
+            // SET NIGHTMODE COLOURS
+            var nightmode = true;
+            if(nightmode){
+              $('head').append('<link href="/res/quikdark.css" rel="stylesheet" type="text/css">');
+            }
+
+            // REPLACE COLOURS
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_class', 'g'), brandingAccentClass);
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_accent_hex', 'g'), brandingAccentHex);
+
             promptForUsername();
             /* End of brand themeing */
             usrdat = text.split('/#');

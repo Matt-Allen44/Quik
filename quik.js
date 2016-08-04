@@ -280,6 +280,9 @@ quik.get('/user/*', function(req, res) {
 quik.get('/res/quik.css', function(req, res) {
     res.sendFile(__dirname + '/res/quik.css');
 });
+quik.get('/res/quikdark.css', function(req, res) {
+    res.sendFile(__dirname + '/res/quikdark.css');
+});
 quik.get('/res/quikclient.js', function(req, res) {
     res.sendFile(__dirname + '/res/quikclient.js');
 });
