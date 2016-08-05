@@ -248,7 +248,7 @@ function quikClientStart() {
             document.title = brandingTitle;
 
             // SET NIGHTMODE COLOURS
-            var nightmode = true;
+            var nightmode = false;
             if(nightmode){
               $('head').append('<link href="/res/quikdark.css" rel="stylesheet" type="text/css">');
             }
