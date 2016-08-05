@@ -247,12 +247,6 @@ function quikClientStart() {
             var brandingTitle = text.split(',')[2].split(':')[1];
             document.title = brandingTitle;
 
-            // SET NIGHTMODE COLOURS
-            var nightmode = false;
-            if(nightmode){
-              $('head').append('<link href="/res/quikdark.css" rel="stylesheet" type="text/css">');
-            }
-
             // REPLACE COLOURS
             document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_class', 'g'), brandingColorClass);
             document.body.innerHTML = document.body.innerHTML.replace(new RegExp('branding_theme_hex', 'g'), brandingColorHex);
@@ -590,4 +584,15 @@ function updateUserlist() {
 function scrollDown() {
     var elem = document.getElementById('messages');
     elem.scrollTop = elem.scrollHeight;
+}
+
+var isNightmode = false;
+function setNightmode(){
+  if(isNightmode){
+    isNightmode = false;
+    $('link[rel=stylesheet][href~="/res/quikdark.css"]').remove();
+  } else {
+    isNightmode = true;
+    $('head').append('<link href="/res/quikdark.css" rel="stylesheet" type="text/css">');
+  }
 }
