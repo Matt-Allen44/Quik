@@ -255,11 +255,13 @@ function quikClientStart() {
 
             promptForUsername();
             /* End of brand themeing */
+            /*
             usrdat = text.split('/#');
             userlist = document.getElementById('dropdown3USRS');
             for (var i = 1; i < usrdat.length; i++) {
                 userlist.innerHTML = userlist.innerHTML + '<li><a href=\'\'>' + usrdat[i].split(',')[1] + '</a></li>';
             }
+            */
             //define notification audio
             var audio = new Audio('notify.mp3');
             var isFocused = true;
@@ -521,7 +523,7 @@ function promptForFlair(showError) {
         text: 'Enter your desired flair',
         type: 'input',
         showCancelButton: false,
-        closeOnConfirm: false,
+        closeOnConfirm: true,
         confirmButtonColor: ' #ff5050 ',
         confirmButtonText: 'Continue',
         allowEscapeKey: false,

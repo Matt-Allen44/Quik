@@ -342,7 +342,7 @@
                             </li>
                         </ul>
                         <!-- Dropdown Trigger -->
-                        <a class='dropdown-button btn branding_accent_class' data-activates='dropdown3' href='#' id="usrs_connected">Users</a>
+                        <a class='dropdown-button btn branding_accent_class' data-activates='dropdown3' href='#' id="usrs_connected">User Settings</a>
                         <!-- Dropdown Structure -->
 
                         <ul class='dropdown-content branding_theme_class' id='dropdown3'>
@@ -350,22 +350,31 @@
                               <a>Profile Options</a>
                           </li>
                           <li>
-                              <a onClick='promptForRoom()'>Set Room</a>
-                          </li>
-                          <li>
                               <a onClick='alert("Not Yet Implemented")'>Set Profile Picture</a>
                           </li>
                           <li>
                               <a onClick='promptForFlair()'>Set Flair</a>
                           </li>
-                          <li>
-                              <a onClick='setNightmode()'>Toggle Nightmode</a>
-                          </li>
+                          <!---
                           <li style="font-weight:bold">
                               <a>Connected Users</a>
                           </li>
+                        -->
                           <li class="divider"></li>
                           <div id='dropdown3USRS'></div>
+                        </ul>
+
+                        <!-- Dropdown Trigger -->
+                        <a class='dropdown-button btn branding_accent_class' data-activates='dropdown4' href='#' id="usrs_connected">Client Settings</a>
+                        <!-- Dropdown Structure -->
+
+                        <ul class='dropdown-content branding_theme_class' id='dropdown4'>
+                          <li>
+                              <a onClick='promptForRoom()'>Change Room</a>
+                          </li>
+                          <li>
+                              <a onClick='setNightmode()'>Toggle Nightmode</a>
+                          </li>
                         </ul>
                     </li>
                 </ul>
