@@ -403,7 +403,7 @@ function prependMessage(usr, msg, flair, private) {
     $('#messages').append($('<br/>'));
     $('#messages').append($('<img src="/api/userimg/history" style="height:28px; margin-top:2px; margin-right: 6px; float:left; border:2px solid' + brandingAccentHex + '">'));
     $('#messages').append($('<a class="msg_name" style="color:' + brandingAccentHex + '"; target="_blank"; href="/user/' + usr + '">').text(usr + ' '));
-    $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + '">').text(flair));
+    $('#messages').append($('<li class="msg_flair" style="font-size:12px; background-color:' + brandingAccentHex + ' !important">').text(flair));
     $('#messages').append($('<li class="msg_date" style="font-size:12px">').text(new Date().toLocaleString()));
 
     if (private) {
