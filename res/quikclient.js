@@ -219,6 +219,7 @@ var brandingAccentClass;
 var brandingAccentHex;
 
 setInterval(function() {
+    updateRoomInf();
     favicon.badge(messagesSinceFocus);
     if (messagesSinceFocus > 0) {
         document.title = 'Quik (Unread)';
@@ -577,10 +578,13 @@ function updateUserlist() {
             var elem = document.getElementById('messages');
             elem.scrollTop = elem.scrollHeight;
             numberOfConnectedUsers = msgdata.clients.length;
-            document.getElementById('statusbar_Row').innerHTML = msgdata.clients.length + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
-            document.getElementById('statusbar_Room').innerHTML = room;
         }
     };
+}
+
+function updateRoomInf(){
+  document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
+  document.getElementById('statusbar_Room').innerHTML = room;
 }
 
 function scrollDown() {
