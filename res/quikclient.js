@@ -462,7 +462,7 @@ function promptForUsername(showError) {
         }
     }
 
-    if (showError || document.cookie === "") {
+    if (showError) {
         promptText = 'Username taken, please choose another';
         document.cookie = ";expires=Thu, 01 Jan 1970 00:00:00 GMT";
         //Prompt user for name
