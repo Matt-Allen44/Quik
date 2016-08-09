@@ -451,7 +451,7 @@ function promptForRoom() {
         } else {
             room = inputValue;
             //socket.emit('set room', room);
-            window.location.replace("/c/" + room);
+            window.location.replace("/" + room);
         }
     });
 }
