@@ -204,6 +204,7 @@
 */
 
 var quik = require('express')();
+var flags = require("node-flags");
 var http = require('http').Server(quik);
 var https = require('https');
 var io = require('socket.io')(http);
@@ -218,9 +219,10 @@ var csp = require('helmet-csp');
 var fs = require('fs');
 var quikbot = require('./quikbot.js')(io);
 
-var useRedis = true;
+var useRedis = flags.get('usedb');
 
 if(useRedis){
+  console.log("Loaded with usedb flag - running with Redis")
   var redis = require('redis');
   var redisHost;
   var redisPort;
