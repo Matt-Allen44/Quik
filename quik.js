@@ -218,25 +218,29 @@ var csp = require('helmet-csp');
 var fs = require('fs');
 var quikbot = require('./quikbot.js')(io);
 
-var redis = require('redis');
-var redisHost;
-var redisPort;
-var redisPass;
-var redisClient;
+var useRedis = true;
 
-fs.readFile(__dirname + '/conf/redisconf', 'utf8', function(err, data) {
-    if (err)
-        throw err;
-    redisHost = data.split(',')[0].split(':')[1].trim();
-    redisPort = data.split(',')[1].split(':')[1].trim();
-    redisPass = data.split(',')[2].split(':')[1].trim();
+if(useRedis){
+  var redis = require('redis');
+  var redisHost;
+  var redisPort;
+  var redisPass;
+  var redisClient;
 
-    qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
-    redisClient = redis.createClient(redisPort, redisHost);
-    redisClient.auth(redisPass, function(err) {
-        if (err) throw err;
-    });
-});
+  fs.readFile(__dirname + '/conf/redisconf', 'utf8', function(err, data) {
+      if (err)
+          throw err;
+      redisHost = data.split(',')[0].split(':')[1].trim();
+      redisPort = data.split(',')[1].split(':')[1].trim();
+      redisPass = data.split(',')[2].split(':')[1].trim();
+
+      qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
+      redisClient = redis.createClient(redisPort, redisHost);
+      redisClient.auth(redisPass, function(err) {
+          if (err) throw err;
+      });
+  });
+}
 
 var clients = [];
 var userIDs = [];
@@ -356,17 +360,21 @@ quik.get('/notify.mp3', function(req, res) {
 });
 //Database requests
 quik.get('/api/redis/history', function(req, res) {
-    redisClient.select(0);
-    redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
-        if (err) {
-            res.status(422);
-            res.end("Lookup failed for " + req.query.room);
-        }
+    if(useRedis){
+      redisClient.select(0);
+      redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
+          if (err) {
+              res.status(422);
+              res.end("Lookup failed for " + req.query.room);
+          }
 
-        res.status(200);
-        res.end("" + JSON.stringify(reply, null, 4));
-    });
-
+          res.status(200);
+          res.end("" + JSON.stringify(reply, null, 4));
+      });
+    } else {
+      res.status(501)
+      res.end("Redis Client Not Enabled")
+    }
 });
 
 quik.get('/api/quik/roomdata', function(req, res) {
@@ -460,8 +468,10 @@ io.on('connection', function(socket) {
 
         socket.join(room);
 
-        jsonLogDat = ['', '', socket.id, new Date(), 'User connected to ' + room];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        if(redisClient){
+          jsonLogDat = ['', '', socket.id, new Date(), 'User connected to ' + room];
+          redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        }
     });
 
     socket.emit('chat message private', 'Notice', 'Connection established', 'Bot');
@@ -482,20 +492,29 @@ io.on('connection', function(socket) {
         }
 
         jsonLogDat = [username, '', socket.id, new Date(), 'User disconnected from the server'];
-        redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+        if(useRedis){
+          redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+        }
     });
     socket.on('ban', function(name, socketID, ip) {
         if (godlist == socket.handshake.address) {
             qLog('Ban Log', 'Ban req for ' + ip + ' from ' + socket.conn.remoteAddress);
             jsonLogDat = [name, '', socket.id, new Date(), 'Accepted ban request (200) from ' + socket.conn.remoteAddress + ' for ' + ip];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
 
             socket.broadcast.emit('chat message', 'Server', 'User: ' + name + ' of the ip ' + ip + ' has been permanently banned.', 'Bot');
             banIP(name, socket, ip);
         } else {
             qLog("banllog", "Rejected ban request (403) from " + ip);
             jsonLogDat = [name, '', socket.id, new Date(), 'Rejected ban request (403) from ' + socket.conn.remoteAddress];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
         }
     });
 
@@ -560,13 +579,15 @@ io.on('connection', function(socket) {
                 } else {
                     var date = new Date();
 
-                    var jsonRoom = [usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
-                    redisClient.select(0);
-                    redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
+                    if(useRedis){
+                      var jsonRoom = [usr, socket.conn.remoteAddress, socket.id, date, swearjar.censor(msg)];
+                      redisClient.select(0);
+                      redisClient.lpush(userRoom[socket.id], JSON.stringify(jsonRoom)); // push into redis
 
-                    var jsonIPLog = [usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
-                    redisClient.select(1);
-                    redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+                      var jsonIPLog = [usr, userRoom[socket.id], socket.id, date, swearjar.censor(msg)];
+                      redisClient.select(1);
+                      redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonIPLog)); // push into redis
+                    }
                 }
             }
         }
@@ -579,7 +600,10 @@ io.on('connection', function(socket) {
         var PRE_SANITIZE_NAME = name;
         name = sanitizeHtml(name);
 
-        redisClient.select(1);
+        if(useRedis){
+          redisClient.select(1);
+        }
+
         var jsonLogDat;
         var date = new Date();
 
@@ -587,17 +611,26 @@ io.on('connection', function(socket) {
             socket.emit('username rejected', "name too long");
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" rejected as it exceeds the maximum name length of 20 characters (' + name.length + ')'];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
         } else if (usernames.indexOf(name.toLowerCase()) > -1) {
             socket.emit('username rejected', 'already in use');
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + PRE_SANITIZE_NAME + '" rejected as it is already in use'];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
         } else if (PRE_SANITIZE_NAME != sanitizeHtml(name)) {
             socket.emit('username rejected', 'anti-xss policy');
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" rejected as it violates the anti-xss policy'];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
         } else {
             setUsername(socket.id, name, socket);
             io.emit('on user connect', name);
@@ -607,7 +640,9 @@ io.on('connection', function(socket) {
             console.log('Usernames: ' + usernames.toString());
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" was set'];
-            redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            if(useRedis){
+              redisClient.lpush(socket.conn.remoteAddress, JSON.stringify(jsonLogDat)); // push into redis
+            }
         }
     });
     socket.on('get username', function(socketID) {
