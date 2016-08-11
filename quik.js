@@ -398,6 +398,10 @@ quik.get('/api/quik/user', function(req, res) {
     res.end(clients[req.query.userid].toString());
 });
 
+quik.get('/quik', function(req, res) {
+    res.sendFile(__dirname + "/html/quik.html");
+});
+
 quik.get('*', function(req, res) {
   if (req.url.split("/").length > 2) {
         res.status(404);
