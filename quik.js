@@ -217,12 +217,13 @@ var util = require('util');
 var helmet = require('helmet');
 var csp = require('helmet-csp');
 var fs = require('fs');
+var cCols = require('colors');
 var quikbot = require('./quikbot.js')(io);
 
 var useRedis = flags.get('usedb');
 
 if(useRedis){
-  console.log("Loaded with usedb flag - running with Redis")
+  qLog('Startup', "Loaded with usedb flag - running with Redis");
   var redis = require('redis');
   var redisHost;
   var redisPort;
@@ -236,7 +237,7 @@ if(useRedis){
       redisPort = data.split(',')[1].split(':')[1].trim();
       redisPass = data.split(',')[2].split(':')[1].trim();
 
-      qLog('RedisClient', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
+      qLog('Startup', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
       redisClient = redis.createClient(redisPort, redisHost);
       redisClient.auth(redisPass, function(err) {
           if (err) throw err;
@@ -298,7 +299,7 @@ quik.get('/branding/favicon.ico', function(req, res) {
 quik.get('/api/userimg/*', function(req, res) {
     var usr = req.url.replace('api/userimg/', '').replace("/", '');
     var profilePictureExists = fs.existsSync(__dirname + '/public/usr/imgs/' + usr + '.png');
-    console.log("Exists? " + profilePictureExists + " - " + __dirname + '/public/usr/imgs/' + usr);
+    qLog("Username Handler",  'Lookup for ' + __dirname + '/public/usr/imgs/' + usr + ': ' + profilePictureExists);
 
     if (profilePictureExists) {
         res.sendFile(__dirname + '/public/usr/imgs/' + usr + '.png');
@@ -361,32 +362,36 @@ quik.get('/notify.mp3', function(req, res) {
     res.sendFile(__dirname + '/notify.mp3');
 });
 //Database requests
-quik.get('/api/redis/history', function(req, res) {
+quik.get('/api/redis/history/*', function(req, res) {
+    var roomname = req.originalUrl.toString().split('/api/redis/history')[1].split('/')[1];
+    var nummessages = req.originalUrl.toString().split('/api/redis/history')[1].split('/')[2];
+
     if(useRedis){
       redisClient.select(0);
-      redisClient.lrange('/' + req.query.room, -req.query.nummessages, -1, function(err, reply) {
+      redisClient.lrange('/' + roomname, nummessages, -1, function(err, reply) {
           if (err) {
               res.status(422);
-              res.end("Lookup failed for " + req.query.room);
+              res.end("Lookup failed for " + roomname);
           }
 
           res.status(200);
           res.end("" + JSON.stringify(reply, null, 4));
       });
     } else {
-      res.status(501)
-      res.end("Redis Client Not Enabled")
+      res.status(501);
+      res.end("Redis Client Not Enabled");
     }
 });
 
-quik.get('/api/quik/roomdata', function(req, res) {
+quik.get('/api/quik/roomdata/*', function(req, res) {
+        var roomname = req.originalUrl.toString().split('/api/quik/roomdata/')[1];
         var roomdat = {
-            "name": req.query.room,
-            "connected users": roomUsers[req.query.room].length
+            "name": roomname,
+            "connected users": roomUsers[roomname].length
         };
         var dat = [];
-        for (var i = 0; i < roomUsers[req.query.room].length; i++) {
-            dat[i] = [clients[userIDs[(roomUsers[req.query.room][i][0])]]];
+        for (var i = 0; i < roomUsers[roomname].length; i++) {
+            dat[i] = [clients[userIDs[(roomUsers[roomname][i][0])]]];
         }
         res.end(JSON.stringify({
             "room": roomdat,
@@ -395,7 +400,8 @@ quik.get('/api/quik/roomdata', function(req, res) {
 });
 
 quik.get('/api/quik/user', function(req, res) {
-    res.end(clients[req.query.userid].toString());
+    var userid = req.originalUrl.toString().split('/api/quik/user')[1];
+    res.end(clients[userid].toString());
 });
 
 quik.get('/quik', function(req, res) {
@@ -426,18 +432,19 @@ fs.readFile(__dirname + '/branding/motd', 'utf8', function(err, data) {
     if (err)
         throw err;
     motd = data;
+    qLog('Startup', 'Loaded motd of ' + motd);
 });
 fs.readFile(__dirname + '/conf/godips', 'utf8', function(err, data) {
     if (err)
         throw err;
     godlist = data.trim();
-    qLog('Server Log', 'Loaded god ips: ' + godlist);
+    qLog('Startup', 'Loaded god ips: ' + godlist);
 });
 fs.readFile(__dirname + '/conf/netconf', 'utf8', function(err, data) {
     if (err)
         throw err;
     port = parseInt(data.split(':')[1]);
-    qLog('Server Log', 'Loaded netconf with port: ' + port);
+    qLog('Startup', 'Loaded netconf with port: ' + port);
     startServer(); //Wait until netconf is loaded to start
 });
 
@@ -452,8 +459,8 @@ function startServer() {
         }, quik).listen(443);
     }
     http.listen(port, function() {
-        qLog('Server Log', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
-        qLog('Server Log', 'Started on :' + port);
+        qLog('Startup', 'Quick Started, this application is protected by the Apache 2.0 License - hack on the source at github.com/matt-allen44/quik');
+        qLog('Server Log', 'Listening for request on :' + port);
     });
 }
 /*
@@ -493,7 +500,7 @@ io.on('connection', function(socket) {
         //remove username for restricted names
         if (typeof username !== 'undefined') {
           var index = usernames.indexOf(username);
-          console.log('Removing name ' + username + ' from index ' + index);
+          qLog('Username Handler', 'Removed ' + username + " from restricted names");
           usernames.splice(index, 1);
         }
 
@@ -577,7 +584,7 @@ io.on('connection', function(socket) {
                         socket.emit('chat message private', 'Quikbot (ERROR)', command + " is an unkown command", 'Error');
                 }
             } else {
-                qLog('chatlog', socket.conn.remoteAddress + ' [' + ipLookup(socket.conn.remoteAddress).city + '] [' + socket.id + ']' + msg);
+                qLog('Chat Log',  '(' +  userRoom[socket.id] + ') ' + usr + ': ' + msg);
                 io.sockets.in(userRoom[socket.id]).emit('chat message', usr, swearjar.censor(msg), userflairs[socket.id], false);
 
                 if (typeof userRoom[socket.id] === 'undefined') {
@@ -643,7 +650,7 @@ io.on('connection', function(socket) {
             io.emit('connectEvent', getUsername(socket.id));
             //Add username to end of usernames array
             usernames[usernames.length] = name.toLowerCase();
-            console.log('Usernames: ' + usernames.toString());
+            qLog('Username Handler', 'Set username ' + name + ' for ' + socket.id);
 
             jsonLogDat = [name, '', socket.id, date, 'Username "' + name + '" was set'];
             if(useRedis){
@@ -673,7 +680,7 @@ var clientid = 0;
 
 function setUsername(socketID, name, socket) {
     if (typeof users[socketID] === 'undefined') {
-        qLog('chatlog', socketID + ' set username to ' + name);
+        qLog('Chat Log', socketID + ' set username to ' + name);
         users[socketID] = name;
         userIDs[socketID] = clientid;
         clients[clientid] = [
@@ -686,7 +693,7 @@ function setUsername(socketID, name, socket) {
         ];
         clientid++;
     } else {
-        qLog('chatlog', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
+        qLog('Chat Log', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
     }
 }
 
@@ -698,7 +705,7 @@ function messageIsLegal(msg, socket) {
         socket.disconnect();
     } else if (0 === msg.trim().length) {
         socket.emit('chat message private', 'Quikbot', 'Empty message removed', 'Bot');
-        qLog('chatlog', 'empty message removed');
+        qLog('Chat Log', 'empty message removed');
     } else {
         return true;
     }
@@ -707,9 +714,8 @@ function messageIsLegal(msg, socket) {
 
 function getUsername(socketID) {
     if (typeof users[socketID] === 'undefined') {
-        qLog('chatlog', 'could not get username of ' + socketID);
+        qLog('Username Handler', 'Failure retrieving username for  ' + socketID);
     } else {
-        qLog('chatlog', 'succesfully got useranem of ' + socketID + ' - ' + users[socketID]);
         return users[socketID];
     }
 }
@@ -723,8 +729,28 @@ winston.add(winston.transports.File, {
 });
 
 function qLog(type, msg) {
-    msg = new Date() + msg;
+    msg = + ' - ' + new Date() + ' - '+  msg;
+
+    switch (type) {
+        case 'Startup':
+          console.log((('[' + type + '] ' + msg).inverse).magenta);
+          break;
+        case 'Server Log':
+          console.log((('[' + type + '] ' + msg).inverse).cyan);
+          break;
+        case 'Server Request':
+          console.log((('[' + type + '] ' + msg).inverse).grey);
+          break;
+        case 'Username Handler':
+          console.log((('[' + type + '] ' + msg).inverse).green);
+          break;
+        case 'Chat Log':
+            console.log(('[' + type + '] ' + msg).inverse);
+            break;
+        default:
+
     console.log('[' + type + '] ' + msg);
     log += '[' + type + '] ' + msg + '\n';
     winston.log(type, msg);
+    }
 }

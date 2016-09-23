@@ -288,7 +288,7 @@ function quikClientStart() {
             });
             socket.on('set desc', function(desc) {
                 if(desc){
-                  console.log("Set desc to " + desc)
+                  console.log("Set desc to " + desc);
                   roomDescription = desc;
                   document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
                 }
@@ -547,7 +547,7 @@ function promptForFlair(showError) {
 function loadMessages(nummessages, room) {
     var xmlhttp, text;
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', '/api/redis/history?nummessages=' + nummessages + '&room=' + room.replace('/', ''), true);
+    xmlhttp.open('GET', '/api/redis/history/' + room.replace('/', '') + '/' + nummessages, true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -566,7 +566,7 @@ function loadMessages(nummessages, room) {
 function updateUserlist() {
     var xmlhttp, text;
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET', '/api/quik/roomdata?room=' + room.replace('/', ''), true);
+    xmlhttp.open('GET', '/api/quik/roomdata/' + room.replace('/', ''), true);
     xmlhttp.send();
     xmlhttp.onreadystatechange = function() {
         userlist.innerHTML = "";

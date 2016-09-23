@@ -1,6 +1,5 @@
 var io;
 module.exports = function(importIO) {
-    console.log("Quikbot.js loaded");
     io = importIO;
 };
 
