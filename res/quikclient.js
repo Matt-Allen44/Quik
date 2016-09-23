@@ -264,7 +264,7 @@ function quikClientStart() {
             }
             */
             //define notification audio
-            var audio = new Audio('notify.mp3');
+            var audio = new Audio('/api/notifysound');
             var isFocused = true;
             //Default to true so the noise isn't played if there is an error
             $('form').submit(function() {
