@@ -226,6 +226,7 @@ var useRedis = flags.get('usedb');
 var redisClient;
 var redis = require('redis');
 var redisConf;
+var numberOfConnectedUsers = {};
 
 if (useRedis) {
     qLog('Startup', "Loaded with usedb flag - running with Redis");
@@ -369,7 +370,7 @@ quik.get('/api/quik/roomdata/*', function(req, res) {
     var roomname = req.originalUrl.toString().split('/api/quik/roomdata/')[1];
     var roomdat = {
         "name": roomname,
-        "connected_users": roomUsers[roomname].length
+        "connected_users": numberOfConnectedUsers[roomname]
     };
     res.end(JSON.stringify({
         "room": roomdat,
@@ -444,7 +445,14 @@ io.on('connection', function(socket) {
         if (typeof roomUsersObj === 'undefined') {
             roomUsers[room.replace("/", "")] = [];
         }
-        roomUsers[room.replace("/", "")][roomUsers[room.replace("/", "")].length] = [socket.id];
+        roomUsers[room.replace("/", "")] = [socket.id];
+
+        if(typeof numberOfConnectedUsers[room.replace("/", "")] == 'undefined'){
+          numberOfConnectedUsers[room.replace("/", "")] = 1;
+        } else {
+          numberOfConnectedUsers[room.replace("/", "")]++;
+        }
+        console.log('Users2: ' + numberOfConnectedUsers[room.replace("/", "")])
 
         socket.join(room);
 
@@ -470,6 +478,13 @@ io.on('connection', function(socket) {
             qLog('Username Handler', 'Removed ' + username + " from restricted names");
             usernames.splice(index, 1);
             delete clients[socket.id];
+
+            var roomUsersArray = roomUsers[userRoom[socket.id].replace('/', '')];
+
+            console.log(roomUsers[userRoom[socket.id].replace('/', '')]);
+            delete roomUsers[userRoom[socket.id].replace('/', '')][roomUsersArray.indexOf(socket.id)];
+            console.log(roomUsers[userRoom[socket.id].replace('/', '')]);
+            numberOfConnectedUsers[userRoom[socket.id].replace('/', '')]--;
         }
 
         jsonLogDat = [username, '', socket.id, new Date(), 'User disconnected from the server'];
