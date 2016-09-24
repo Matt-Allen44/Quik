@@ -452,7 +452,7 @@ io.on('connection', function(socket) {
         } else {
           numberOfConnectedUsers[room.replace("/", "")]++;
         }
-        console.log('Users2: ' + numberOfConnectedUsers[room.replace("/", "")])
+        console.log('Users2: ' + numberOfConnectedUsers[room.replace("/", "")]);
 
         socket.join(room);
 
