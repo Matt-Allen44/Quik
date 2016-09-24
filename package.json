@@ -19,8 +19,7 @@
     "winston": "2.2.0",
     "redis": "2.6.2",
     "node-flags":"0.1.9",
-    "colors": "1.1.2",
-    "sleep": "4.0.0"
+    "colors": "1.1.2"
   },
   "scripts": {
     "startNode": "node quik.js",

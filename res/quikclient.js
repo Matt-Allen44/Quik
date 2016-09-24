@@ -218,6 +218,7 @@ var brandingColorHex;
 var brandingAccentClass;
 var brandingAccentHex;
 
+
 setInterval(function() {
     updateRoomInf();
     favicon.badge(messagesSinceFocus);
@@ -564,6 +565,7 @@ function loadMessages(nummessages, room) {
 }
 
 function updateUserlist() {
+    var userlist = document.getElementById('statusbar_Row');
     var xmlhttp, text;
     xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET', '/api/quik/roomdata/' + room.replace('/', ''), true);
@@ -577,7 +579,9 @@ function updateUserlist() {
             }
             var elem = document.getElementById('messages');
             elem.scrollTop = elem.scrollHeight;
-            numberOfConnectedUsers = msgdata.clients.length;
+
+            numberOfConnectedUsers = msgdata.room.connected_users;
+            console.log('Connected users: ' + numberOfConnectedUsers);
         }
     };
 }

@@ -223,27 +223,23 @@ var quikbot = require('./quikbot.js')(io);
 var configLoader = require('./configLoader.js');
 
 var useRedis = flags.get('usedb');
+var redisClient;
+var redis = require('redis');
+var redisConf;
 
 if (useRedis) {
     qLog('Startup', "Loaded with usedb flag - running with Redis");
-    var redis = require('redis');
-    var redisConf = configLoader.getRedisConfig();
-    qLog('Startup', "Waiting 5 seconds to load Redis Configuration")
+    redisConf = configLoader.getRedisConfig();
 
-    var redisHost = redisConf.host;
-    var redisPort = redisConf.port;
-    var redisPass = redisConf.pass;
-    var redisClient;
+    qLog('Startup', "Loaded redis config of " + redisConf.host + ":" + redisConf.port + " w/ password " + redisConf.pass);
 
-    qLog('Startup', "Loaded redis config of " + redisHost + ":" + redisPort + " w/ password " + redisPass);
-    redisClient = redis.createClient(redisPort, redisHost);
-    redisClient.auth(redisPass, function(err) {
+    redisClient = redis.createClient(redisConf.port, redis.host);
+    redisClient.auth(redisConf.pass, function(err) {
         if (err) throw err;
     });
-
 }
 
-var clients = [];
+var clients = {};
 var userIDs = [];
 var users = [];
 var usernames = [];
@@ -373,15 +369,11 @@ quik.get('/api/quik/roomdata/*', function(req, res) {
     var roomname = req.originalUrl.toString().split('/api/quik/roomdata/')[1];
     var roomdat = {
         "name": roomname,
-        "connected users": roomUsers[roomname].length
+        "connected_users": roomUsers[roomname].length
     };
-    var dat = [];
-    for (var i = 0; i < roomUsers[roomname].length; i++) {
-        dat[i] = [clients[userIDs[(roomUsers[roomname][i][0])]]];
-    }
     res.end(JSON.stringify({
         "room": roomdat,
-        "clients": dat
+        "clients": clients
     }));
 });
 
@@ -408,24 +400,16 @@ quik.get('/', function(req, res) {
 });
 
 
-/*
-quik.get('*', function(req, res) {
-  res.status(404);
-  res.sendFile(__dirname + '/html/404.html');
-});
-*/
+function configServer(){
+  motd = configLoader.getMotd();
+  qLog('Startup', 'Loaded motd of ' + motd);
 
-motd = configLoader.getMotd();
-qLog('Startup', 'Loaded motd of ' + motd);
+  godlist = configLoader.getGodIps();
+  qLog('Startup', 'Loaded god ips: ' + godlist);
 
-godlist = configLoader.getGodIps();
-qLog('Startup', 'Loaded god ips: ' + godlist);
-
-port = configLoader.getNetConfPort();
-qLog('Startup', 'Loaded netconf with port: ' + port);
-startServer(); //Wait until netconf is loaded to start
-
-
+  port = configLoader.getNetConfPort();
+  qLog('Startup', 'Loaded netconf with port: ' + port);
+}
 
 function startServer() {
     var runSecure = false;
@@ -442,6 +426,10 @@ function startServer() {
         qLog('Server Log', 'Listening for request on :' + port);
     });
 }
+
+configServer();
+startServer();
+
 /*
 	ON CONNECTION
 */
@@ -481,6 +469,7 @@ io.on('connection', function(socket) {
             var index = usernames.indexOf(username);
             qLog('Username Handler', 'Removed ' + username + " from restricted names");
             usernames.splice(index, 1);
+            delete clients[socket.id];
         }
 
         jsonLogDat = [username, '', socket.id, new Date(), 'User disconnected from the server'];
@@ -661,8 +650,7 @@ function setUsername(socketID, name, socket) {
     if (typeof users[socketID] === 'undefined') {
         qLog('Chat Log', socketID + ' set username to ' + name);
         users[socketID] = name;
-        userIDs[socketID] = clientid;
-        clients[clientid] = [
+        clients[socketID] = [
             socket.id,
             getUsername(socket.id),
             socket.conn.remoteAddress,
@@ -670,7 +658,6 @@ function setUsername(socketID, name, socket) {
             ipLookup(socket.conn.remoteAddress).country,
             Math.floor(new Date() / 1000)
         ];
-        clientid++;
     } else {
         qLog('Chat Log', socketID + ' could not set username to ' + name + ' as they already have a username of ' + users[socketID]);
     }
