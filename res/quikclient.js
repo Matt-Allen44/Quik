@@ -424,8 +424,6 @@ function updateStatus(){
 }
 
 function joinRoom(room) {
-    //document.getElementById('usrs_connectedMobi').text = 'Channels';
-    //document.getElementById('connectedtostatus').text = 'Channels';
     socket.emit('set room', room);
 }
 
@@ -587,6 +585,9 @@ function updateUserlist() {
 }
 
 function updateRoomInf(){
+  document.getElementById('usrs_connectedMobi').text = numberOfConnectedUsers + ' Users';
+  document.getElementById('descMobi').innerHTML = roomDescription;
+
   document.getElementById('statusbar_Row').innerHTML = numberOfConnectedUsers + ' members <span style="padding-left:10px;padding-right:10px;color:#e6e6e6">|</span>' + roomDescription;
   document.getElementById('statusbar_Room').innerHTML = room;
 }
