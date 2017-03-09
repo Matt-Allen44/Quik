@@ -1,5 +1,11 @@
 # Quik | A Free, Lightweight & Open Web Chat Application
 
+---
+
+![Quik Screenshots](http://i.imgur.com/Hf6zcNp.png)
+
+---
+
 ![Travis-CI Build](https://api.travis-ci.org/Matt-Allen44/Quik.svg)
 ![Dependencies](https://david-dm.org/matt-allen44/quik.svg)
 ![Apache License](https://img.shields.io/github/license/matt-allen44/quik.svg)
@@ -21,11 +27,6 @@ Clone the git repository
 > node quik.js {OR} nodejs quik.js (depending on how your NodeJS is installed)
 
 > access localhost using any web browser
-
-## Screenshots
-![Conversation Screen](http://i.imgur.com/tfOhD4F.png)
-![Joining Screen](http://i.imgur.com/fQQG3dM.png)
-
 
 
 ### Contributing
